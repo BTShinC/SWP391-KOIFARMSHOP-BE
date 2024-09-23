@@ -43,12 +43,12 @@ public class ProductComboService implements IProductComboService{
 
     @Override
     public void deleteProductCombo(long productComboID) {
-
+        iProductComboRepository.deleteById(productComboID);
     }
 
     @Override
     public Optional<ProductCombo> getProductComboByID(long productComboID) {
-        return Optional.empty();
+        return iProductComboRepository.findById(productComboID);
     }
 }
 
