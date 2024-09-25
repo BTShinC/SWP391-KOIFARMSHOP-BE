@@ -1,73 +1,37 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
 @Entity
 @Table (name = "Care_Infomation")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CareInfomation {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column(name = "Care_Infomation_ID")
+
     private long careInfomationID;
-    @Column(name = "Date_Received")
+    @NotNull(message = "Date received cannot be null")
+    @PastOrPresent(message = "Date received must be in the past or present")
     private Date dateReceived;
-    @Column(name = "Date_Expiration")
+    @NotNull(message = "Date expiration cannot be null")
+    @Future(message = "Date expiration must be in the future")
     private Date dateExpiration;
-    @Column(name = "Status")
+    @NotBlank(message = "Status cannot be blank")
+    @Size(max = 255, message = "Status must be less than 255 characters")
     private String status;
-    @Column(name = "Consignment_ID")
-    private long consignmentID;
 
-    public long getCareInfomationID() {
-        return careInfomationID;
-    }
 
-    public void setCareInfomationID(long careInfomationID) {
-        this.careInfomationID = careInfomationID;
-    }
 
-    public Date getDateReceived() {
-        return dateReceived;
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "consigment_id")
+    private Consignment consignment;
 
-    public void setDateReceived(Date dateReceived) {
-        this.dateReceived = dateReceived;
-    }
-
-    public Date getDateExpiration() {
-        return dateExpiration;
-    }
-
-    public void setDateExpiration(Date dateExpiration) {
-        this.dateExpiration = dateExpiration;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public long getConsignmentID() {
-        return consignmentID;
-    }
-
-    public void setConsignmentID(long consignmentID) {
-        this.consignmentID = consignmentID;
-    }
-
-    public CareInfomation() {
-    }
-
-    public CareInfomation(long careInfomationID, Date dateReceived, Date dateExpiration, String status, long consignmentID) {
-        this.careInfomationID = careInfomationID;
-        this.dateReceived = dateReceived;
-        this.dateExpiration = dateExpiration;
-        this.status = status;
-        this.consignmentID = consignmentID;
-    }
 }

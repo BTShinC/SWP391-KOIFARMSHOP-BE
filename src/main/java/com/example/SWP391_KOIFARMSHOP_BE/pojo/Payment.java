@@ -1,71 +1,32 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Payment")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Payment_ID")
+
     private long paymentID;
-    @Column(name = "Orders_ID")
-    private long ordersID;
-    @Column(name = "Sale_Price")
+    @PositiveOrZero(message = "Sale price must be zero or a positive number")
     private double salePrice;
-    @Column(name = "Ship_Price")
+    @PositiveOrZero(message = "Ship price must be zero or a positive number")
     private double shipPrice;
-    @Column(name = "Sub_Total")
+    @PositiveOrZero(message = "Subtotal must be zero or a positive number")
     private double subTotal;
 
-    public long getPaymentID() {
-        return paymentID;
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private Orders orders;
 
-    public void setPaymentID(long paymentID) {
-        this.paymentID = paymentID;
-    }
 
-    public long getOrdersID() {
-        return ordersID;
-    }
 
-    public void setOrdersID(long ordersID) {
-        this.ordersID = ordersID;
-    }
-
-    public double getSalePrice() {
-        return salePrice;
-    }
-
-    public void setSalePrice(double salePrice) {
-        this.salePrice = salePrice;
-    }
-
-    public double getShipPrice() {
-        return shipPrice;
-    }
-
-    public void setShipPrice(double shipPrice) {
-        this.shipPrice = shipPrice;
-    }
-
-    public double getSubTotal() {
-        return subTotal;
-    }
-
-    public void setSubTotal(double subTotal) {
-        this.subTotal = subTotal;
-    }
-
-    public Payment() {
-    }
-
-    public Payment(long paymentID, long ordersID, double salePrice, double shipPrice, double subTotal) {
-        this.paymentID = paymentID;
-        this.ordersID = ordersID;
-        this.salePrice = salePrice;
-        this.shipPrice = shipPrice;
-        this.subTotal = subTotal;
-    }
 }

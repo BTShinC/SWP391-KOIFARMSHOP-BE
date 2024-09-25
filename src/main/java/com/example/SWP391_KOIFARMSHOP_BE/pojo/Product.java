@@ -1,204 +1,64 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Product")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column(name = "Product_ID")
+
     private long productID;
-    @Column(name = "Breed")
+    @NotBlank(message = "Breed cannot be blank")
     private String breed;
-    @Column(name = "Size")
+    @Positive(message = "Size must be a positive number")
     private float size;
-    @Column(name = "Sex")
+    @NotBlank(message = "Sex cannot be blank")
     private String sex;
-    @Column(name = "Health_Status")
+    @NotBlank(message = "Health status cannot be blank")
     private String healthStatus;
-    @Column(name = "Personality_Trait")
+    @NotBlank(message = "Personality trait cannot be blank")
     private String personalityTrait;
-    @Column(name = "Origin")
+    @NotBlank(message = "Origin cannot be blank")
     private String origin;
-    @Column(name = "Description")
+    @NotBlank(message = "Description cannot be blank")
     private String desciption;
-    @Column(name = "Image")
+    @NotBlank(message="Image Url canot br blank")
     private String image;
-    @Column(name = "Price")
+    @Positive(message = "Price must be a positive number")
     private double price;
-    @Column(name = "Certificate")
+    @NotBlank(message = "Certificate cannot be blank")
     private String certificate;
-    @Column(name = "Type")
+    @NotBlank(message = "Type cannot be blank")
     private String type;
-    @Column(name = "Quantity")
+    @PositiveOrZero(message = "Quantity must be zero or a positive number")
     private int quantity;
-    @Column(name = "Status")
+    @NotBlank(message = "Status cannot be blank")
     private String status;
-    @Column(name = "Desired_Price")
+    @Positive(message = "Desired price must be a positive number")
     private double desiredPrice;
-    @Column(name = "Consignment_Type")
+    @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
-    @Column(name = "Care_Package_ID")
-    private long carePackageID;
 
-    public long getProductID() {
-        return productID;
-    }
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="ordersdetail_id")
+    private OrdersDetail ordersdetail ;
 
-    public void setProductID(long productID) {
-        this.productID = productID;
-    }
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="carepackage_id")
+    private CarePackage carePackage  ;
 
-    public String getBreed() {
-        return breed;
-    }
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
+    private Consignment consignment;
 
-    public void setBreed(String breed) {
-        this.breed = breed;
-    }
-
-    public float getSize() {
-        return size;
-    }
-
-    public void setSize(float size) {
-        this.size = size;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getHealthStatus() {
-        return healthStatus;
-    }
-
-    public void setHealthStatus(String healthStatus) {
-        this.healthStatus = healthStatus;
-    }
-
-    public String getPersonalityTrait() {
-        return personalityTrait;
-    }
-
-    public void setPersonalityTrait(String personalityTrait) {
-        this.personalityTrait = personalityTrait;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public String getDesciption() {
-        return desciption;
-    }
-
-    public void setDesciption(String desciption) {
-        this.desciption = desciption;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getCertificate() {
-        return certificate;
-    }
-
-    public void setCertificate(String certificate) {
-        this.certificate = certificate;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public double getDesiredPrice() {
-        return desiredPrice;
-    }
-
-    public void setDesiredPrice(double desiredPrice) {
-        this.desiredPrice = desiredPrice;
-    }
-
-    public String getConsignmentType() {
-        return consignmentType;
-    }
-
-    public void setConsignmentType(String consignmentType) {
-        this.consignmentType = consignmentType;
-    }
-
-    public long getCarePackageID() {
-        return carePackageID;
-    }
-
-    public void setCarePackageID(long carePackageID) {
-        this.carePackageID = carePackageID;
-    }
-
-    public Product() {
-    }
-
-    public Product(long productID, String breed, String sex, float size, String healthStatus, String personalityTrait, String origin, String desciption, String image, double price, String certificate, String type, int quantity, String status, double desiredPrice, String consignmentType, long carePackageID) {
-        this.productID = productID;
-        this.breed = breed;
-        this.sex = sex;
-        this.size = size;
-        this.healthStatus = healthStatus;
-        this.personalityTrait = personalityTrait;
-        this.origin = origin;
-        this.desciption = desciption;
-        this.image = image;
-        this.price = price;
-        this.certificate = certificate;
-        this.type = type;
-        this.quantity = quantity;
-        this.status = status;
-        this.desiredPrice = desiredPrice;
-        this.consignmentType = consignmentType;
-        this.carePackageID = carePackageID;
-    }
 }
 
