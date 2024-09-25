@@ -1,149 +1,53 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Product_Combo")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductCombo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Product_Combo_ID")
+
     private long productComboID;
-    @Column(name = "Size")
+    @Positive(message = "Size must be a positive number")
     private float size;
-    @Column(name = "Breed")
+    @NotBlank(message = "Breed cannot be blank")
     private String breed;
-    @Column(name = "Health_Status")
+    @NotBlank(message = "Health status cannot be blank")
     private String healthStatus;
-    @Column(name = "Quantity")
+    @PositiveOrZero(message = "Quantity must be zero or a positive number")
     private int quantity;
-    @Column(name = "Description")
+    @NotBlank(message = "Description cannot be blank")
     private String desciption;
-    @Column(name = "image")
+    @NotBlank(message = "Image URL cannot be blank")
     private String image;
-    @Column(name = "Price")
+    @Positive(message = "Price must be a positive number")
     private double price;
-    @Column(name = "Consignment_Type")
+    @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
-    @Column(name = "Desired_Price")
+    @Positive(message = "Desired price must be a positive number")
     private double desiredPrice;
-    @Column(name = "Type")
+    @NotBlank(message = "Type cannot be blank")
     private String type;
-    @Column(name = "Care_Package_ID")
-    private long carePackageID;
 
-    public long getProductComboID() {
-        return productComboID;
-    }
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="ordersdetail_id")
+    private OrdersDetail ordersdetail ;
 
-    public void setProductComboID(long productComboID) {
-        this.productComboID = productComboID;
-    }
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="carepackage_id")
+    private CarePackage carePackage;
 
-    public float getSize() {
-        return size;
-    }
-
-    public void setSize(float size) {
-        this.size = size;
-    }
-
-    public String getBreed() {
-        return breed;
-    }
-
-    public void setBreed(String breed) {
-        this.breed = breed;
-    }
-
-    public String getHealthStatus() {
-        return healthStatus;
-    }
-
-    public void setHealthStatus(String healthStatus) {
-        this.healthStatus = healthStatus;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getDesciption() {
-        return desciption;
-    }
-
-    public void setDesciption(String desciption) {
-        this.desciption = desciption;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getConsignmentType() {
-        return consignmentType;
-    }
-
-    public void setConsignmentType(String consignmentType) {
-        this.consignmentType = consignmentType;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public double getDesiredPrice() {
-        return desiredPrice;
-    }
-
-    public void setDesiredPrice(double desiredPrice) {
-        this.desiredPrice = desiredPrice;
-    }
-
-    public long getCarePackageID() {
-        return carePackageID;
-    }
-
-    public void setCarePackageID(long carePackageID) {
-        this.carePackageID = carePackageID;
-    }
-
-    public ProductCombo() {
-    }
-
-    public ProductCombo(long productComboID, float size, String breed, int quantity, String healthStatus, String desciption, String image, double price, String consignmentType, double desiredPrice, String type, long carePackageID) {
-        this.productComboID = productComboID;
-        this.size = size;
-        this.breed = breed;
-        this.quantity = quantity;
-        this.healthStatus = healthStatus;
-        this.desciption = desciption;
-        this.image = image;
-        this.price = price;
-        this.consignmentType = consignmentType;
-        this.desiredPrice = desiredPrice;
-        this.type = type;
-        this.carePackageID = carePackageID;
-    }
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "productCombo")
+    private Consignment consignment;
 }
 

@@ -1,61 +1,34 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "Orders_detail")
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrdersDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Orders_Detail_ID")
     private long ordersDetailID;
-    @Column(name = "Product_ID")
-    private long productID;
-    @Column(name = "Orders_ID")
-    private long ordersID;
-    @Column(name = "Product_Combo_ID")
-    private long productComboID;
 
-    public long getOrdersDetailID() {
-        return ordersDetailID;
-    }
 
-    public void setOrdersDetailID(long ordersDetailID) {
-        this.ordersDetailID = ordersDetailID;
-    }
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private Orders orders;
 
-    public long getProductID() {
-        return productID;
-    }
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name ="ordersdetail_id")
+    private Set<Product> product;
 
-    public void setProductID(long productID) {
-        this.productID = productID;
-    }
 
-    public long getOrdersID() {
-        return ordersID;
-    }
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name ="ordersdetail_id")
+    private Set<ProductCombo> productCombos;
 
-    public void setOrdersID(long ordersID) {
-        this.ordersID = ordersID;
-    }
-
-    public long getProductComboID() {
-        return productComboID;
-    }
-
-    public void setProductComboID(long productComboID) {
-        this.productComboID = productComboID;
-    }
-
-    public OrdersDetail() {
-    }
-
-    public OrdersDetail(long ordersDetailID, long productID, long ordersID, long productComboID) {
-        this.ordersDetailID = ordersDetailID;
-        this.productID = productID;
-        this.ordersID = ordersID;
-        this.productComboID = productComboID;
-    }
 }

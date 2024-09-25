@@ -1,127 +1,58 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "Account")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Account_ID")
+
     private long accountID;
-    @Column(name = "User_Name")
+    @NotBlank(message = "Username cannot be blank")
+    @Size(max = 50, message = "Username cannot exceed 50 characters")
     private String userName;
-    @Column(name = "Password")
+    @NotBlank(message = "Password cannot be blank")
+    @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
-    @Column(name = "Full_Name")
+    @NotBlank(message = "Full name cannot be blank")
+    @Size(max = 100, message = "Full name cannot exceed 100 characters")
     private String fullName;
-    @Column(name = "Address")
+    @NotBlank(message = "Address cannot be blank")
+    @Size(max = 255, message = "Address cannot exceed 255 characters")
     private String address;
-    @Column(name = "Email")
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Email should be valid")
     private String email;
-    @Column(name = "Phone_Number")
+    @NotBlank(message = "Phone number cannot be blank")
+    @Pattern(regexp = "^[0-9]+$", message = "Phone number should only contain numbers")
+    @Size(min = 10, max = 15, message = "Phone number should be between 10 and 15 digits")
     private String phoneNumber;
-    @Column(name = "Role_ID")
-    private String roleID;
-    @Column(name = "Account_Balance")
+    @Min(value = 0, message = "Account balance cannot be negative")
     private double accountBalance;
-    @Column(name = "Image")
+    @Size(max = 255, message = "Image URL cannot exceed 255 characters")
     private String image;
 
-    public long getAccountID() {
-        return accountID;
-    }
 
-    public void setAccountID(long accountID) {
-        this.accountID = accountID;
-    }
+//  @ManyToOne(cascade = CascadeType.ALL)
+//  @JoinColumn(name ="role_id",referencedColumnName = "RoleID")
+//    private Role role ;
+//
+//  @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "account-id")
+//    private Set<Orders> orders ;
 
-    public String getUserName() {
-        return userName;
-    }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+//    @ManyToOne
+//    @JoinColumn(name = "role_id", referencedColumnName = "roleID")
+//    private Role role;
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getRoleID() {
-        return roleID;
-    }
-
-    public void setRoleID(String roleID) {
-        this.roleID = roleID;
-    }
-
-    public double getAccountBalance() {
-        return accountBalance;
-    }
-
-    public void setAccountBalance(double accountBalance) {
-        this.accountBalance = accountBalance;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public Account() {
-    }
-
-    public Account(long accountID, String userName, String password, String fullName, String address, String email, String phoneNumber, String roleID, double accountBalance, String image) {
-        this.accountID = accountID;
-        this.userName = userName;
-        this.password = password;
-        this.fullName = fullName;
-        this.address = address;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.roleID = roleID;
-        this.accountBalance = accountBalance;
-        this.image = image;
-    }
 }
 

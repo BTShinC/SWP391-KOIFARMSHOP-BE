@@ -1,95 +1,53 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "Orders")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Orders {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column(name = "Orders_ID")
-    private long ordersID;
-    @Column(name = "Orders_Detail_ID")
-    private long ordersDetailID;
-    @Column(name = "Account_ID")
-    private long accountID;
-    @Column(name = "Status")
+
+    private long orderID;
+    @NotBlank(message = "Status cannot be blank")
+    @Size(max = 50, message = "Status must be less than 50 characters")
     private String status;
-    @Column(name = "Total")
+    @PositiveOrZero(message = "Total must be zero or a positive number")
     private double total;
-    @Column(name = "Date")
+    @NotNull(message = "Date cannot be null")
     private Date date;
-    @Column(name = "Desctription")
+    @Size(max = 255, message = "Description must be less than 255 characters")
     private String description;
 
-    public long getOrdersID() {
-        return ordersID;
-    }
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "account-id")
+//    private Account account ;
 
-    public void setOrdersID(long ordersID) {
-        this.ordersID = ordersID;
-    }
 
-    public long getOrdersDetailID() {
-        return ordersDetailID;
-    }
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "orders")
+    private Payment payment;
 
-    public void setOrdersDetailID(long ordersDetailID) {
-        this.ordersDetailID = ordersDetailID;
-    }
 
-    public long getAccountID() {
-        return accountID;
-    }
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private Set<OrdersDetail> ordersDetail;
 
-    public void setAccountID(long accountID) {
-        this.accountID = accountID;
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "feedback_id")
+    private Feedback feedback;
 
-    public String getStatus() {
-        return status;
-    }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Orders() {
-    }
-
-    public Orders(long ordersID, long ordersDetailID, long accountID, String status, double total, Date date, String description) {
-        this.ordersID = ordersID;
-        this.ordersDetailID = ordersDetailID;
-        this.accountID = accountID;
-        this.status = status;
-        this.total = total;
-        this.date = date;
-        this.description = description;
-    }
 }
