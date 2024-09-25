@@ -2,6 +2,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Consignment;
 import com.example.SWP391_KOIFARMSHOP_BE.service.IConsignmentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,12 @@ public class ConsignmentController {
     }
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Consignment saveConsignment(@org.springframework.web.bind.annotation.RequestBody Consignment consignment){
+    public Consignment saveConsignment(@Valid @RequestBody Consignment consignment){
         return iConsignmentService.insertConsignment(consignment);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Consignment> updateConsignment(@PathVariable long id, @RequestBody Consignment consignment){
+    public ResponseEntity<Consignment> updateConsignment(@PathVariable long id,@Valid @RequestBody Consignment consignment){
         Consignment updateConsignment = iConsignmentService.updateConsignment(id, consignment);
         return ResponseEntity.ok(updateConsignment);
     }

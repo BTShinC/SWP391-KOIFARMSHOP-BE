@@ -2,6 +2,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
 import com.example.SWP391_KOIFARMSHOP_BE.service.IAccountService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,15 @@ public class AccountController {
     }
     @PostMapping("/")
     @ResponseStatus (HttpStatus.CREATED)
-    public Account saveAccount(@org.springframework.web.bind.annotation.RequestBody Account account){
+//    public Account saveAccount(@org.springframework.web.bind.annotation.RequestBody Account account){
+//        return iAccountService.insertAccount(account);
+//    }
+    public Account saveAccount(@Valid @RequestBody Account account){
         return iAccountService.insertAccount(account);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Account> updateAccount(@PathVariable long id, @RequestBody Account account){
+    public ResponseEntity<Account> updateAccount(@PathVariable long id, @Valid @RequestBody Account account){
         Account updateAccount = iAccountService.updateAccount(id, account);
         return ResponseEntity.ok(updateAccount);
     }

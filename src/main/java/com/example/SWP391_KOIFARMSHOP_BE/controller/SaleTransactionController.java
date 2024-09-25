@@ -2,6 +2,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.SaleTransaction;
 import com.example.SWP391_KOIFARMSHOP_BE.service.ISaleTransactionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,12 @@ public class SaleTransactionController {
     }
     @PostMapping("/")
     @ResponseStatus (HttpStatus.CREATED)
-    public SaleTransaction saveSaleTransaction(@org.springframework.web.bind.annotation.RequestBody SaleTransaction saleTransaction){
+    public SaleTransaction saveSaleTransaction(@Valid @RequestBody SaleTransaction saleTransaction){
         return iSaleTransactionService.insertSaleTransaction(saleTransaction);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SaleTransaction> updateSaleTransaction(@PathVariable long id, @RequestBody SaleTransaction saleTransaction){
+    public ResponseEntity<SaleTransaction> updateSaleTransaction(@PathVariable long id,@Valid @RequestBody SaleTransaction saleTransaction){
         SaleTransaction updateSaleTransaction = iSaleTransactionService.updateSaleTransaction(id, saleTransaction);
         return ResponseEntity.ok(updateSaleTransaction);
     }

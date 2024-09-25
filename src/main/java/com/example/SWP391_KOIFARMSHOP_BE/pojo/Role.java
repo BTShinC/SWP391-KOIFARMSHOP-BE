@@ -17,7 +17,7 @@ public class Role {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long roleID;
     @NotBlank(message = "Username cannot be blank")
-    @Size(max = 50, message = "Username cannot exceed 50 characters")
+    @Size(max = 8, message = "Username cannot exceed 50 characters")
     private String roleName;
 
 //    @OneToMany(cascade = CascadeType.ALL)

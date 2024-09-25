@@ -2,6 +2,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.CarePackage;
 import com.example.SWP391_KOIFARMSHOP_BE.service.ICarePackageService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,12 @@ public class CarePackageController {
     }
     @PostMapping("/")
     @ResponseStatus (HttpStatus.CREATED)
-    public CarePackage saveCarePackage(@org.springframework.web.bind.annotation.RequestBody CarePackage carePackage){
+    public CarePackage saveCarePackage(@Valid @RequestBody CarePackage carePackage){
         return iCarePackageService.insertCarePackage(carePackage);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CarePackage> updateCarePackage(@PathVariable long id, @RequestBody CarePackage carePackage){
+    public ResponseEntity<CarePackage> updateCarePackage(@Valid @PathVariable long id, @RequestBody CarePackage carePackage){
         CarePackage updateCarePackage = iCarePackageService.updateCarePackage(id, carePackage);
         return ResponseEntity.ok(updateCarePackage);
     }

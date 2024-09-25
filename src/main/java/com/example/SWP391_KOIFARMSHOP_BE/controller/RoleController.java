@@ -3,6 +3,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
 import com.example.SWP391_KOIFARMSHOP_BE.service.IRoleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,15 @@ public class RoleController {
     }
     @PostMapping("/")
     @ResponseStatus (HttpStatus.CREATED)
-    public Role saveRole(@org.springframework.web.bind.annotation.RequestBody Role role){
+//    public Role saveRole(@org.springframework.web.bind.annotation.RequestBody Role role){
+//        return iRoleService.insertRole(role);
+//    }
+    public Role saveRole(@Valid @RequestBody Role role){
         return iRoleService.insertRole(role);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Role> updateRole(@PathVariable long id, @RequestBody Role role){
+    public ResponseEntity<Role> updateRole(@PathVariable long id,@Valid @RequestBody Role role){
         Role updateRole = iRoleService.updateRole(id, role);
         return ResponseEntity.ok(updateRole);
     }

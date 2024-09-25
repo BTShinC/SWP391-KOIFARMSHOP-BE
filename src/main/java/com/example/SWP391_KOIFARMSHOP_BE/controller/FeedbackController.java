@@ -2,6 +2,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Feedback;
 import com.example.SWP391_KOIFARMSHOP_BE.service.IFeedbackService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,12 @@ public class FeedbackController {
     }
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Feedback saveFeedback(@org.springframework.web.bind.annotation.RequestBody Feedback feedback){
+    public Feedback saveFeedback(@Valid @RequestBody Feedback feedback){
         return iFeedbackService.insertFeedback(feedback);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Feedback> updateFeedback(@PathVariable long id, @RequestBody Feedback feedback){
+    public ResponseEntity<Feedback> updateFeedback(@PathVariable long id,@Valid @RequestBody Feedback feedback){
         Feedback updateFeedback = iFeedbackService.updateFeedback(id, feedback);
         return ResponseEntity.ok(updateFeedback);
     }

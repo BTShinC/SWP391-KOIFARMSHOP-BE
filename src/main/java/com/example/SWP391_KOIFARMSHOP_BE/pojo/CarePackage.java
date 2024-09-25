@@ -22,7 +22,7 @@ public class CarePackage {
     @NotBlank(message = "Package name cannot be blank")
     @Size(max = 100, message = "Package name must be less than 100 characters")
     private String packageName;
-    @Size(max = 500, message = "Description must be less than 500 characters")
+    @Size(max = 1000, message = "Description must be less than 100 characters")
     private String description;
     @NotNull(message = "Price cannot be null")
     @PositiveOrZero(message = "Price must be zero or positive")
@@ -34,12 +34,12 @@ public class CarePackage {
     @Min(value = 1, message = "Food intake per day must be at least 1")
     private int foodIntakePerDay;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name ="carepackage_id")
-    private Set<Product> product;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name ="carepackage_id")
-    private Set<ProductCombo> productCombos;
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name ="carepackage_id")
+//    private Set<Product> product;
+//
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name ="carepackage_id")
+//    private Set<ProductCombo> productCombos;
 
 }

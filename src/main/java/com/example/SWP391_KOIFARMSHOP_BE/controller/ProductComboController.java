@@ -2,6 +2,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.ProductCombo;
 import com.example.SWP391_KOIFARMSHOP_BE.service.IProductComboService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,12 @@ public class ProductComboController {
     }
     @PostMapping("/")
     @ResponseStatus (HttpStatus.CREATED)
-    public ProductCombo saveProductCombo(@org.springframework.web.bind.annotation.RequestBody ProductCombo productCombo){
+    public ProductCombo saveProductCombo(@Valid @RequestBody ProductCombo productCombo){
         return iProductComboService.insertProductCombo(productCombo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductCombo> updateProductCombo(@PathVariable long id, @RequestBody ProductCombo productCombo){
+    public ResponseEntity<ProductCombo> updateProductCombo(@PathVariable long id,@Valid @RequestBody ProductCombo productCombo){
         ProductCombo updateProductCombo = iProductComboService.updateProductCombo(id, productCombo);
         return ResponseEntity.ok(updateProductCombo);
     }

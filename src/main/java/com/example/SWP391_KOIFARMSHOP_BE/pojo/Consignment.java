@@ -24,21 +24,21 @@ public class Consignment {
     @NotNull(message = "Consignment date cannot be null")
     private Date consignmentDate;
     @NotBlank(message = "Status cannot be blank")
-    @Size(max = 50, message = "Status must be less than 50 characters")
+    @Size(max = 100, message = "Status must be less than 100 characters")
     private String status;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_combo_id")
-    private ProductCombo productCombo;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "consignment")
-    private SaleTransaction saleTransaction;
-
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "consignment")
-    private CareInfomation careInfomation;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "product_combo_id")
+//    private ProductCombo productCombo;
+//
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "product_id")
+//    private Product product;
+//
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "consignment")
+//    private SaleTransaction saleTransaction;
+//
+//
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "consignment")
+//    private CareInfomation careInfomation;
 }

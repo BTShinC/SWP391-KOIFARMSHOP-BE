@@ -25,13 +25,13 @@ public class CareInfomation {
     @Future(message = "Date expiration must be in the future")
     private Date dateExpiration;
     @NotBlank(message = "Status cannot be blank")
-    @Size(max = 255, message = "Status must be less than 255 characters")
+    @Size(max = 100, message = "Status must be less than 100 characters")
     private String status;
 
 
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "consigment_id")
-    private Consignment consignment;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "consigment_id")
+//    private Consignment consignment;
 
 }

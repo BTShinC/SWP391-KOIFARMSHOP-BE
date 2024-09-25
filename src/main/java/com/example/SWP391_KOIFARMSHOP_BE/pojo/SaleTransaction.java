@@ -26,9 +26,9 @@ public class SaleTransaction {
     @NotBlank(message = "Status cannot be blank")
     private String status;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "consigment_id")
-    private Consignment consignment;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "consigment_id")
+//    private Consignment consignment;
 
 
 }

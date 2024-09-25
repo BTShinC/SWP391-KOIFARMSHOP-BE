@@ -2,6 +2,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Payment;
 import com.example.SWP391_KOIFARMSHOP_BE.service.IPaymentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,12 @@ public class PaymentController {
     }
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Payment savePayment(@org.springframework.web.bind.annotation.RequestBody Payment payment){
+    public Payment savePayment(@Valid @RequestBody Payment payment){
         return iPaymentService.insertPayment(payment);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Payment> updatePayment(@PathVariable long id, @RequestBody Payment payment){
+    public ResponseEntity<Payment> updatePayment(@PathVariable long id,@Valid @RequestBody Payment payment){
         Payment updatePayment = iPaymentService.updatePayment(id, payment);
         return ResponseEntity.ok(updatePayment);
     }

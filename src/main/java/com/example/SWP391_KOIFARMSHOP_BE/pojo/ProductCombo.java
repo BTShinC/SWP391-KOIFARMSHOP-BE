@@ -39,15 +39,15 @@ public class ProductCombo {
     @NotBlank(message = "Type cannot be blank")
     private String type;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="ordersdetail_id")
-    private OrdersDetail ordersdetail ;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="carepackage_id")
-    private CarePackage carePackage;
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "productCombo")
-    private Consignment consignment;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name ="ordersdetail_id")
+//    private OrdersDetail ordersdetail ;
+//
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name ="carepackage_id")
+//    private CarePackage carePackage;
+//
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "productCombo")
+//    private Consignment consignment;
 }
 

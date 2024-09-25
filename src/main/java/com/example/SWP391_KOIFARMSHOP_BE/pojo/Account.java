@@ -17,13 +17,13 @@ public class Account {
 
     private long accountID;
     @NotBlank(message = "Username cannot be blank")
-    @Size(max = 50, message = "Username cannot exceed 50 characters")
+    @Size(max = 10, message = "Username cannot exceed 10 characters")
     private String userName;
     @NotBlank(message = "Password cannot be blank")
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
     @NotBlank(message = "Full name cannot be blank")
-    @Size(max = 100, message = "Full name cannot exceed 100 characters")
+    @Size(max = 20, message = "Full name cannot exceed 20 characters")
     private String fullName;
     @NotBlank(message = "Address cannot be blank")
     @Size(max = 255, message = "Address cannot exceed 255 characters")

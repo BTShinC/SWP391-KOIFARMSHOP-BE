@@ -4,6 +4,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.CareInfomation;
 import com.example.SWP391_KOIFARMSHOP_BE.service.ICareInfomationService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +25,12 @@ public class CareInfomationController {
     }
     @PostMapping("/")
     @ResponseStatus (HttpStatus.CREATED)
-    public CareInfomation saveCareInfomation(@org.springframework.web.bind.annotation.RequestBody CareInfomation careInfomation){
+    public CareInfomation saveCareInfomation( @Valid @RequestBody CareInfomation careInfomation){
         return iCareInfomationService.insertCareInfomation(careInfomation);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CareInfomation> updateCareInfomation(@PathVariable long id, @RequestBody CareInfomation careInfomation){
+    public ResponseEntity<CareInfomation> updateCareInfomation(@PathVariable long id,@Valid @RequestBody CareInfomation careInfomation){
         CareInfomation updateCareInfomation = iCareInfomationService.updateCareInfomation(id, careInfomation);
         return ResponseEntity.ok(updateCareInfomation);
     }

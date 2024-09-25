@@ -2,6 +2,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Orders;
 import com.example.SWP391_KOIFARMSHOP_BE.service.IOrdersService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,12 @@ public class OrdersController {
     }
     @PostMapping("/")
     @ResponseStatus (HttpStatus.CREATED)
-    public Orders saveOrders(@org.springframework.web.bind.annotation.RequestBody Orders orders){
+    public Orders saveOrders(@Valid @RequestBody Orders orders){
         return iOrdersService.insertOrders(orders);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Orders> updateOrders(@PathVariable long id, @RequestBody Orders orders){
+    public ResponseEntity<Orders> updateOrders(@PathVariable long id,@Valid @RequestBody Orders orders){
         Orders updateOrders = iOrdersService.updateOrders(id, orders);
         return ResponseEntity.ok(updateOrders);
     }

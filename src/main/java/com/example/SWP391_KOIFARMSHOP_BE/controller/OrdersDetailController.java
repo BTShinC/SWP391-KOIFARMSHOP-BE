@@ -4,6 +4,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.OrdersDetail;
 import com.example.SWP391_KOIFARMSHOP_BE.service.IOrdersDetailService;
 import com.example.SWP391_KOIFARMSHOP_BE.service.IOrdersService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,12 @@ public class OrdersDetailController {
     }
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public OrdersDetail saveOrdersDetail(@org.springframework.web.bind.annotation.RequestBody OrdersDetail ordersDetail){
+    public OrdersDetail saveOrdersDetail(@Valid @RequestBody OrdersDetail ordersDetail){
         return iOrdersDetailService.insertOrdersDetail(ordersDetail);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrdersDetail> updateOrdersDetail(@PathVariable long id, @RequestBody OrdersDetail ordersDetail){
+    public ResponseEntity<OrdersDetail> updateOrdersDetail(@PathVariable long id,@Valid @RequestBody OrdersDetail ordersDetail){
         OrdersDetail updateOrdersDetail = iOrdersDetailService.updateOrdersDetail(id, ordersDetail);
         return ResponseEntity.ok(updateOrdersDetail);
     }

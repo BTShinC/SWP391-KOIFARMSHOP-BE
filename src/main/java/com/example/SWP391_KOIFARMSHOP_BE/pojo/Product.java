@@ -49,16 +49,16 @@ public class Product {
     @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="ordersdetail_id")
-    private OrdersDetail ordersdetail ;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="carepackage_id")
-    private CarePackage carePackage  ;
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
-    private Consignment consignment;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name ="ordersdetail_id")
+//    private OrdersDetail ordersdetail ;
+//
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name ="carepackage_id")
+//    private CarePackage carePackage  ;
+//
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
+//    private Consignment consignment;
 
 }
 

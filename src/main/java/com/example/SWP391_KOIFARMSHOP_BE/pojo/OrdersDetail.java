@@ -18,17 +18,17 @@ public class OrdersDetail {
     private long ordersDetailID;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
-    private Orders orders;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name ="ordersdetail_id")
-    private Set<Product> product;
-
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name ="ordersdetail_id")
-    private Set<ProductCombo> productCombos;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "order_id")
+//    private Orders orders;
+//
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name ="ordersdetail_id")
+//    private Set<Product> product;
+//
+//
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name ="ordersdetail_id")
+//    private Set<ProductCombo> productCombos;
 
 }

@@ -15,12 +15,12 @@ public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long feedBackID;
-    @Size(max = 500, message = "Description must be less than 500 characters")
+    @Size(max = 1000, message = "Description must be less than 1000 characters")
     private String desciption;
 
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "feedback")
-    private Orders orders;
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "feedback")
+//    private Orders orders;
 
 
 
