@@ -9,4 +9,5 @@ public class AccountResponse {
     String address;
     String email;
     String phoneNumber;
+    private String role;
 }

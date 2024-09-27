@@ -6,7 +6,9 @@ import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.model.LoginRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.RegisterRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IAccountRepository;
+import com.example.SWP391_KOIFARMSHOP_BE.repository.IRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,33 +36,69 @@ public class AuthenticationService implements UserDetailsService {
     ModelMapper modelMapper;
 
     @Autowired
+    IRoleRepository iRoleRepository;
+
+    @Autowired
     AuthenticationManager authenticationManager;
 
     public AccountResponse register(RegisterRequest registerRequest) {
-
         if (iAccountRepository.existsByEmail(registerRequest.getEmail())) {
             throw new DuplicateEntity("Email already exists");
         }
-//        if (iAccountRepository.existsByPhone(registerRequest.getPhoneNumber())) {
-//            throw new DuplicateEntity("Email already exists");
-//        }
 
+        // Tạo tài khoản mới và mã hóa mật khẩu
         Account account = modelMapper.map(registerRequest, Account.class);
-        try {
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
 
-            account.setPassword(passwordEncoder.encode(account.getPassword()));
-            Account newAccount = iAccountRepository.save(account);
-            return modelMapper.map(newAccount, AccountResponse.class);
+        // Lưu tài khoản vào cơ sở dữ liệu lần đầu tiên để có accountID
+        Account newAccount = iAccountRepository.save(account);
 
-        } catch (Exception e) {
-//            if (e.getMessage().contains(account.getEmail())) {
-//                throw new DuplicateEntity("Duplicate Email");
-//            }
-//            throw new DuplicateEntity("Duplicate phone");
-            throw new RuntimeException("Error occurred while registering the account", e);
+        // Kiểm tra nếu đây là tài khoản đầu tiên (accountID == 1) thì set role Admin
+        if (newAccount.getAccountID() == 1) {
+            Role adminRole = iRoleRepository.findByRoleName("admin")
+                    .orElseThrow(() -> new RuntimeException("Admin role not found"));
+            newAccount.setRole(adminRole);
+        } else {
+            // Gán role mặc định là Customer cho các tài khoản khác
+            Role customerRole = iRoleRepository.findByRoleName("customer")
+                    .orElseThrow(() -> new RuntimeException("Customer role not found"));
+            newAccount.setRole(customerRole);
         }
 
+        // Cập nhật tài khoản với vai trò mới
+        newAccount = iAccountRepository.save(newAccount);
+
+        return modelMapper.map(newAccount, AccountResponse.class);
     }
+
+
+
+
+//    public AccountResponse register(RegisterRequest registerRequest) {
+//
+//        if (iAccountRepository.existsByEmail(registerRequest.getEmail())) {
+//            throw new DuplicateEntity("Email already exists");
+//        }
+////        if (iAccountRepository.existsByPhone(registerRequest.getPhoneNumber())) {
+////            throw new DuplicateEntity("Email already exists");
+////        }
+//
+//        Account account = modelMapper.map(registerRequest, Account.class);
+//        try {
+//
+//            account.setPassword(passwordEncoder.encode(account.getPassword()));
+//            Account newAccount = iAccountRepository.save(account);
+//            return modelMapper.map(newAccount, AccountResponse.class);
+//
+//        } catch (Exception e) {
+////            if (e.getMessage().contains(account.getEmail())) {
+////                throw new DuplicateEntity("Duplicate Email");
+////            }
+////            throw new DuplicateEntity("Duplicate phone");
+//            throw new RuntimeException("Error occurred while registering the account", e);
+//        }
+//
+//    }
 
     // Hàm xử lý đăng nhập
     public AccountResponse login(LoginRequest loginRequest){

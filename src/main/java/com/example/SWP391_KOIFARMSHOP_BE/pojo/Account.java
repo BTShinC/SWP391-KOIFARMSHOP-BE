@@ -76,10 +76,10 @@ public  class Account implements UserDetails {
         return true;
     }
 
-//  @ManyToOne(cascade = CascadeType.ALL)
-//  @JoinColumn(name ="role_id",referencedColumnName = "RoleID")
-//    private Role role ;
-//
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name ="role_id",referencedColumnName = "RoleID")
+    private Role role ;
+
 //  @OneToMany(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "account-id")
 //    private Set<Orders> orders ;
