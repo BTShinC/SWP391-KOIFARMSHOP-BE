@@ -22,10 +22,10 @@ public class Payment {
     private double shipPrice;
     @PositiveOrZero(message = "Subtotal must be zero or a positive number")
     private double subTotal;
-//
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "order_id")
-//    private Orders orders;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private Orders orders;
 
 
 

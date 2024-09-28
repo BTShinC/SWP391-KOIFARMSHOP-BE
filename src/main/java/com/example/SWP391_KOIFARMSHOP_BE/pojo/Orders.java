@@ -32,22 +32,22 @@ public class Orders {
     @Size(max = 255, message = "Description must be less than 255 characters")
     private String description;
 
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "account-id")
-//    private Account account ;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "account-id")
+    private Account account ;
 
 
-//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "orders")
-//    private Payment payment;
-//
-//
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "order_id")
-//    private Set<OrdersDetail> ordersDetail;
-//
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "feedback_id")
-//    private Feedback feedback;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "orders")
+    private Payment payment;
+
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private Set<OrdersDetail> ordersDetail;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "feedback_id")
+    private Feedback feedback;
 
 
 }
