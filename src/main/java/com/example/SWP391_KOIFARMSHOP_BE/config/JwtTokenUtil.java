@@ -1,10 +1,12 @@
-package com.example.SWP391_KOIFARMSHOP_BE.model;
+package com.example.SWP391_KOIFARMSHOP_BE.config;
 
 
+import com.example.SWP391_KOIFARMSHOP_BE.service.JwtBlacklistService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +26,9 @@ public class JwtTokenUtil {
 
     @Value("${jwt.token.expiration:600000}") // Default 10 minutes (in milliseconds)
     private long jwtExpirationInMs;
+
+    @Autowired
+    private JwtBlacklistService jwtBlacklistService;
 
     // Tạo token từ thông tin người dùng
     public String generateToken(String username) {
@@ -80,5 +85,19 @@ public class JwtTokenUtil {
     public Boolean validateToken(String token, String username) {
         final String tokenUsername = extractUsername(token);
         return (tokenUsername.equals(username) && !isTokenExpired(token));
+    }
+
+
+
+    // Các hàm generate và validate token khác
+
+    public boolean validateToken(String token) {
+        // Kiểm tra xem token có bị blacklist không
+        if (jwtBlacklistService.isTokenBlacklisted(token)) {
+            return false;
+        }
+
+        // Thực hiện các kiểm tra khác như expiration...
+        return !isTokenExpired(token);
     }
 }

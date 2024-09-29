@@ -1,4 +1,4 @@
-package com.example.SWP391_KOIFARMSHOP_BE.pojo;
+package com.example.SWP391_KOIFARMSHOP_BE.model;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
