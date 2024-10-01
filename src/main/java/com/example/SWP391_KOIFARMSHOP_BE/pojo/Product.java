@@ -4,20 +4,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Product")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Product {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
 
     private long productID;
+    @NotBlank(message = "Product name cannot be blank")
+    private String productName;
     @NotBlank(message = "Breed cannot be blank")
     private String breed;
     @Positive(message = "Size must be a positive number")
@@ -31,7 +29,7 @@ public class Product {
     @NotBlank(message = "Origin cannot be blank")
     private String origin;
     @NotBlank(message = "Description cannot be blank")
-    private String desciption;
+    private String description;
     @NotBlank(message="Image Url canot br blank")
     private String image;
     @Positive(message = "Price must be a positive number")

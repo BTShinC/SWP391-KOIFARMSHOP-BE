@@ -22,7 +22,7 @@ public class RoleService {
     @Autowired
     private ModelMapper modelMapper;
 
-    // Create Role
+    // Tạo Role mới
     public RoleResponse createRole(RoleRequest roleRequest) {
         Optional<Role> existingRole = iRoleRepository.findByRoleName(roleRequest.getRoleName());
 
@@ -35,7 +35,7 @@ public class RoleService {
         return modelMapper.map(savedRole, RoleResponse.class);
     }
 
-    // Update Role
+    // Chỉnh sửa Role
     public RoleResponse updateRole(Long id, RoleRequest roleRequest) {
         Role existingRole = iRoleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Role with ID " + id + " not found"));
@@ -47,7 +47,7 @@ public class RoleService {
         return modelMapper.map(updatedRole, RoleResponse.class);
     }
 
-    // Delete Role
+    // Xóa Role
     public void deleteRole(Long id) {
         Role existingRole = iRoleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Role with ID " + id + " not found"));
@@ -55,7 +55,7 @@ public class RoleService {
         iRoleRepository.delete(existingRole);
     }
 
-    // Get All Roles
+    // Xem tất cả Roles
     public List<RoleResponse> getAllRoles() {
         List<Role> roles = iRoleRepository.findAll();
         return roles.stream()

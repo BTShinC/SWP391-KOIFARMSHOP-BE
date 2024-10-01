@@ -1,7 +1,11 @@
 package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
+import com.example.SWP391_KOIFARMSHOP_BE.model.ProductRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.ProductResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Product;
 import com.example.SWP391_KOIFARMSHOP_BE.service.IProductService;
+import com.example.SWP391_KOIFARMSHOP_BE.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,36 +16,44 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/product")
+@RequestMapping("/api/products")
 public class ProductController {
+
     @Autowired
-    private IProductService iProductService;
-    @GetMapping("/")
-    public ResponseEntity<List<Product>> fetchALlProduct(){
-        return ResponseEntity.ok(iProductService.getAllProduct());
-    }
-    @PostMapping("/")
-    @ResponseStatus (HttpStatus.CREATED)
-    public Product saveProduct(@RequestBody Product product){
-        return iProductService.insertProduct(product);
+    private ProductService productService;
+
+    // API để tạo sản phẩm mới
+    @PostMapping
+    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest productRequest) {
+        ProductResponse newProduct = productService.createProduct(productRequest);
+        return ResponseEntity.ok(newProduct);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable long id, @RequestBody Product product){
-        Product updateProduct = iProductService.updateProduct(id, product);
-        return ResponseEntity.ok(updateProduct);
+    // API để lấy tất cả sản phẩm
+    @GetMapping
+    public ResponseEntity<List<ProductResponse>> getAllProducts() {
+        List<ProductResponse> products = productService.getAllProducts();
+        return ResponseEntity.ok(products);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable long id){
-        iProductService.deleteProduct(id);
-        return ResponseEntity.ok("Delete product success!");
-    }
-
+    // API để lấy sản phẩm theo ID
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Product>> getProductByID(@PathVariable long id){
-        Optional<Product> product = iProductService.getProductByID(id);
-        return  ResponseEntity.ok(product);
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
+        ProductResponse product = productService.getProductById(id);
+        return ResponseEntity.ok(product);
+    }
+
+    // API để cập nhật sản phẩm
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequest productRequest) {
+        ProductResponse updatedProduct = productService.updateProduct(id, productRequest);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+    // API để xóa sản phẩm
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.ok("Product deleted successfully");
     }
 }
-
