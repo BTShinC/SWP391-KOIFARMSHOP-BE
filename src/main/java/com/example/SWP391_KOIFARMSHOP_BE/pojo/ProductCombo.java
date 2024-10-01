@@ -18,6 +18,9 @@ public class ProductCombo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private long productComboID;
+
+    private String name;
+
     @Positive(message = "Size must be a positive number")
     private float size;
     @NotBlank(message = "Breed cannot be blank")
@@ -27,7 +30,7 @@ public class ProductCombo {
     @PositiveOrZero(message = "Quantity must be zero or a positive number")
     private int quantity;
     @NotBlank(message = "Description cannot be blank")
-    private String desciption;
+    private String description;
     @NotBlank(message = "Image URL cannot be blank")
     private String image;
     @Positive(message = "Price must be a positive number")
@@ -47,7 +50,10 @@ public class ProductCombo {
     @JoinColumn(name ="carepackage_id")
     private CarePackage carePackage;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "productCombo")
+
+    @OneToOne(mappedBy = "productCombo")
     private Consignment consignment;
+
+
 }
 
