@@ -1,23 +1,12 @@
-package com.example.SWP391_KOIFARMSHOP_BE.pojo;
+package com.example.SWP391_KOIFARMSHOP_BE.model;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "Product_Combo")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ProductCombo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private long productComboID;
+public class ProductComboRequest {
     @Positive(message = "Size must be a positive number")
     private float size;
     @NotBlank(message = "Breed cannot be blank")
@@ -38,16 +27,4 @@ public class ProductCombo {
     private double desiredPrice;
     @NotBlank(message = "Type cannot be blank")
     private String type;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="ordersdetail_id")
-    private OrdersDetail ordersdetail ;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="carepackage_id")
-    private CarePackage carePackage;
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "productCombo")
-    private Consignment consignment;
 }
-

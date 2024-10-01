@@ -33,13 +33,13 @@ public class CarePackage {
     @NotNull(message = "Food intake per day cannot be null")
     @Min(value = 1, message = "Food intake per day must be at least 1")
     private int foodIntakePerDay;
-//
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name ="carepackage_id")
-//    private Set<Product> product;
-//
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name ="carepackage_id")
-//    private Set<ProductCombo> productCombos;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name ="carepackage_id")
+    private Set<Product> product;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name ="carepackage_id")
+    private Set<ProductCombo> productCombos;
 
 }

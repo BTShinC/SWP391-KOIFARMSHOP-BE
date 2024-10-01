@@ -1,4 +1,4 @@
-package com.example.SWP391_KOIFARMSHOP_BE.pojo;
+package com.example.SWP391_KOIFARMSHOP_BE.model;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -36,4 +36,5 @@ public class RegisterRequest {
 
     @Size(max = 255, message = "Image URL cannot exceed 255 characters")
     private String image;
+
 }

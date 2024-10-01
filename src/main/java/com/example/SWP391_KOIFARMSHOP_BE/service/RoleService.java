@@ -1,43 +1,65 @@
 package com.example.SWP391_KOIFARMSHOP_BE.service;
 
+import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
+import com.example.SWP391_KOIFARMSHOP_BE.model.RoleRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.RoleResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IRoleRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
-public class RoleService implements IRoleService{
+public class RoleService {
+
     @Autowired
     private IRoleRepository iRoleRepository;
-    @Override
-    public List<Role> getAllRole() {
-        return iRoleRepository.findAll();
-    }
 
-    @Override
-    public Role insertRole(Role role) {
-        return iRoleRepository.save(role);
-    }
+    @Autowired
+    private ModelMapper modelMapper;
 
-    @Override
-    public Role updateRole(long roleID, Role role) {
-        Role r = iRoleRepository.getById(roleID);
-        if(r != null){
-            r.setRoleName(role.getRoleName());
-            return iRoleRepository.save(r);
+    // Create Role
+    public RoleResponse createRole(RoleRequest roleRequest) {
+        Optional<Role> existingRole = iRoleRepository.findByRoleName(roleRequest.getRoleName());
+
+        if (existingRole.isPresent()) {
+            throw new IllegalArgumentException("Role with name '" + roleRequest.getRoleName() + "' already exists.");
         }
-        return null;
+
+        Role role = modelMapper.map(roleRequest, Role.class);
+        Role savedRole = iRoleRepository.save(role);
+        return modelMapper.map(savedRole, RoleResponse.class);
     }
 
-    @Override
-    public void deleteRole(long roleID) {
-        iRoleRepository.deleteById(roleID);
+    // Update Role
+    public RoleResponse updateRole(Long id, RoleRequest roleRequest) {
+        Role existingRole = iRoleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Role with ID " + id + " not found"));
+
+        // Cập nhật thông tin Role
+        existingRole.setRoleName(roleRequest.getRoleName());
+
+        Role updatedRole = iRoleRepository.save(existingRole);
+        return modelMapper.map(updatedRole, RoleResponse.class);
     }
 
-    @Override
-    public Optional<Role> getRoleByID(long roleID) {
-        return iRoleRepository.findById(roleID);
+    // Delete Role
+    public void deleteRole(Long id) {
+        Role existingRole = iRoleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Role with ID " + id + " not found"));
+
+        iRoleRepository.delete(existingRole);
+    }
+
+    // Get All Roles
+    public List<RoleResponse> getAllRoles() {
+        List<Role> roles = iRoleRepository.findAll();
+        return roles.stream()
+                .map(role -> modelMapper.map(role, RoleResponse.class))
+                .collect(Collectors.toList());
     }
 }

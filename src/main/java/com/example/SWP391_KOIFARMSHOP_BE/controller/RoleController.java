@@ -1,47 +1,49 @@
 package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 
-import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
-import com.example.SWP391_KOIFARMSHOP_BE.service.IRoleService;
+import com.example.SWP391_KOIFARMSHOP_BE.model.RoleRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.RoleResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.service.RoleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/role")
 public class RoleController {
     @Autowired
-    private IRoleService iRoleService;
-    @GetMapping("/")
-    public ResponseEntity<List<Role>> fetchALlRole(){
-        return ResponseEntity.ok(iRoleService.getAllRole());
-    }
-    @PostMapping("/")
-    @ResponseStatus (HttpStatus.CREATED)
-    public Role saveRole(@RequestBody Role role){
-        return iRoleService.insertRole(role);
+    RoleService roleService;
+
+    // Create Role
+    @PostMapping("Create")
+    public ResponseEntity<RoleResponse> createRole(@Valid @RequestBody RoleRequest roleRequest) {
+        RoleResponse newRole = roleService.createRole(roleRequest);
+        return ResponseEntity.ok(newRole);
     }
 
+    // Get All Roles
+    @GetMapping
+    public ResponseEntity<List<RoleResponse>> getAllRoles() {
+        List<RoleResponse> roles = roleService.getAllRoles();
+        return ResponseEntity.ok(roles);
+    }
+
+    // Update Role
     @PutMapping("/{id}")
-    public ResponseEntity<Role> updateRole(@PathVariable long id, @RequestBody Role role){
-        Role updateRole = iRoleService.updateRole(id, role);
-        return ResponseEntity.ok(updateRole);
+    public ResponseEntity<RoleResponse> updateRole(@PathVariable Long id, @Valid @RequestBody RoleRequest roleRequest) {
+        RoleResponse updatedRole = roleService.updateRole(id, roleRequest);
+        return ResponseEntity.ok(updatedRole);
     }
 
+    // Delete Role
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRole(@PathVariable long id){
-        iRoleService.deleteRole(id);
-        return ResponseEntity.ok("Delete Role success!");
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<Role>> getRoleByID(@PathVariable long id){
-        Optional<Role> role = iRoleService.getRoleByID(id);
-        return  ResponseEntity.ok(role);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRole(@PathVariable Long id) {
+        roleService.deleteRole(id);
     }
 }

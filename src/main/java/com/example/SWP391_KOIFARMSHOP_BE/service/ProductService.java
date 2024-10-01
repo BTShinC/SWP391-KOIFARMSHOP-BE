@@ -2,6 +2,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.service;
 
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Product;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IProductRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,8 @@ import java.util.Optional;
 public class ProductService implements IProductService{
     @Autowired
     private IProductRepository iProductRepository;
+    @Autowired
+    private ModelMapper modelMapper;
     @Override
     public List<Product> getAllProduct() {
         return iProductRepository.findAll();

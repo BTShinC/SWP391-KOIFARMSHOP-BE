@@ -3,12 +3,14 @@ package com.example.SWP391_KOIFARMSHOP_BE.service;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.DuplicateEntity;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
 import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.config.JwtTokenUtil;
 import com.example.SWP391_KOIFARMSHOP_BE.model.LoginRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
-import com.example.SWP391_KOIFARMSHOP_BE.pojo.RegisterRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IAccountRepository;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IRoleRepository;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +44,10 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     AuthenticationManager authenticationManager;
 
-    public AccountResponse register(RegisterRequest registerRequest) {
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
+    public AccountResponse register(@Valid RegisterRequest registerRequest) {
         if (iAccountRepository.existsByEmail(registerRequest.getEmail())) {
             throw new DuplicateEntity("Email already exists");
         }
@@ -72,37 +78,10 @@ public class AuthenticationService implements UserDetailsService {
     }
 
 
-
-
-//    public AccountResponse register(RegisterRequest registerRequest) {
-//
-//        if (iAccountRepository.existsByEmail(registerRequest.getEmail())) {
-//            throw new DuplicateEntity("Email already exists");
-//        }
-////        if (iAccountRepository.existsByPhone(registerRequest.getPhoneNumber())) {
-////            throw new DuplicateEntity("Email already exists");
-////        }
-//
-//        Account account = modelMapper.map(registerRequest, Account.class);
-//        try {
-//
-//            account.setPassword(passwordEncoder.encode(account.getPassword()));
-//            Account newAccount = iAccountRepository.save(account);
-//            return modelMapper.map(newAccount, AccountResponse.class);
-//
-//        } catch (Exception e) {
-////            if (e.getMessage().contains(account.getEmail())) {
-////                throw new DuplicateEntity("Duplicate Email");
-////            }
-////            throw new DuplicateEntity("Duplicate phone");
-//            throw new RuntimeException("Error occurred while registering the account", e);
-//        }
-//
-//    }
-
     // Hàm xử lý đăng nhập
-    public AccountResponse login(LoginRequest loginRequest){
-        try{
+    public String login(LoginRequest loginRequest) {
+        try {
+            // Xác thực thông tin đăng nhập
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getUserName(),
@@ -110,11 +89,17 @@ public class AuthenticationService implements UserDetailsService {
                     )
             );
 
-            // Xác thực thành công, lấy tài khoản và trả về
+            // Nếu xác thực thành công, lấy thông tin tài khoản
             Account account = (Account) authentication.getPrincipal();
-            return modelMapper.map(account, AccountResponse.class);
+
+            // Tạo JWT Token
+            String token = jwtTokenUtil.generateToken(account.getUsername());
+
+            // Trả về JWT Token cho người dùng
+            return token;
 
         } catch (Exception e) {
+            System.err.println("Error : " + e.getMessage());
             throw new EntityNotFoundException("Username or password is invalid");
         }
     }
@@ -137,5 +122,20 @@ public class AuthenticationService implements UserDetailsService {
         return accounts.stream()
                 .map(account -> modelMapper.map(account, AccountResponse.class))
                 .collect(Collectors.toList());
+    }
+    // Hàm lấy chi tiết tài khoản theo username
+    public AccountResponse getAccountDetails(String username) {
+        Account account = iAccountRepository.findAccountByUserName(username);
+        if (account == null) {
+            throw new EntityNotFoundException("Account not found");
+        }
+        return modelMapper.map(account, AccountResponse.class);
+    }
+
+    // Hàm để lấy thời gian hết hạn của token
+    public long getTokenExpiration(String token) {
+        // Sử dụng JwtTokenUtil để lấy thời gian hết hạn của token
+        Date expirationDate = jwtTokenUtil.extractExpiration(token);
+        return expirationDate.getTime(); // Trả về thời gian hết hạn dưới dạng milliseconds
     }
 }
