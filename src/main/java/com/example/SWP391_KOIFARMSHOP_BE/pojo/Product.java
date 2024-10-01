@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,35 +18,49 @@ public class Product {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long productID;
-  //  @NotBlank(message = "Breed cannot be blank")
+    @NotBlank(message = "Breed cannot be blank")
     private String breed;
-   // @Positive(message = "Size must be a positive number")
+
+    @Positive(message = "Size must be a positive number")
     private float size;
-  //  @NotBlank(message = "Sex cannot be blank")
+
+    @NotBlank(message = "Sex cannot be blank")
     private String sex;
-  //  @NotBlank(message = "Health status cannot be blank")
+
+    @NotBlank(message = "Health status cannot be blank")
     private String healthStatus;
-  //  @NotBlank(message = "Personality trait cannot be blank")
+
+    @NotBlank(message = "Personality trait cannot be blank")
     private String personalityTrait;
-  //  @NotBlank(message = "Origin cannot be blank")
+
+    @NotBlank(message = "Origin cannot be blank")
     private String origin;
-  //  @NotBlank(message = "Description cannot be blank")
-    private String desciption;
-  //  @NotBlank(message="Image Url canot br blank")
+
+    @NotBlank(message = "Description cannot be blank")
+    private String description; // sửa lỗi chính tả từ desciption
+
+    @NotBlank(message = "Image URL cannot be blank")
     private String image;
-   // @Positive(message = "Price must be a positive number")
+
+    @Positive(message = "Price must be a positive number")
     private double price;
-   // @NotBlank(message = "Certificate cannot be blank")
+
+    @NotBlank(message = "Certificate cannot be blank")
     private String certificate;
-   // @NotBlank(message = "Type cannot be blank")
+
+    @NotBlank(message = "Type cannot be blank")
     private String type;
-  //  @PositiveOrZero(message = "Quantity must be zero or a positive number")
+
+    @PositiveOrZero(message = "Quantity must be zero or a positive number")
     private int quantity;
-  //  @NotBlank(message = "Status cannot be blank")
+
+    @NotBlank(message = "Status cannot be blank")
     private String status;
-  //  @Positive(message = "Desired price must be a positive number")
+
+    @Positive(message = "Desired price must be a positive number")
     private double desiredPrice;
-   // @NotBlank(message = "Consignment type cannot be blank")
+
+    @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
 
     @ManyToOne(cascade = CascadeType.ALL)

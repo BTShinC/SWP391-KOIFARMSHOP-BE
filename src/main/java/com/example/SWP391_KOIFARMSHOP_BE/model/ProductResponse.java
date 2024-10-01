@@ -17,7 +17,7 @@ public class ProductResponse {
      private  String healthStatus;
      private  String personalityTrait;
      private String origin;
-     private String desciption;
+     private String description;
      private String image;
      private double price;
      private String certificate;
