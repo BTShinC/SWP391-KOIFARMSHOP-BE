@@ -3,7 +3,6 @@ package com.example.SWP391_KOIFARMSHOP_BE.service;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.DuplicateEntity;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
 import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
-import com.example.SWP391_KOIFARMSHOP_BE.config.JwtTokenUtil;
 import com.example.SWP391_KOIFARMSHOP_BE.model.LoginRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
@@ -13,6 +12,7 @@ import com.example.SWP391_KOIFARMSHOP_BE.repository.IRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,8 +32,6 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     IAccountRepository iAccountRepository;
 
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     IRoleRepository iRoleRepository;
@@ -46,6 +44,9 @@ public class AuthenticationService implements UserDetailsService {
 
     @Autowired
     AuthenticationManager authenticationManager;
+
+    @Autowired
+    TokenService tokenService;
 
     @Value("${default.role.name:USER}")
     private String defaultRoleName;
@@ -81,7 +82,7 @@ public class AuthenticationService implements UserDetailsService {
     }
 
     // Hàm xử lý đăng nhập
-    public String login(LoginRequest loginRequest) {
+    public AccountResponse login(LoginRequest loginRequest) {
         try {
             // Xác thực thông tin đăng nhập
             Authentication authentication = authenticationManager.authenticate(
@@ -93,12 +94,10 @@ public class AuthenticationService implements UserDetailsService {
 
             // Nếu xác thực thành công, lấy thông tin tài khoản
             Account account = (Account) authentication.getPrincipal();
-
-            // Tạo JWT Token
-            String token = jwtTokenUtil.generateToken(account.getUsername());
-
-            // Trả về JWT Token cho người dùng
-            return token;
+            AccountResponse accountResponse =  modelMapper.map(account, AccountResponse.class);
+            accountResponse.setToken(tokenService.generateToken(account));
+            // lần sau quay lại chỉ cần cái token
+            return accountResponse;
 
         } catch (Exception e) {
             System.err.println("Error : " + e.getMessage());
@@ -135,9 +134,5 @@ public class AuthenticationService implements UserDetailsService {
     }
 
     // Hàm để lấy thời gian hết hạn của token
-    public long getTokenExpiration(String token) {
-        // Sử dụng JwtTokenUtil để lấy thời gian hết hạn của token
-        Date expirationDate = jwtTokenUtil.extractExpiration(token);
-        return expirationDate.getTime(); // Trả về thời gian hết hạn dưới dạng milliseconds
-    }
+
 }

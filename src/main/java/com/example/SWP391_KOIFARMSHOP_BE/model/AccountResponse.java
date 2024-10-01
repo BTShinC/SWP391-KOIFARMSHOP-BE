@@ -10,5 +10,6 @@ public class AccountResponse {
     private String email;
     private String phoneNumber;
     private String Role;
+    private String Token;
 
 }
