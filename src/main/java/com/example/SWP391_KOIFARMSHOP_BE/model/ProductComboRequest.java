@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class ProductComboRequest {
+
     @NotBlank(message = "Breed cannot be blank")
     private String name;
 
@@ -39,5 +40,8 @@ public class ProductComboRequest {
 
     @NotBlank(message = "Type cannot be blank")
     private String type;
+
+    @NotBlank(message = "Type cannot be blank")
+    private String Status;
 
 }

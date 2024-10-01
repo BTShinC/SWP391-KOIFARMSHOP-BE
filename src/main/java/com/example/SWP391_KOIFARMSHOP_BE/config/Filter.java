@@ -15,5 +15,6 @@ public class Filter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // kiểm tra trước khi cho phép truy cập vào controller
         filterChain.doFilter(request,response);
+
     }
 }

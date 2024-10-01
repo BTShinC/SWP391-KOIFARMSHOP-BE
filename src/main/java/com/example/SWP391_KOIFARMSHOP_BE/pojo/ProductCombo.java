@@ -42,6 +42,9 @@ public class ProductCombo {
     @NotBlank(message = "Type cannot be blank")
     private String type;
 
+    @NotBlank(message = "Type cannot be blank")
+    private String Status;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="ordersdetail_id")
     private OrdersDetail ordersdetail ;

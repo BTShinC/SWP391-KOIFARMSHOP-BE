@@ -22,14 +22,18 @@ public class ProductService /*implements IProductService*/{
 
     // Thêm mới sản phẩm
     public ProductResponse createProduct(ProductRequest productRequest) {
-      // try {
+       try {
            Product product = modelMapper.map(productRequest, Product.class);
+           product.setConsignment(null);
+           product.setCarePackage(null);
+           product.setOrdersdetail(null);
            Product savedProduct = productRepository.save(product);
+
            return modelMapper.map(savedProduct, ProductResponse.class);
-//       }catch(Exception e){
-//           System.err.println("Error : " + e.getMessage());
-//           throw new EntityNotFoundException("Error when to Create ");
-//       }
+       }catch(Exception e){
+           System.err.println("Error : " + e.getMessage());
+           throw new EntityNotFoundException("Error when to Create ");
+       }
     }
 
     // Lấy sản phẩm theo ID

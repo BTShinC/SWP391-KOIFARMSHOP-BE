@@ -2,19 +2,11 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductComboRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductComboResponse;
-import com.example.SWP391_KOIFARMSHOP_BE.model.RoleRequest;
-import com.example.SWP391_KOIFARMSHOP_BE.model.RoleResponse;
-import com.example.SWP391_KOIFARMSHOP_BE.pojo.ProductCombo;
-import com.example.SWP391_KOIFARMSHOP_BE.service.IProductComboService;
 import com.example.SWP391_KOIFARMSHOP_BE.service.ProductComboService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin

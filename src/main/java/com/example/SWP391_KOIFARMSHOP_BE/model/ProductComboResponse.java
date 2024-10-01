@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class ProductComboResponse {
     private long productComboID;
+
     private String name;
 
     private float size;
@@ -29,4 +30,6 @@ public class ProductComboResponse {
     private double desiredPrice;
 
     private String type;
+
+    private String Status;
 }
