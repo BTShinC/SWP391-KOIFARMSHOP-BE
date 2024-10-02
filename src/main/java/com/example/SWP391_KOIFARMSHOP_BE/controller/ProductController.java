@@ -43,6 +43,13 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
+    // API để lấy sản phẩm theo breed
+    @GetMapping("/breed/{breed}")
+    public ResponseEntity<ProductResponse> getProductByBreed(@PathVariable String breed) {
+        ProductResponse product = productService.getProductByBreed(breed);
+        return ResponseEntity.ok(product);
+    }
+
     // API để cập nhật sản phẩm
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequest productRequest) {

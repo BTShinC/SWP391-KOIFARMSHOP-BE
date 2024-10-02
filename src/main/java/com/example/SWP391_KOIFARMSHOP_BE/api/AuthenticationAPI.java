@@ -72,7 +72,7 @@ public class AuthenticationAPI {
             String token = UUID.randomUUID().toString();
             iAccountService.saveResetToken(request.getEmail(), token);
 
-            String resetLink = "http://localhost:8080/api/reset?token=" + token;//gắn link FE vào
+            String resetLink = "http://103.90.227.69/recoveryPassword?token=" + token;//gắn link FE vào
             emailService.sendSimpleMessage(request.getEmail(),
                     "Reset your password",
                     "Click the link to reset your password: " + resetLink);

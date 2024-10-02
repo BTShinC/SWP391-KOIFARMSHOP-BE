@@ -51,6 +51,14 @@ public class ProductService {
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
         return modelMapper.map(product, ProductResponse.class);
     }
+    // Lấy sản phẩm theo breed
+    public ProductResponse getProductByBreed(String breed){
+        Product product = iProductRepository.findByBreed(breed);
+        if (product == null) {
+            throw new IllegalArgumentException("Product with name '" + breed + "' already exists.");
+        }
+        return modelMapper.map(product, ProductResponse.class);
+    }
 
     // Cập nhật sản phẩm
     public ProductResponse updateProduct(Long productId, ProductRequest productRequest) {

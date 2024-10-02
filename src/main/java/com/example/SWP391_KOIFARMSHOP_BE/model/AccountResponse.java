@@ -10,4 +10,5 @@ public class AccountResponse {
     String email;
     String phoneNumber;
     private String role;
+    private double accountBalance;
 }
