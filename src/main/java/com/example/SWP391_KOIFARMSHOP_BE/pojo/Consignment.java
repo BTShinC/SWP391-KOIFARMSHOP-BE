@@ -27,9 +27,14 @@ public class Consignment {
     @Size(max = 50, message = "Status must be less than 50 characters")
     private String status;
 
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_combo_id")
     private ProductCombo productCombo;
+
+
+
+
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
