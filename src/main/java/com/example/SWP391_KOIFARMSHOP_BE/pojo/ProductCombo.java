@@ -42,6 +42,7 @@ public class ProductCombo {
     @NotBlank(message = "Type cannot be blank")
     private String type;
 
+
     @NotBlank(message = "Type cannot be blank")
     private String Status;
 
@@ -53,10 +54,8 @@ public class ProductCombo {
     @JoinColumn(name ="carepackage_id")
     private CarePackage carePackage;
 
-
-    @OneToOne(mappedBy = "productCombo")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "productCombo")
     private Consignment consignment;
-
 
 }
 

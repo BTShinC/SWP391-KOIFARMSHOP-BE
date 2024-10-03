@@ -33,9 +33,6 @@ public class Consignment {
     private ProductCombo productCombo;
 
 
-
-
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private Product product;

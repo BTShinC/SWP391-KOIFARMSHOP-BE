@@ -23,8 +23,9 @@ public class Role {
     @JoinColumn(name ="role_id")
     private Set<Account> account;
 
-//    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL) // Chỉ định mappedBy để tránh vấn đề vòng lặp
-//    private Set<Account> accounts;
-//
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL) // Chỉ định mappedBy để tránh vấn đề vòng lặp
+    private Set<Account> accounts;
+
 
 }

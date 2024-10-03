@@ -88,6 +88,12 @@
 			<version>3.2.1</version>
 		</dependency>
 
+<!--		email-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+<!--		jwt-->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
@@ -104,6 +110,12 @@
 			<artifactId>jjwt-jackson</artifactId> <!-- for JSON parser -->
 			<version>0.11.5</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
 
 	</dependencies>
 

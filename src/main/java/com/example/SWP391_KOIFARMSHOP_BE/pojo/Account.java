@@ -51,6 +51,9 @@ public  class Account implements UserDetails {
     @Size(max = 255, message = "Image URL cannot exceed 255 characters")
 
     private String image;
+
+    // resetToken để lưu token đặt lại mật khẩu
+    private String resetToken;
     @JsonIgnore
     boolean isDeleted = false;
 
@@ -90,14 +93,10 @@ public  class Account implements UserDetails {
   @JoinColumn(name ="role_id",referencedColumnName = "RoleID")
     private Role role ;
 
+
   @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "account-id")
     private Set<Orders> orders ;
-
-
-//    @ManyToOne
-//    @JoinColumn(name = "role_id", referencedColumnName = "roleID")
-//    private Role role;
 
 }
 

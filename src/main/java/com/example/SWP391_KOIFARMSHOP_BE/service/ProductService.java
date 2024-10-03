@@ -12,63 +12,76 @@ import java.util.stream.Collectors;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class ProductService /*implements IProductService*/{
+
+public class ProductService {
+
     @Autowired
-    private IProductRepository productRepository;
+    private IProductRepository iProductRepository;
+
     @Autowired
     private ModelMapper modelMapper;
 
-    // Thêm mới sản phẩm
+    // Tạo sản phẩm mới
     public ProductResponse createProduct(ProductRequest productRequest) {
-       try {
-           Product product = modelMapper.map(productRequest, Product.class);
-           product.setConsignment(null);
-           product.setCarePackage(null);
-           product.setOrdersdetail(null);
-           Product savedProduct = productRepository.save(product);
+        Optional<Product> existingProduct = iProductRepository.findByProductName(productRequest.getProductName());
 
-           return modelMapper.map(savedProduct, ProductResponse.class);
-       }catch(Exception e){
-           System.err.println("Error : " + e.getMessage());
-           throw new EntityNotFoundException("Error when to Create ");
-       }
-    }
-
-    // Lấy sản phẩm theo ID
-    public ProductResponse getProductById(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
-        return modelMapper.map(product, ProductResponse.class);
-    }
-
-    // Cập nhật sản phẩm
-    public ProductResponse updateProduct(Long id, ProductRequest request) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
-
-        product.setStatus(request.getStatus());
-        product.setPrice(request.getPrice());
-        product.setConsignmentType(request.getConsignmentType());
-
-        Product updatedProduct = productRepository.save(product);
-        return modelMapper.map(updatedProduct, ProductResponse.class);
-    }
-
-    // Xóa sản phẩm
-    public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
-        productRepository.delete(product);
+        if (existingProduct.isPresent()) {
+            throw new IllegalArgumentException("Product with name '" + productRequest.getProductName() + "' already exists.");
+        }
+        Product product = modelMapper.map(productRequest, Product.class);
+        product.setConsignment(null);
+        product.setCarePackage(null);
+        product.setOrdersdetail(null);
+        Product savedProduct = iProductRepository.save(product);
+        return modelMapper.map(savedProduct, ProductResponse.class);
     }
 
     // Lấy tất cả sản phẩm
     public List<ProductResponse> getAllProducts() {
-        List<Product> products = productRepository.findAll();
+        List<Product> products = iProductRepository.findAll();
         return products.stream()
                 .map(product -> modelMapper.map(product, ProductResponse.class))
                 .collect(Collectors.toList());
+    }
+
+    // Lấy sản phẩm theo ID
+    public ProductResponse getProductById(Long productId) {
+        Product product = iProductRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        return modelMapper.map(product, ProductResponse.class);
+    }
+    // Lấy sản phẩm theo breed
+    public ProductResponse getProductByBreed(String breed){
+        Product product = iProductRepository.findByBreed(breed);
+        if (product == null) {
+            throw new IllegalArgumentException("Product with name '" + breed + "' already exists.");
+        }
+        return modelMapper.map(product, ProductResponse.class);
+    }
+
+    // Cập nhật sản phẩm
+    public ProductResponse updateProduct(Long productId, ProductRequest productRequest) {
+        Product product = iProductRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        // Cập nhật thông tin sản phẩm
+        modelMapper.map(productRequest, product);
+        product.setConsignment(null);
+        product.setCarePackage(null);
+        product.setOrdersdetail(null);
+        Product updatedProduct = iProductRepository.save(product);
+        return modelMapper.map(updatedProduct, ProductResponse.class);
+    }
+
+    // Xóa sản phẩm
+    public void deleteProduct(Long productId) {
+        Product product = iProductRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        iProductRepository.delete(product);
+
     }
 
 

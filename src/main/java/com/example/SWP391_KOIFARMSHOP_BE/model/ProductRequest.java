@@ -3,13 +3,12 @@ package com.example.SWP391_KOIFARMSHOP_BE.model;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class ProductRequest {
+    @NotBlank(message = "Product name cannot be blank")
+    private String productName;
 
     @NotBlank(message = "Breed cannot be blank")
     private String breed;
@@ -30,7 +29,9 @@ public class ProductRequest {
     private String origin;
 
     @NotBlank(message = "Description cannot be blank")
-    private String description; // sửa lỗi chính tả từ desciption
+
+    private String description;
+
 
     @NotBlank(message = "Image URL cannot be blank")
     private String image;

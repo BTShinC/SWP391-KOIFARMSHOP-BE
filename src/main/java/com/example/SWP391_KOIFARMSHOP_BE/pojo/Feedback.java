@@ -19,7 +19,10 @@ public class Feedback {
     private String desciption;
 
 
+//
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "feedback")
+
+
     private Orders orders;
 
 
