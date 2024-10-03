@@ -1,7 +1,13 @@
 package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
+
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductResponse;
+
+import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.model.ProductRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.ProductResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Product;
 import com.example.SWP391_KOIFARMSHOP_BE.service.IProductService;
 import com.example.SWP391_KOIFARMSHOP_BE.service.ProductService;
@@ -15,11 +21,14 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+
 @CrossOrigin
 @RequestMapping("/api/products")
+
 public class ProductController {
 
     @Autowired
+
     private ProductService productService;
 
     // API để tạo sản phẩm mới
@@ -56,6 +65,7 @@ public class ProductController {
         ProductResponse updatedProduct = productService.updateProduct(id, productRequest);
         return ResponseEntity.ok(updatedProduct);
     }
+
 
     // API để xóa sản phẩm
     @DeleteMapping("/{id}")

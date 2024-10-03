@@ -11,4 +11,5 @@ public interface IAccountRepository extends JpaRepository<Account, Long> {
     Account findByEmail(String email);
     Account findByResetToken(String token);
    // boolean existsByPhone(String phoneNumber);
+   Account findAccountByaccountID(long accountID);
 }

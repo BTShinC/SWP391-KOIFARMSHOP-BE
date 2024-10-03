@@ -1,7 +1,13 @@
 package com.example.SWP391_KOIFARMSHOP_BE.api;
 
+
 import com.example.SWP391_KOIFARMSHOP_BE.model.*;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
+import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.model.LoginRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.LoginResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
+
 import com.example.SWP391_KOIFARMSHOP_BE.service.AuthenticationService;
 import com.example.SWP391_KOIFARMSHOP_BE.service.EmailService;
 import com.example.SWP391_KOIFARMSHOP_BE.service.IAccountService;
@@ -25,6 +31,7 @@ public class AuthenticationAPI {
 
     @Autowired
     AuthenticationService authenticationService;
+
     @Autowired
      EmailService emailService;
     @Autowired
@@ -33,6 +40,7 @@ public class AuthenticationAPI {
     JwtBlacklistService jwtBlacklistService;
     // API đăng ký
     @PostMapping("Register")
+
     public ResponseEntity register(@Valid @RequestBody RegisterRequest registerRequest) {
         AccountResponse newAccount = authenticationService.register(registerRequest);
         emailService.sendSimpleMessage(registerRequest.getEmail(),
@@ -45,6 +53,7 @@ public class AuthenticationAPI {
 
     // API đăng nhập
     @PostMapping("login")
+
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest){
         String token = authenticationService.login(loginRequest); // Lấy token từ service
         AccountResponse accountResponse = authenticationService.getAccountDetails(loginRequest.getUserName()); // Lấy thông tin tài khoản
@@ -53,6 +62,7 @@ public class AuthenticationAPI {
         LoginResponse loginResponse = new LoginResponse(token, accountResponse);
 
         return ResponseEntity.ok(loginResponse);
+
     }
 
     // API lấy danh sách tài khoản
@@ -61,6 +71,7 @@ public class AuthenticationAPI {
         List<AccountResponse> accounts = authenticationService.getAllAccount();
         return ResponseEntity.ok(accounts);
     }
+
 
     // API quên mật khẩu
     @PostMapping("/forgot")
@@ -125,4 +136,5 @@ public class AuthenticationAPI {
 
         return ResponseEntity.ok("Logged out successfully.");
     }
+
 }

@@ -4,11 +4,16 @@ import lombok.Data;
 
 @Data
 public class AccountResponse {
-    long accountID;
-    String fullName;
-    String address;
-    String email;
-    String phoneNumber;
-    private String role;
+
     private double accountBalance;
+
+    private long accountID;
+    private  String fullName;
+    private String address;
+    private String email;
+    private String phoneNumber;
+    private String Role;
+    private String Token;
+
+
 }

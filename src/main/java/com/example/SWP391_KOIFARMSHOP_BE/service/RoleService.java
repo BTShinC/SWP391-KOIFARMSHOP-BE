@@ -1,8 +1,13 @@
 package com.example.SWP391_KOIFARMSHOP_BE.service;
 
 import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
+
+import com.example.SWP391_KOIFARMSHOP_BE.model.ProductRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.ProductResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RoleRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RoleResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.pojo.Product;
+
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IRoleRepository;
 import org.modelmapper.ModelMapper;
@@ -20,6 +25,7 @@ public class RoleService {
     private IRoleRepository iRoleRepository;
 
     @Autowired
+
     private ModelMapper modelMapper;
 
     // Tạo Role mới
@@ -61,5 +67,10 @@ public class RoleService {
         return roles.stream()
                 .map(role -> modelMapper.map(role, RoleResponse.class))
                 .collect(Collectors.toList());
+
     }
+
+
+
+
 }

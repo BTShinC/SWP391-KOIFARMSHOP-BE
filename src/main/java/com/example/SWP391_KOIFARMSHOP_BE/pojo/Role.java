@@ -10,7 +10,6 @@ import java.util.Set;
 @Entity
 @Table(name = "Role")
 @Data
-
 public class Role {
 
     @Id
@@ -23,6 +22,7 @@ public class Role {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name ="role_id")
     private Set<Account> account;
+
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL) // Chỉ định mappedBy để tránh vấn đề vòng lặp
     private Set<Account> accounts;

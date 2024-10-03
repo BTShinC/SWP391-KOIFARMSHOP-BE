@@ -1,6 +1,7 @@
 package com.example.SWP391_KOIFARMSHOP_BE.model;
 
 import jakarta.validation.constraints.NotBlank;
+
 import lombok.Data;
 
 @Data
@@ -22,4 +23,5 @@ public class ProductResponse {
     private String status;
     private double desiredPrice;
     private String consignmentType;
+
 }

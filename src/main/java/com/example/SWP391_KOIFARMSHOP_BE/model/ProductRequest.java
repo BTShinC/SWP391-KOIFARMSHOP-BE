@@ -9,6 +9,7 @@ import lombok.Data;
 public class ProductRequest {
     @NotBlank(message = "Product name cannot be blank")
     private String productName;
+
     @NotBlank(message = "Breed cannot be blank")
     private String breed;
 
@@ -28,7 +29,9 @@ public class ProductRequest {
     private String origin;
 
     @NotBlank(message = "Description cannot be blank")
+
     private String description;
+
 
     @NotBlank(message = "Image URL cannot be blank")
     private String image;
@@ -53,4 +56,5 @@ public class ProductRequest {
 
     @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
+
 }
