@@ -38,12 +38,13 @@ public class SecurityConfig {
 
     // Cấu hình chuỗi bảo mật
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)  throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable) // Tắt CSRF (để đơn giản hóa cho môi trường phát triển)
+                .csrf(AbstractHttpConfigurer::disable)  // Tắt CSRF vì bạn đang phát triển
                 .authorizeHttpRequests(req -> req
-                        .anyRequest().permitAll() // Cho phép tất cả các yêu cầu mà không cần xác thực
+                        .anyRequest().permitAll()  // Cho phép tất cả các yêu cầu mà không cần xác thực
                 )
                 .build();
-    }
+        }
+
 }

@@ -69,5 +69,36 @@ public class AccountService implements IAccountService {
         return account;
     }
 
+    @Override
+    public Account findByEmail(String email) {
+        Account account = iAccountRepository.findByEmail(email);
+        if (account == null) {
+            throw new EntityNotFoundException("Account not found for email: " + email);
+        }
+        return account;
+    }
+
+    @Override
+    public void saveResetToken(String email, String token) {
+        Account account = iAccountRepository.findByEmail(email);
+        if (account != null) {
+            account.setResetToken(token);
+            iAccountRepository.save(account);
+        }
+    }
+    @Override
+    public Account findByResetToken(String token) {
+        return iAccountRepository.findByResetToken(token);
+    }
+    @Override
+    public String encode(String password) {
+        return passwordEncoder.encode(password);
+    }
+    @Override
+    public void save(Account account) {
+        iAccountRepository.save(account);
+    }
+
+
 }
 

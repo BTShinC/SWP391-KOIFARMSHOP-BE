@@ -29,9 +29,9 @@ public class CareInfomation {
     private String status;
 
 
-//
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "consigment_id")
-//    private Consignment consignment;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "consigment_id")
+    private Consignment consignment;
 
 }

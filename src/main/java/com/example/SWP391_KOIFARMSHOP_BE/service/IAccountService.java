@@ -11,4 +11,9 @@ public interface IAccountService {
     public Account updateAccount(long accountID, Account account);
     public Account deleteAccount (long accountID);
     public Optional<Account> getAccountByID(long accountID);
+    public void saveResetToken(String email, String token);
+    public Account findByResetToken(String token);
+    public String encode(String password);
+    public void save(Account account);
+    public Account findByEmail(String email);
 }
