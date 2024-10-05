@@ -7,16 +7,12 @@ import com.example.SWP391_KOIFARMSHOP_BE.config.JwtTokenUtil;
 import com.example.SWP391_KOIFARMSHOP_BE.model.LoginRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
-
-import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IAccountRepository;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IRoleRepository;
-
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,10 +32,6 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     IAccountRepository iAccountRepository;
 
-
-    @Autowired
-    IRoleRepository iRoleRepository;
-
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -53,16 +45,7 @@ public class AuthenticationService implements UserDetailsService {
     AuthenticationManager authenticationManager;
 
     @Autowired
-
     JwtTokenUtil jwtTokenUtil;
-
-    TokenService tokenService;
-
-    @Value("${default.role.name:USER}")
-    private String defaultRoleName;
-
-    public AccountResponse register(RegisterRequest registerRequest) {
-
 
     public AccountResponse register(@Valid RegisterRequest registerRequest) {
         if (iAccountRepository.existsByEmail(registerRequest.getEmail())) {
@@ -75,7 +58,6 @@ public class AuthenticationService implements UserDetailsService {
 
         // Lưu tài khoản vào cơ sở dữ liệu lần đầu tiên để có accountID
         Account newAccount = iAccountRepository.save(account);
-
 
         // Kiểm tra nếu đây là tài khoản đầu tiên (accountID == 1) thì set role Admin
         if (newAccount.getAccountID() == 1) {
@@ -92,16 +74,12 @@ public class AuthenticationService implements UserDetailsService {
         // Cập nhật tài khoản với vai trò mới
         newAccount = iAccountRepository.save(newAccount);
 
-
         return modelMapper.map(newAccount, AccountResponse.class);
-
     }
 
 
     // Hàm xử lý đăng nhập
-
-    public AccountResponse login(LoginRequest loginRequest) {
-
+    public String login(LoginRequest loginRequest) {
         try {
             // Xác thực thông tin đăng nhập
             Authentication authentication = authenticationManager.authenticate(
@@ -114,18 +92,11 @@ public class AuthenticationService implements UserDetailsService {
             // Nếu xác thực thành công, lấy thông tin tài khoản
             Account account = (Account) authentication.getPrincipal();
 
-
             // Tạo JWT Token
             String token = jwtTokenUtil.generateToken(account.getUsername());
 
             // Trả về JWT Token cho người dùng
             return token;
-
-            AccountResponse accountResponse =  modelMapper.map(account, AccountResponse.class);
-            accountResponse.setToken(tokenService.generateToken(account));
-            // lần sau quay lại chỉ cần cái token
-            return accountResponse;
-
 
         } catch (Exception e) {
             System.err.println("Error : " + e.getMessage());
@@ -162,11 +133,9 @@ public class AuthenticationService implements UserDetailsService {
     }
 
     // Hàm để lấy thời gian hết hạn của token
-
     public long getTokenExpiration(String token) {
         // Sử dụng JwtTokenUtil để lấy thời gian hết hạn của token
         Date expirationDate = jwtTokenUtil.extractExpiration(token);
         return expirationDate.getTime(); // Trả về thời gian hết hạn dưới dạng milliseconds
     }
-
 }
