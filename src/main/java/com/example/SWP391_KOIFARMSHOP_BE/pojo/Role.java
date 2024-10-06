@@ -10,11 +10,12 @@ import java.util.Set;
 @Entity
 @Table(name = "Role")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private long roleID;
+    private String roleID;
     @NotBlank(message = "Username cannot be blank")
     @Size(max = 50, message = "Username cannot exceed 50 characters")
     private String roleName;

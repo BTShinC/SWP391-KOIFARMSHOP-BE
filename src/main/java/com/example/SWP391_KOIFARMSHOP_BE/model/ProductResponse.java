@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class ProductResponse {
-    private long productID;
+    private String productID;
     private String productName;
     private String breed;
     private float size;

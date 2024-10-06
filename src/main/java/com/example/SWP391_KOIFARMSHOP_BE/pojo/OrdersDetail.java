@@ -14,11 +14,10 @@ import java.util.Set;
 @NoArgsConstructor
 public class OrdersDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long ordersDetailID;
+    private String ordersDetailID;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "order_id")
     private Orders orders;
 

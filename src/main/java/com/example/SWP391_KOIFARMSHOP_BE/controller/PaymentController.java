@@ -1,46 +1,56 @@
 package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
-import com.example.SWP391_KOIFARMSHOP_BE.pojo.Payment;
-import com.example.SWP391_KOIFARMSHOP_BE.service.IPaymentService;
+import com.example.SWP391_KOIFARMSHOP_BE.model.PaymentRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.PaymentResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.service.PaymentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/api/payment")
 public class PaymentController {
+
     @Autowired
-    private IPaymentService iPaymentService;
-    //HTTP Verb GET, POST, PUT, DELETE (API)
-    @GetMapping("/")
-    public ResponseEntity<List<Payment>> fetchALlPayment(){
-        return ResponseEntity.ok(iPaymentService.getAllPayment());
+    private PaymentService paymentService;
+
+    // API để lấy tất cả payments
+    @GetMapping
+    public ResponseEntity<List<PaymentResponse>> fetchAllPayments() {
+        List<PaymentResponse> payments = paymentService.getAllPayments();
+        return ResponseEntity.ok(payments);
     }
-    @PostMapping("/")
+
+    // API để tạo payment mới
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Payment savePayment(@RequestBody Payment payment){
-        return iPaymentService.insertPayment(payment);
+    public PaymentResponse savePayment(@Valid @RequestBody PaymentRequest paymentRequest) {
+        return paymentService.createPayment(paymentRequest);
     }
 
+    // API để cập nhật payment
     @PutMapping("/{id}")
-    public ResponseEntity<Payment> updatePayment(@PathVariable long id, @RequestBody Payment payment){
-        Payment updatePayment = iPaymentService.updatePayment(id, payment);
-        return ResponseEntity.ok(updatePayment);
+    public ResponseEntity<PaymentResponse> updatePayment(@PathVariable String id, @Valid @RequestBody PaymentRequest paymentRequest) {
+        PaymentResponse updatedPayment = paymentService.updatePayment(id, paymentRequest);
+        return ResponseEntity.ok(updatedPayment);
     }
 
+    // API để xóa payment
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePayment(@PathVariable long id){
-        iPaymentService.deletePayment(id);
-        return ResponseEntity.ok("Delete Payment success!");
+    public ResponseEntity<String> deletePayment(@PathVariable String id) {
+        paymentService.deletePayment(id);
+        return ResponseEntity.ok("Delete payment success!");
     }
 
+    // API để lấy payment theo ID
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Payment>> getPaymentByID(@PathVariable long id){
-        Optional<Payment> payment = iPaymentService.getPaymentByID(id);
-        return  ResponseEntity.ok(payment);
+    public ResponseEntity<PaymentResponse> getPaymentByID(@PathVariable String id) {
+        PaymentResponse payment = paymentService.getPaymentByID(id);
+        return ResponseEntity.ok(payment);
     }
 }

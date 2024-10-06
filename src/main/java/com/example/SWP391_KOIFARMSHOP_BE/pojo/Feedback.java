@@ -13,8 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Feedback {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long feedBackID;
+    private String feedbackID;
     @Size(max = 500, message = "Description must be less than 500 characters")
     private String desciption;
 

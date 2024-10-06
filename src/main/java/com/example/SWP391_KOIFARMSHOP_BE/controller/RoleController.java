@@ -5,19 +5,11 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RoleRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RoleResponse;
 
-import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
-import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
-import com.example.SWP391_KOIFARMSHOP_BE.model.RoleRequest;
-import com.example.SWP391_KOIFARMSHOP_BE.model.RoleResponse;
-import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
-import com.example.SWP391_KOIFARMSHOP_BE.service.IRoleService;
-
 import com.example.SWP391_KOIFARMSHOP_BE.service.RoleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +23,7 @@ public class RoleController {
 
 
     // Create Role
-    @PostMapping("Create")
+    @PostMapping
     public ResponseEntity<RoleResponse> createRole(@Valid @RequestBody RoleRequest roleRequest) {
         RoleResponse newRole = roleService.createRole(roleRequest);
         return ResponseEntity.ok(newRole);
@@ -46,7 +38,7 @@ public class RoleController {
 
     // Update Role
     @PutMapping("/{id}")
-    public ResponseEntity<RoleResponse> updateRole(@PathVariable Long id, @Valid @RequestBody RoleRequest roleRequest) {
+    public ResponseEntity<RoleResponse> updateRole(@PathVariable String id, @Valid @RequestBody RoleRequest roleRequest) {
         RoleResponse updatedRole = roleService.updateRole(id, roleRequest);
         return ResponseEntity.ok(updatedRole);
     }
@@ -54,7 +46,7 @@ public class RoleController {
     // Delete Role
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteRole(@PathVariable Long id) {
+    public void deleteRole(@PathVariable String id) {
         roleService.deleteRole(id);
 
     }

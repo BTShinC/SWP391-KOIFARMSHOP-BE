@@ -15,12 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductCombo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private long productComboID;
-
-    private String name;
-
+    private String productComboID;
+    @NotBlank(message = "Name cannot be blank")
+    private String comboName;
     @Positive(message = "Size must be a positive number")
     private float size;
     @NotBlank(message = "Breed cannot be blank")

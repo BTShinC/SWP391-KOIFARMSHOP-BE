@@ -3,22 +3,13 @@ package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductResponse;
-
-import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
-import com.example.SWP391_KOIFARMSHOP_BE.model.ProductRequest;
-import com.example.SWP391_KOIFARMSHOP_BE.model.ProductResponse;
-import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
-import com.example.SWP391_KOIFARMSHOP_BE.pojo.Product;
-import com.example.SWP391_KOIFARMSHOP_BE.service.IProductService;
 import com.example.SWP391_KOIFARMSHOP_BE.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 
@@ -47,7 +38,7 @@ public class ProductController {
 
     // API để lấy sản phẩm theo ID
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable String id) {
         ProductResponse product = productService.getProductById(id);
         return ResponseEntity.ok(product);
     }
@@ -61,7 +52,7 @@ public class ProductController {
 
     // API để cập nhật sản phẩm
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequest productRequest) {
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable String id, @Valid @RequestBody ProductRequest productRequest) {
         ProductResponse updatedProduct = productService.updateProduct(id, productRequest);
         return ResponseEntity.ok(updatedProduct);
     }
@@ -69,7 +60,7 @@ public class ProductController {
 
     // API để xóa sản phẩm
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<String> deleteProduct(@PathVariable String id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully");
     }

@@ -5,11 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IAccountRepository extends JpaRepository<Account, Long> {
+public interface IAccountRepository extends JpaRepository<Account, String> {
     Account findAccountByUserName(String userName);
     boolean existsByEmail(String email);
     Account findByEmail(String email);
     Account findByResetToken(String token);
-   // boolean existsByPhone(String phoneNumber);
-   Account findAccountByaccountID(long accountID);
+    Account findTopByOrderByAccountIDDesc();
 }

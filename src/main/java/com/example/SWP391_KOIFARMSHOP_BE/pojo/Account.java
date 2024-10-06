@@ -18,8 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 public  class Account implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long accountID;
+    private String accountID;
     @NotBlank(message = "Username cannot be blank")
     @Size(max = 50, message = "Username cannot exceed 50 characters")
 

@@ -8,20 +8,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 @Service
-public class CarePackageService implements ICarePackageService {
+public class CarePackageService {
     @Autowired
     private ICarePackageRepository iCarePackageRepository;
-    @Override
+
     public List<CarePackage> getAllCarePackage() {
         return iCarePackageRepository.findAll();
     }
 
-    @Override
+
     public CarePackage insertCarePackage(CarePackage carePackage) {
         return iCarePackageRepository.save(carePackage);
     }
 
-    @Override
+
     public CarePackage updateCarePackage(long carePackageID, CarePackage carePackage) {
         CarePackage cp = iCarePackageRepository.getById(carePackageID);
         if(cp != null){
@@ -35,12 +35,12 @@ public class CarePackageService implements ICarePackageService {
         return null;
     }
 
-    @Override
+
     public void deleteCarePackage(long carePackageID) {
         iCarePackageRepository.deleteById(carePackageID);
     }
 
-    @Override
+
     public Optional<CarePackage> getCarePackageByID(long carePackageID) {
         return iCarePackageRepository.findById(carePackageID);
     }
