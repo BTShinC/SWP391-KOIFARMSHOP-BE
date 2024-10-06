@@ -1,7 +1,7 @@
 package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
-import com.example.SWP391_KOIFARMSHOP_BE.model.OrdersRequest;
-import com.example.SWP391_KOIFARMSHOP_BE.model.OrdersResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.model.OrderRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.OrderResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.service.OrdersService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,43 +13,44 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/oders")
+@RequestMapping("/api/orders")
 public class OrdersController {
+
     @Autowired
     private OrdersService ordersService;
 
     // Create Order
     @PostMapping
-    public ResponseEntity<OrdersResponse> createOrder(@Valid @RequestBody OrdersRequest ordersRequest) {
-        OrdersResponse newOrder = ordersService.createOrder(ordersRequest);
+    public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest orderRequest) {
+        OrderResponse newOrder = ordersService.createOrder(orderRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(newOrder);
     }
 
     // Get All Orders
     @GetMapping
-    public ResponseEntity<List<OrdersResponse>> getAllOrders() {
-        List<OrdersResponse> orders = ordersService.getAllOrders();
+    public ResponseEntity<List<OrderResponse>> getAllOrders() {
+        List<OrderResponse> orders = ordersService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
 
     // Get Order by ID
     @GetMapping("/{id}")
-    public ResponseEntity<OrdersResponse> getOrderById(@PathVariable Long id) {
-        OrdersResponse order = ordersService.getOrderById(id);
+    public ResponseEntity<OrderResponse> getOrderById(@PathVariable String id) {
+        OrderResponse order = ordersService.getOrderById(id);
         return ResponseEntity.ok(order);
     }
 
     // Update Order
     @PutMapping("/{id}")
-    public ResponseEntity<OrdersResponse> updateOrder(@PathVariable Long id, @Valid @RequestBody OrdersRequest ordersRequest) {
-        OrdersResponse updatedOrder = ordersService.updateOrder(id, ordersRequest);
+    public ResponseEntity<OrderResponse> updateOrder(@PathVariable String id, @Valid @RequestBody OrderRequest orderRequest) {
+        OrderResponse updatedOrder = ordersService.updateOrder(id, orderRequest);
         return ResponseEntity.ok(updatedOrder);
     }
 
     // Delete Order
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOrder(@PathVariable Long id) {
+    public void deleteOrder(@PathVariable String id) {
         ordersService.deleteOrder(id);
     }
 }

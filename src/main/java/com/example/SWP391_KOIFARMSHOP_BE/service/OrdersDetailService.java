@@ -10,32 +10,32 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrderDetailService implements IOrdersDetailService {
+public class OrdersDetailService {
     @Autowired
     private IOrdersDetailRepository iOrdersDetailRepository;
-    @Override
+
     public List<OrdersDetail> getAllOrdersDetail() {
         return iOrdersDetailRepository.findAll();
     }
 
-    @Override
+
     public OrdersDetail insertOrdersDetail(OrdersDetail ordersDetail) {
         return iOrdersDetailRepository.save(ordersDetail);
     }
 
-    @Override
-    public OrdersDetail updateOrdersDetail(long ordersDetailID, OrdersDetail ordersDetail) {
+
+    public OrdersDetail updateOrdersDetail(String ordersDetailID, OrdersDetail ordersDetail) {
         OrdersDetail od = iOrdersDetailRepository.getById(ordersDetailID);
         return null;
     }
 
-    @Override
-    public void deleteOrdersDetail(long ordersDetailID) {
+
+    public void deleteOrdersDetail(String ordersDetailID) {
         iOrdersDetailRepository.deleteById(ordersDetailID);
     }
 
-    @Override
-    public Optional<OrdersDetail> getOrdersDetailByID(long ordersDetailID) {
+
+    public Optional<OrdersDetail> getOrdersDetailByID(String ordersDetailID) {
         return iOrdersDetailRepository.findById(ordersDetailID);
     }
 }

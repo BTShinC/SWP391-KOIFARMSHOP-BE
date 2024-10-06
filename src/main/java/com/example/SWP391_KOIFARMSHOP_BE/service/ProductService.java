@@ -3,6 +3,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.service;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Product;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IProductRepository;
 import org.modelmapper.ModelMapper;
@@ -26,17 +27,34 @@ public class ProductService {
 
     // Tạo sản phẩm mới
     public ProductResponse createProduct(ProductRequest productRequest) {
+        // Kiểm tra sản phẩm đã tồn tại dựa trên tên sản phẩm
         Optional<Product> existingProduct = iProductRepository.findByProductName(productRequest.getProductName());
-
         if (existingProduct.isPresent()) {
             throw new IllegalArgumentException("Product with name '" + productRequest.getProductName() + "' already exists.");
         }
+
+        // Tạo ID mới cho sản phẩm
+        String nextId = generateNextProductId();
+
+        // Ánh xạ từ productRequest sang product entity
         Product product = modelMapper.map(productRequest, Product.class);
+        product.setProductID(nextId);
         product.setConsignment(null);
         product.setCarePackage(null);
         product.setOrdersdetail(null);
         Product savedProduct = iProductRepository.save(product);
         return modelMapper.map(savedProduct, ProductResponse.class);
+    }
+    private String generateNextProductId() {
+        Product lastProduct = iProductRepository.findTopByOrderByProductIDDesc();
+        if (lastProduct != null) {
+            String lastId = lastProduct.getProductID();
+            int idNumber = Integer.parseInt(lastId.substring(1));
+            String nextId = String.format("P%03d", idNumber + 1);
+            return nextId;
+        } else {
+            return "P001";
+        }
     }
 
     // Lấy tất cả sản phẩm
@@ -48,9 +66,9 @@ public class ProductService {
     }
 
     // Lấy sản phẩm theo ID
-    public ProductResponse getProductById(Long productId) {
+    public ProductResponse getProductById(String productId) {
         Product product = iProductRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Product with ID " + productId + " not found"));
         return modelMapper.map(product, ProductResponse.class);
     }
     // Lấy sản phẩm theo breed
@@ -63,9 +81,9 @@ public class ProductService {
     }
 
     // Cập nhật sản phẩm
-    public ProductResponse updateProduct(Long productId, ProductRequest productRequest) {
+    public ProductResponse updateProduct(String productId, ProductRequest productRequest) {
         Product product = iProductRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Product with ID " + productId + " not found"));
 
         // Cập nhật thông tin sản phẩm
         modelMapper.map(productRequest, product);
@@ -77,66 +95,10 @@ public class ProductService {
     }
 
     // Xóa sản phẩm
-    public void deleteProduct(Long productId) {
+    public void deleteProduct(String productId) {
         Product product = iProductRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Product with ID " + productId + " not found"));
         iProductRepository.delete(product);
-
     }
 
-
-
-
-
-
-
-
-
-
-
-
-//    @Override
-//    public List<Product> getAllProduct() {
-//        return iProductRepository.findAll();
-//    }
-//
-//    @Override
-//    public Product insertProduct(Product product) {
-//        return iProductRepository.save(product);
-//    }
-//
-//
-//    @Override
-//    public Product updateProduct(long productID, Product product) {
-//        Product p = iProductRepository.getById(productID);
-//        if(p != null){
-//            p.setBreed(product.getBreed());
-//            p.setSize(product.getSize());
-//            p.setSex(product.getSex());
-//            p.setHealthStatus(product.getHealthStatus());
-//            p.setPersonalityTrait(product.getPersonalityTrait());
-//            p.setOrigin(product.getOrigin());
-//            p.setDesciption(product.getDesciption());
-//            p.setImage(product.getImage());
-//            p.setPrice(product.getPrice());
-//            p.setCertificate(product.getCertificate());
-//            p.setType(product.getType());
-//            p.setQuantity(product.getQuantity());
-//            p.setStatus(product.getStatus());
-//            p.setDesiredPrice(product.getDesiredPrice());
-//            p.setConsignmentType(product.getConsignmentType());
-//            return iProductRepository.save(p);
-//        }
-//        return null;
-//    }
-//
-//    @Override
-//    public void deleteProduct(long productID) {
-//        iProductRepository.deleteById(productID);
-//    }
-//
-//    @Override
-//    public Optional<Product> getProductByID(long productID) {
-//        return iProductRepository.findById(productID);
-//    }
 }

@@ -56,11 +56,15 @@ public class AuthenticationService implements UserDetailsService {
         Account account = modelMapper.map(registerRequest, Account.class);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
 
-        // Lưu tài khoản vào cơ sở dữ liệu lần đầu tiên để có accountID
+        // Sinh ID mới cho tài khoản
+        String nextId = generateNextAccountId();
+        account.setAccountID(nextId);  // Đặt ID cho tài khoản mới
+
+        // Lưu tài khoản vào cơ sở dữ liệu lần đầu tiên
         Account newAccount = iAccountRepository.save(account);
 
-        // Kiểm tra nếu đây là tài khoản đầu tiên (accountID == 1) thì set role Admin
-        if (newAccount.getAccountID() == 1) {
+        // Kiểm tra nếu tài khoản có accountID là "A001" thì set role Admin
+        if (newAccount.getAccountID().equals("A001")) {
             Role adminRole = iRoleRepository.findByRoleName("admin")
                     .orElseThrow(() -> new RuntimeException("Admin role not found"));
             newAccount.setRole(adminRole);
@@ -76,6 +80,22 @@ public class AuthenticationService implements UserDetailsService {
 
         return modelMapper.map(newAccount, AccountResponse.class);
     }
+
+    private String generateNextAccountId() {
+        // Lấy tài khoản có accountID lớn nhất hiện tại
+        Account lastAccount = iAccountRepository.findTopByOrderByAccountIDDesc();
+
+        // Nếu có tài khoản trước đó, sinh ID mới
+        if (lastAccount != null) {
+            String lastId = lastAccount.getAccountID(); // Ví dụ: "A001"
+            int idNumber = Integer.parseInt(lastId.substring(1)); // Lấy phần số từ "A001"
+            String nextId = String.format("A%03d", idNumber + 1); // Sinh ID mới theo định dạng "A002"
+            return nextId;
+        } else {
+            return "A001"; // Nếu chưa có tài khoản nào, bắt đầu từ "A001"
+        }
+    }
+
 
 
     // Hàm xử lý đăng nhập
@@ -109,7 +129,7 @@ public class AuthenticationService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         Account account = iAccountRepository.findAccountByUserName(userName);
         if (account == null) {
-            throw new UsernameNotFoundException("User not found with username: " + userName);
+            throw new UsernameNotFoundException("Account with username " + userName + " not found");
         }
         return account;
     }
@@ -127,7 +147,7 @@ public class AuthenticationService implements UserDetailsService {
     public AccountResponse getAccountDetails(String username) {
         Account account = iAccountRepository.findAccountByUserName(username);
         if (account == null) {
-            throw new EntityNotFoundException("Account not found");
+            throw new EntityNotFoundException("Account with username " + username + " not found");
         }
         return modelMapper.map(account, AccountResponse.class);
     }

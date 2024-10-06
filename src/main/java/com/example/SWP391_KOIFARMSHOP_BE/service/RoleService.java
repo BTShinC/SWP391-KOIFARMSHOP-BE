@@ -35,14 +35,27 @@ public class RoleService {
         if (existingRole.isPresent()) {
             throw new IllegalArgumentException("Role with name '" + roleRequest.getRoleName() + "' already exists.");
         }
-
+        String nextId = generateNextRoleId();
         Role role = modelMapper.map(roleRequest, Role.class);
+        role.setRoleID(nextId);
         Role savedRole = iRoleRepository.save(role);
         return modelMapper.map(savedRole, RoleResponse.class);
     }
 
+    private String generateNextRoleId() {
+        Role lastRole = iRoleRepository.findTopByOrderByRoleIDDesc();
+        if (lastRole != null) {
+            String lastId = lastRole.getRoleID();
+            int idNumber = Integer.parseInt(lastId.substring(1));
+            String nextId = String.format("R%03d", idNumber + 1);
+            return nextId;
+        } else {
+            return "R001";
+        }
+    }
+
     // Chỉnh sửa Role
-    public RoleResponse updateRole(Long id, RoleRequest roleRequest) {
+    public RoleResponse updateRole(String id, RoleRequest roleRequest) {
         Role existingRole = iRoleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Role with ID " + id + " not found"));
 
@@ -54,7 +67,7 @@ public class RoleService {
     }
 
     // Xóa Role
-    public void deleteRole(Long id) {
+    public void deleteRole(String id) {
         Role existingRole = iRoleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Role with ID " + id + " not found"));
 

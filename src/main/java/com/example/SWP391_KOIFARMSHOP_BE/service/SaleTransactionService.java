@@ -8,20 +8,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 @Service
-public class SaleTransactionService implements ISaleTransactionService{
+public class SaleTransactionService{
     @Autowired
     private ISaleTransactionRepository iSaleTransactionRepository;
-    @Override
+
     public List<SaleTransaction> getAllSaleTransaction() {
         return iSaleTransactionRepository.findAll();
     }
 
-    @Override
+
     public SaleTransaction insertSaleTransaction(SaleTransaction saleTransaction) {
         return iSaleTransactionRepository.save(saleTransaction);
     }
 
-    @Override
+
     public SaleTransaction updateSaleTransaction(long saleTransactionID, SaleTransaction saleTransaction) {
         SaleTransaction st = iSaleTransactionRepository.getById(saleTransactionID);
         if(st != null){
@@ -33,12 +33,12 @@ public class SaleTransactionService implements ISaleTransactionService{
         return null;
     }
 
-    @Override
+
     public void deleteSaleTransaction(long saleTransactionID) {
         iSaleTransactionRepository.deleteById(saleTransactionID);
     }
 
-    @Override
+   
     public Optional<SaleTransaction> getSaleTransactionByID(long saleTransactionID) {
         return iSaleTransactionRepository.findById(saleTransactionID);
     }

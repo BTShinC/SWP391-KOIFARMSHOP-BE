@@ -8,9 +8,9 @@ import com.example.SWP391_KOIFARMSHOP_BE.model.LoginRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.LoginResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
 
+import com.example.SWP391_KOIFARMSHOP_BE.service.AccountService;
 import com.example.SWP391_KOIFARMSHOP_BE.service.AuthenticationService;
 import com.example.SWP391_KOIFARMSHOP_BE.service.EmailService;
-import com.example.SWP391_KOIFARMSHOP_BE.service.IAccountService;
 import com.example.SWP391_KOIFARMSHOP_BE.service.JwtBlacklistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,7 +35,7 @@ public class AuthenticationAPI {
     @Autowired
      EmailService emailService;
     @Autowired
-     IAccountService iAccountService;
+    AccountService accountService;
     @Autowired
     JwtBlacklistService jwtBlacklistService;
     // API đăng ký
@@ -78,10 +78,10 @@ public class AuthenticationAPI {
     public String forgotPassword(@Valid @RequestBody PasswordResetRequest request) {
         System.out.println("Request received for email: " + request.getEmail());
 
-        Account account = iAccountService.findByEmail(request.getEmail());
+        Account account = accountService.findByEmail(request.getEmail());
         if (account != null) {
             String token = UUID.randomUUID().toString();
-            iAccountService.saveResetToken(request.getEmail(), token);
+            accountService.saveResetToken(request.getEmail(), token);
 
             String resetLink = "http://103.90.227.69/recoveryPassword?token=" + token;//gắn link FE vào
             emailService.sendSimpleMessage(request.getEmail(),
@@ -99,12 +99,12 @@ public class AuthenticationAPI {
     @PostMapping("/reset")
     public String resetPassword(@RequestBody PasswordResetToken tokenData) {
         // Kiểm tra token có hợp lệ hay không
-        Account account = iAccountService.findByResetToken(tokenData.getToken());
+        Account account = accountService.findByResetToken(tokenData.getToken());
         if (account != null) {
             // Cập nhật mật khẩu mới và xóa token
-            account.setPassword(iAccountService.encode(tokenData.getNewPassword()));
+            account.setPassword(accountService.encode(tokenData.getNewPassword()));
             account.setResetToken(null);  // Xóa token sau khi dùng
-            iAccountService.save(account);
+            accountService.save(account);
             return "Password has been reset successfully.";
         }
         return "Invalid token.";

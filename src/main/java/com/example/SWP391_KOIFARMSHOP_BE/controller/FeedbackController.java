@@ -1,45 +1,56 @@
 package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
-import com.example.SWP391_KOIFARMSHOP_BE.pojo.Feedback;
-import com.example.SWP391_KOIFARMSHOP_BE.service.IFeedbackService;
+import com.example.SWP391_KOIFARMSHOP_BE.model.FeedbackRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.FeedbackResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.service.FeedbackService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/api/feedback")
 public class FeedbackController {
+
     @Autowired
-    private IFeedbackService iFeedbackService;
-    @GetMapping("/")
-    public ResponseEntity<List<Feedback>> fetchALlFeedback(){
-        return ResponseEntity.ok(iFeedbackService.getAllFeedback());
+    private FeedbackService feedbackService;
+
+    // API để lấy tất cả feedbacks
+    @GetMapping
+    public ResponseEntity<List<FeedbackResponse>> fetchAllFeedback() {
+        List<FeedbackResponse> feedbacks = feedbackService.getAllFeedback();
+        return ResponseEntity.ok(feedbacks);
     }
-    @PostMapping("/")
+
+    // API để tạo feedback mới
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Feedback saveFeedback(@RequestBody Feedback feedback){
-        return iFeedbackService.insertFeedback(feedback);
+    public FeedbackResponse saveFeedback(@Valid @RequestBody FeedbackRequest feedbackRequest) {
+        return feedbackService.createFeedback(feedbackRequest);
     }
 
+    // API để cập nhật feedback
     @PutMapping("/{id}")
-    public ResponseEntity<Feedback> updateFeedback(@PathVariable long id, @RequestBody Feedback feedback){
-        Feedback updateFeedback = iFeedbackService.updateFeedback(id, feedback);
-        return ResponseEntity.ok(updateFeedback);
+    public ResponseEntity<FeedbackResponse> updateFeedback(@PathVariable String id, @Valid @RequestBody FeedbackRequest feedbackRequest) {
+        FeedbackResponse updatedFeedback = feedbackService.updateFeedback(id, feedbackRequest);
+        return ResponseEntity.ok(updatedFeedback);
     }
 
+    // API để xóa feedback
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteFeedback(@PathVariable long id){
-        iFeedbackService.deleteFeedback(id);
-        return ResponseEntity.ok("Delete Feedback success!");
+    public ResponseEntity<String> deleteFeedback(@PathVariable String id) {
+        feedbackService.deleteFeedback(id);
+        return ResponseEntity.ok("Delete feedback success!");
     }
 
+    // API để lấy feedback theo ID
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Feedback>> getFeedbackByID(@PathVariable long id){
-        Optional<Feedback> feedback = iFeedbackService.getFeedbackByID(id);
-        return  ResponseEntity.ok(feedback);
+    public ResponseEntity<FeedbackResponse> getFeedbackByID(@PathVariable String id) {
+        FeedbackResponse feedback = feedbackService.getFeedbackByID(id);
+        return ResponseEntity.ok(feedback);
     }
 }

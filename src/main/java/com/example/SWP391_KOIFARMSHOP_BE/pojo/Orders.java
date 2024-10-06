@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -19,9 +19,8 @@ import java.util.Set;
 @NoArgsConstructor
 public class Orders {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-
-    private long orderID;
+    @Column( name = "order_id")
+    private String orderID;
     @NotBlank(message = "Status cannot be blank")
     @Size(max = 50, message = "Status must be less than 50 characters")
     private String status;
@@ -33,7 +32,7 @@ public class Orders {
     private String description;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account-id")
+    @JoinColumn(name = "account_id")
     private Account account ;
 
 
@@ -41,9 +40,9 @@ public class Orders {
     private Payment payment;
 
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     private Set<OrdersDetail> ordersDetail;
+
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "feedback_id")

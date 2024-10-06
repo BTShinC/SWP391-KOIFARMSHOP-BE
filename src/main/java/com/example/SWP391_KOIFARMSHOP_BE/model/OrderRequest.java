@@ -6,10 +6,10 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Data
-public class OrdersRequest {
+public class OrderRequest {
     @NotBlank(message = "Status cannot be blank")
     @Size(max = 50, message = "Status must be less than 50 characters")
     private String status;
@@ -24,7 +24,7 @@ public class OrdersRequest {
     private String description;
 
     @NotNull(message = "Account ID cannot be null")
-    private long accountId;
+    private String accountId;
 
-    private long feedbackId;
+    private String feedbackId;
 }

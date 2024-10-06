@@ -7,34 +7,16 @@ import lombok.Data;
 
 @Data
 public class ProductComboResponse {
-    private long productComboID;
-
-
-    private String name;
-
+    private String productComboID;
+    private String comboName;
     private float size;
-
     private String breed;
-
     private String healthStatus;
-
     private int quantity;
-
-
-    private String desciption;
-
-
+    private String description;
     private String image;
-
     private double price;
-
     private String consignmentType;
-
     private double desiredPrice;
-
     private String type;
-
-
-    private String Status;
-
 }

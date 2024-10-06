@@ -9,14 +9,16 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Product")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private long productID;
+    private String productID;
     @NotBlank(message = "Product name cannot be blank")
     private String productName;
     @NotBlank(message = "Breed cannot be blank")
