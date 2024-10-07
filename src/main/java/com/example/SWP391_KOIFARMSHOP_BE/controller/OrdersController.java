@@ -53,4 +53,16 @@ public class OrdersController {
     public void deleteOrder(@PathVariable String id) {
         ordersService.deleteOrder(id);
     }
+
+    // API để tạo Order với Product và ProductCombo
+    @PostMapping("/makeOrder")
+    public ResponseEntity<OrderResponse> makeOrder(
+            @RequestParam("accountId") String accountId,
+            @RequestParam("productIds") List<String> productIds,
+            @RequestParam("productComboIds") List<String> productComboIds) {
+
+        OrderResponse orderResponse = ordersService.createOrderWithMultipleProducts(accountId, productIds, productComboIds);
+        return ResponseEntity.ok(orderResponse);
+    }
+
 }
