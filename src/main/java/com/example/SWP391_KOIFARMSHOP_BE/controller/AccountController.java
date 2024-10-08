@@ -8,6 +8,7 @@ import com.example.SWP391_KOIFARMSHOP_BE.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @RequestMapping("/api/account")
+//@PreAuthorize("hasAnyRole('Customer', 'Admin')")
 public class AccountController {
     @Autowired
     private AccountService accountService;
@@ -27,6 +29,7 @@ public class AccountController {
 //    }
 
     // API để lấy account theo ID (tương tự getProductById)
+
     @GetMapping("/{id}")
     public ResponseEntity<AccountResponse> getAccountById(@PathVariable String id) {
         AccountResponse account = accountService.getAccountByID(id);

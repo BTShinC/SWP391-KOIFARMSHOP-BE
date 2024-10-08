@@ -110,31 +110,6 @@ public class AuthenticationAPI {
         return "Invalid token.";
     }
 
-    // API Logout
-    @PostMapping("logout")
-    @Operation(summary = "Logout user", description = "Logs out the user by invalidating the JWT token")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully logged out"),
-            @ApiResponse(responseCode = "400", description = "Invalid or missing Authorization header")
-    })
-    public ResponseEntity<String> logout(
-            @Parameter(in = ParameterIn.HEADER, required = true, description = "JWT token with Bearer prefix")
-            @RequestHeader(value = "Authorization", required = false) String token
-    ) {
-        if (token == null || !token.startsWith("Bearer ")) {
-            return ResponseEntity.badRequest().body("Invalid or missing Authorization header");
-        }
 
-        // Loại bỏ "Bearer " ở đầu token
-        String jwtToken = token.substring(7);
-
-        // Tính toán thời gian hết hạn của token (lấy expiration từ token)
-        long expirationTime = authenticationService.getTokenExpiration(jwtToken);
-
-        // Thêm vào blacklist
-        jwtBlacklistService.blacklistToken(jwtToken, expirationTime);
-
-        return ResponseEntity.ok("Logged out successfully.");
-    }
 
 }

@@ -3,7 +3,6 @@ package com.example.SWP391_KOIFARMSHOP_BE.service;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.DuplicateEntity;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
 import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
-import com.example.SWP391_KOIFARMSHOP_BE.config.JwtTokenUtil;
 import com.example.SWP391_KOIFARMSHOP_BE.model.LoginRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
@@ -45,9 +44,10 @@ public class AuthenticationService implements UserDetailsService {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    TokenService tokenService;
 
     public AccountResponse register(@Valid RegisterRequest registerRequest) {
+        // Kiểm tra email đã tồn tại hay chưa
         if (iAccountRepository.existsByEmail(registerRequest.getEmail())) {
             throw new DuplicateEntity("Email already exists");
         }
@@ -60,24 +60,24 @@ public class AuthenticationService implements UserDetailsService {
         String nextId = generateNextAccountId();
         account.setAccountID(nextId);  // Đặt ID cho tài khoản mới
 
-        // Lưu tài khoản vào cơ sở dữ liệu lần đầu tiên
-        Account newAccount = iAccountRepository.save(account);
-
         // Kiểm tra nếu tài khoản có accountID là "A001" thì set role Admin
-        if (newAccount.getAccountID().equals("A001")) {
-            Role adminRole = iRoleRepository.findByRoleName("admin")
+        Role assignedRole;
+        if (nextId.equals("A001")) {
+            assignedRole = iRoleRepository.findByRoleName("Admin")
                     .orElseThrow(() -> new RuntimeException("Admin role not found"));
-            newAccount.setRole(adminRole);
         } else {
             // Gán role mặc định là Customer cho các tài khoản khác
-            Role customerRole = iRoleRepository.findByRoleName("customer")
+            assignedRole = iRoleRepository.findByRoleName("Customer")
                     .orElseThrow(() -> new RuntimeException("Customer role not found"));
-            newAccount.setRole(customerRole);
         }
 
-        // Cập nhật tài khoản với vai trò mới
-        newAccount = iAccountRepository.save(newAccount);
+        // Gán vai trò cho tài khoản
+        account.setRole(assignedRole);
 
+        // Lưu tài khoản vào cơ sở dữ liệu sau khi mọi thứ hoàn tất
+        Account newAccount = iAccountRepository.save(account);
+
+        // Trả về phản hồi
         return modelMapper.map(newAccount, AccountResponse.class);
     }
 
@@ -113,7 +113,7 @@ public class AuthenticationService implements UserDetailsService {
             Account account = (Account) authentication.getPrincipal();
 
             // Tạo JWT Token
-            String token = jwtTokenUtil.generateToken(account.getUsername());
+            String token = tokenService.generateToken(account);
 
             // Trả về JWT Token cho người dùng
             return token;
@@ -152,10 +152,5 @@ public class AuthenticationService implements UserDetailsService {
         return modelMapper.map(account, AccountResponse.class);
     }
 
-    // Hàm để lấy thời gian hết hạn của token
-    public long getTokenExpiration(String token) {
-        // Sử dụng JwtTokenUtil để lấy thời gian hết hạn của token
-        Date expirationDate = jwtTokenUtil.extractExpiration(token);
-        return expirationDate.getTime(); // Trả về thời gian hết hạn dưới dạng milliseconds
-    }
+
 }
