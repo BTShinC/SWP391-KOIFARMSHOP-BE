@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IOrdersRepository extends JpaRepository<Orders, String> {
     Orders findTopByOrderByOrderIDDesc();
+    Orders findByorderID(String orderID);
 }

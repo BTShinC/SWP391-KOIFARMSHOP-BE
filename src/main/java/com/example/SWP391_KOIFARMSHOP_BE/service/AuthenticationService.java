@@ -21,7 +21,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +44,9 @@ public class AuthenticationService implements UserDetailsService {
 
     @Autowired
     TokenService tokenService;
+
+    @Autowired
+    EmailService emailService;
 
     public AccountResponse register(@Valid RegisterRequest registerRequest) {
         // Kiểm tra email đã tồn tại hay chưa
@@ -73,6 +75,22 @@ public class AuthenticationService implements UserDetailsService {
 
         // Gán vai trò cho tài khoản
         account.setRole(assignedRole);
+
+//        // Tạo token xác thực
+//        String verificationToken = UUID.randomUUID().toString(); // Hoặc một phương pháp tạo token khác
+//        LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(5);
+//
+//        // Lưu thông tin xác thực
+//        emailVerificationRepository.save(new EmailVerification(account.getEmail(), verificationToken, expirationTime));
+//
+//        // Gửi email xác thực
+//        EmailService.sendSimpleMessage(registerRequest.getEmail(),
+//                "Email Verification",
+//                "Please verify your email by clicking the link: " +
+//                        "http://yourapp.com/verify?token=" + verificationToken);
+//
+//        return new AccountResponse("Verification email sent. Please verify your email to complete registration.");
+
 
         // Lưu tài khoản vào cơ sở dữ liệu sau khi mọi thứ hoàn tất
         Account newAccount = iAccountRepository.save(account);
