@@ -17,11 +17,7 @@ public class Feedback {
     @Size(max = 500, message = "Description must be less than 500 characters")
     private String desciption;
 
-
-//
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "feedback")
-
-
     private Orders orders;
 
 

@@ -29,8 +29,9 @@ public class FeedbackController {
     // API để tạo feedback mới
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public FeedbackResponse saveFeedback(@Valid @RequestBody FeedbackRequest feedbackRequest) {
-        return feedbackService.createFeedback(feedbackRequest);
+    public ResponseEntity<FeedbackResponse> saveFeedback(@Valid @RequestBody FeedbackRequest feedbackRequest) {
+        FeedbackResponse createdFeedback = feedbackService.createFeedback(feedbackRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdFeedback);
     }
 
     // API để cập nhật feedback
