@@ -21,13 +21,12 @@ public class OrdersDetail {
     @JoinColumn(name = "order_id")
     private Orders orders;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name ="ordersdetail_id")
-    private Set<Product> product;
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "productID")
+    private Product product; // Lưu productID
 
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name ="ordersdetail_id")
-    private Set<ProductCombo> productCombos;
-
+    @ManyToOne
+    @JoinColumn(name = "product_combo_id", referencedColumnName = "productComboID")
+    private ProductCombo productCombo; // Lưu productComboID
 }
+

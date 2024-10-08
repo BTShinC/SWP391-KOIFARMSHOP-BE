@@ -23,7 +23,7 @@ public class RoleController {
 
 
     // Create Role
-    @PostMapping
+    @PostMapping("post")
     public ResponseEntity<RoleResponse> createRole(@Valid @RequestBody RoleRequest roleRequest) {
         RoleResponse newRole = roleService.createRole(roleRequest);
         return ResponseEntity.ok(newRole);

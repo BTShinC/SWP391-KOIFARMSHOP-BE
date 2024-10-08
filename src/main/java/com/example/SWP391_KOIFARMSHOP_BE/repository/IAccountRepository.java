@@ -11,4 +11,7 @@ public interface IAccountRepository extends JpaRepository<Account, String> {
     Account findByEmail(String email);
     Account findByResetToken(String token);
     Account findTopByOrderByAccountIDDesc();
+    Account findAccountByaccountID(String accountID);
+    Account findRoleByaccountID(String role);
+
 }

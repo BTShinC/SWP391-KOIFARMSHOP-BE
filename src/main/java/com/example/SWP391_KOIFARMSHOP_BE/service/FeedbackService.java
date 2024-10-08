@@ -5,8 +5,10 @@ import com.example.SWP391_KOIFARMSHOP_BE.model.FeedbackResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Feedback;
+import com.example.SWP391_KOIFARMSHOP_BE.pojo.Orders;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Product;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IFeedbackRepository;
+import com.example.SWP391_KOIFARMSHOP_BE.repository.IOrdersRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ public class FeedbackService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    IOrdersRepository ordersRepository;
+
     // Lấy tất cả feedback
     public List<FeedbackResponse> getAllFeedback() {
         return iFeedbackRepository.findAll().stream()
@@ -36,9 +41,19 @@ public class FeedbackService {
         String nextId = generateNextFeedbackId();
         Feedback feedback = modelMapper.map(feedbackRequest, Feedback.class);
         feedback.setFeedbackID(nextId);
-        feedback.setOrders(null);
+        // Tìm order theo ID
+       String orderID = feedbackRequest.getOrderID();
+        Orders order = ordersRepository.findById(orderID)
+                .orElseThrow(() -> new RuntimeException("Order with ID " + orderID + " not found"));
+
+        feedback.setOrders(order); // Liên kết feedback với order
         Feedback saveFeedback = iFeedbackRepository.save(feedback);
-        return  modelMapper.map(saveFeedback, FeedbackResponse.class);
+
+        // Cập nhật order để liên kết với feedback
+        order.setFeedback(saveFeedback);
+        ordersRepository.save(order); // Lưu lại order
+
+        return modelMapper.map(saveFeedback, FeedbackResponse.class);
     }
 
     private String generateNextFeedbackId() {
