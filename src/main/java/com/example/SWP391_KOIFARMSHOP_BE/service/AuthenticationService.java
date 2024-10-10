@@ -53,7 +53,9 @@ public class AuthenticationService implements UserDetailsService {
         if (iAccountRepository.existsByEmail(registerRequest.getEmail())) {
             throw new DuplicateEntity("Email already exists");
         }
-
+        if(iAccountRepository.existsByUserName(registerRequest.getUserName())){
+            throw new DuplicateEntity("Name was exists");
+        }
         // Tạo tài khoản mới và mã hóa mật khẩu
         Account account = modelMapper.map(registerRequest, Account.class);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
@@ -76,27 +78,15 @@ public class AuthenticationService implements UserDetailsService {
         // Gán vai trò cho tài khoản
         account.setRole(assignedRole);
 
-//        // Tạo token xác thực
-//        String verificationToken = UUID.randomUUID().toString(); // Hoặc một phương pháp tạo token khác
-//        LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(5);
-//
-//        // Lưu thông tin xác thực
-//        emailVerificationRepository.save(new EmailVerification(account.getEmail(), verificationToken, expirationTime));
-//
-//        // Gửi email xác thực
-//        EmailService.sendSimpleMessage(registerRequest.getEmail(),
-//                "Email Verification",
-//                "Please verify your email by clicking the link: " +
-//                        "http://yourapp.com/verify?token=" + verificationToken);
-//
-//        return new AccountResponse("Verification email sent. Please verify your email to complete registration.");
+        try {
+            // Lưu tài khoản vào cơ sở dữ liệu sau khi mọi thứ hoàn tất
+            Account newAccount = iAccountRepository.save(account);
 
-
-        // Lưu tài khoản vào cơ sở dữ liệu sau khi mọi thứ hoàn tất
-        Account newAccount = iAccountRepository.save(account);
-
-        // Trả về phản hồi
-        return modelMapper.map(newAccount, AccountResponse.class);
+            // Trả về phản hồi
+            return modelMapper.map(newAccount, AccountResponse.class);
+        }catch(Exception e){
+            throw new RuntimeException("Failed to register account: " + e.getMessage());
+        }
     }
 
     private String generateNextAccountId() {
