@@ -27,6 +27,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("*")
 public class AuthenticationAPI {
 
     @Autowired

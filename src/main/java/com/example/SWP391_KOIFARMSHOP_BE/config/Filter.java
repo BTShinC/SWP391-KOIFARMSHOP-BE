@@ -38,7 +38,10 @@ public class Filter extends OncePerRequestFilter {
             "/swagger-resources/**",
             "/api/login",
             "/api/Register",
-            "/api/role/post"
+            "/api/role/post",
+            "/api/product/postall",
+            "/api/product/getall"
+
     );
 
     // có cho phép truy cập hay ko
