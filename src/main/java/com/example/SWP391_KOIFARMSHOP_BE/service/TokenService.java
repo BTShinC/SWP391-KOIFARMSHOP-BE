@@ -53,9 +53,9 @@ public class TokenService {
         String role = claims.get("role", String.class);
 
 //        // Kiểm tra vai trò, chỉ chấp nhận Admin hoặc Staff
-        if (!role.equals("Admin") && !role.equals("Staff")) {
-            throw new RuntimeException("Unauthorized: Access denied for role: " + role);
-        }
+//        if (!role.equals("Admin") && !role.equals("Staff")) {
+//            throw new RuntimeException("Unauthorized: Access denied for role: " + role);
+//        }
 
         // Nếu vai trò hợp lệ, tìm tài khoản trong cơ sở dữ liệu
         System.out.println(role);

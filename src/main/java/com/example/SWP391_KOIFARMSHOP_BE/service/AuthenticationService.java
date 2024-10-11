@@ -53,7 +53,7 @@ public class AuthenticationService implements UserDetailsService {
         if (iAccountRepository.existsByEmail(registerRequest.getEmail())) {
             throw new DuplicateEntity("Email already exists");
         }
-        if(iAccountRepository.existsByUserName(registerRequest.getUserName())){
+        if(iAccountRepository.existsByuserName(registerRequest.getUserName())){
             throw new DuplicateEntity("Name was exists");
         }
         // Tạo tài khoản mới và mã hóa mật khẩu

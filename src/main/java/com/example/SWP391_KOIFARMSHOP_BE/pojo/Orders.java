@@ -44,8 +44,7 @@ public class Orders {
     private Set<OrdersDetail> ordersDetail;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "feedback_id")
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Feedback feedback;
 
 
