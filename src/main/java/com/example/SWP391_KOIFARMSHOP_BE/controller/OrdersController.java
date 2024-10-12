@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -56,11 +57,25 @@ public class OrdersController {
 
     // API để tạo Order với Product và ProductCombo
     @PostMapping("/makeOrder")
-    public ResponseEntity<OrderResponse> makeOrder(
+    public ResponseEntity<?> makeOrder(
             @RequestParam("accountId") String accountId,
-            @RequestParam("productIds") List<String> productIds,
-            @RequestParam("productComboIds") List<String> productComboIds) {
+            @RequestParam(value = "productIds", required = false) List<String> productIds,
+            @RequestParam(value = "productComboIds", required = false) List<String> productComboIds) {
 
+        // Nếu productIds hoặc productComboIds không có giá trị, gán chúng thành danh sách rỗng
+        if (productIds == null) {
+            productIds = new ArrayList<>();
+        }
+        if (productComboIds == null) {
+            productComboIds = new ArrayList<>();
+        }
+
+        // Kiểm tra nếu cả hai đều rỗng
+        if (productIds.isEmpty() && productComboIds.isEmpty()) {
+            return ResponseEntity.badRequest().body("Order must contain at least one product or product combo.");
+        }
+
+        // Gọi service để xử lý tạo đơn hàng
         OrderResponse orderResponse = ordersService.createOrderWithMultipleProducts(accountId, productIds, productComboIds);
         return ResponseEntity.ok(orderResponse);
     }
