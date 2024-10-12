@@ -70,8 +70,26 @@ public class TransactionService {
         response.setImage(savetransaction.getImage());
         return response;
     }
+    public List<TransactionReponse> getAllTransactions() {
+        List<Transaction> transactions = transactionRepository.findAll();
+        return transactions.stream()
+                .map(transaction -> modelMapper.map(transaction, TransactionReponse.class))
+                .collect(Collectors.toList());
+    }
+    public List<TransactionReponse> getTransactionsByAccountId(String accountId) {
+        List<Transaction> transactions = transactionRepository.findByAccountID(accountId);
+        return transactions.stream()
+                .map(transaction -> modelMapper.map(transaction, TransactionReponse.class))
+                .collect(Collectors.toList());
+    }
+    public TransactionReponse updateTransactionStatus(String transactionId, String newStatus) {
+        Transaction transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new EntityNotFoundException("Transaction not found with ID: " + transactionId));
 
+        transaction.setStatus(newStatus);
+        Transaction updatedTransaction = transactionRepository.save(transaction);
 
-
+        return modelMapper.map(updatedTransaction, TransactionReponse.class);
+    }
 
 }
