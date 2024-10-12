@@ -36,7 +36,7 @@ public class TransactionService {
         if (lasttransaction != null) {
             String lastId = lasttransaction.getTransactionID();
             int idNumber = Integer.parseInt(lastId.substring(1));
-            String nextId = String.format("O%03d", idNumber + 1);
+            String nextId = String.format("T%03d", idNumber + 1);
             return nextId;
         } else {
             return "T001";
@@ -58,6 +58,7 @@ public class TransactionService {
         transaction.setDate(transactionRequest.getDate());
         transaction.setStatus(transactionRequest.getStatus());
         transaction.setImage(transactionRequest.getImage());
+        transaction.setPrice(transactionRequest.getPrice());
         Transaction savetransaction =  transactionRepository.save(transaction);
 
 
@@ -68,6 +69,7 @@ public class TransactionService {
         response.setStatus(savetransaction.getStatus());
         response.setDate(savetransaction.getDate());
         response.setImage(savetransaction.getImage());
+        response.setPrice(savetransaction.getPrice());
         return response;
     }
     public List<TransactionReponse> getAllTransactions() {
