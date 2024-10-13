@@ -9,4 +9,5 @@ public interface IRoleRepository extends JpaRepository<Role, String> {
 
     Optional<Role> findByRoleName(String roleName);
     Role findTopByOrderByRoleIDDesc();
+    Role findByRoleID(String roleID);
 }
