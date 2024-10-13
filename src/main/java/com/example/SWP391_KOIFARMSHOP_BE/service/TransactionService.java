@@ -47,7 +47,7 @@ public class TransactionService {
         String accountid = transactionRequest.getAccountID();
 
 
-        boolean checkexist = iAccountRepository.existsByaccountID(accountid);
+        boolean checkexist = iAccountRepository.existsById(accountid);
         if(!checkexist){
             throw new EntityNotFoundException("Account not found with ID: " + accountid);
         }
