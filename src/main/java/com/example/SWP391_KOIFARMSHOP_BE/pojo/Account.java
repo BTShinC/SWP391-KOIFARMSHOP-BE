@@ -14,8 +14,6 @@ import java.util.Set;
 @Entity
 @Table(name = "Account")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public  class Account implements UserDetails {
     @Id
     private String accountID;
