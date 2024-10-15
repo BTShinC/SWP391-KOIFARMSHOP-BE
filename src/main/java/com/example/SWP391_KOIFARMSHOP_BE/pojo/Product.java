@@ -67,6 +67,9 @@ public class Product {
     @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
 
+    @NotBlank(message = "Consignment type cannot be blank")
+    private String age;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="ordersdetail_id")
     private OrdersDetail ordersdetail ;
