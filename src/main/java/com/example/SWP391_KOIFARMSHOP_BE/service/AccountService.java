@@ -117,5 +117,36 @@ public class AccountService{
     }
 
 
+    public AccountResponse updateAccountBalance(String accountID, double amount) {
+        Account account = iAccountRepository.findById(accountID)
+                .orElseThrow(() -> new EntityNotFoundException("Account with ID " + accountID + " not found"));
+
+        // Cộng thêm số tiền mới vào số dư hiện tại
+        double updatedBalance = account.getAccountBalance() + amount;
+        account.setAccountBalance(updatedBalance);
+
+        Account updatedAccount = iAccountRepository.save(account);
+
+        return modelMapper.map(updatedAccount, AccountResponse.class);
+    }
+
+    public AccountResponse deductAccountBalance(String accountID, double amount) {
+        Account account = iAccountRepository.findById(accountID)
+                .orElseThrow(() -> new EntityNotFoundException("Account with ID " + accountID + " not found"));
+
+        // Kiểm tra số dư có đủ để trừ không
+        if (account.getAccountBalance() < amount) {
+            throw new IllegalArgumentException("Insufficient account balance to perform this transaction.");
+        }
+
+        // Trừ số tiền từ số dư hiện tại
+        double updatedBalance = account.getAccountBalance() - amount;
+        account.setAccountBalance(updatedBalance);
+
+        Account updatedAccount = iAccountRepository.save(account);
+
+        return modelMapper.map(updatedAccount, AccountResponse.class);
+    }
+
 }
 

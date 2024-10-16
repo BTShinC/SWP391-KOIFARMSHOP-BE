@@ -36,7 +36,7 @@ public class TransactionService {
         if (lasttransaction != null) {
             String lastId = lasttransaction.getTransactionID();
             int idNumber = Integer.parseInt(lastId.substring(1));
-            String nextId = String.format("O%03d", idNumber + 1);
+            String nextId = String.format("T%03d", idNumber + 1);
             return nextId;
         } else {
             return "T001";
@@ -47,7 +47,7 @@ public class TransactionService {
         String accountid = transactionRequest.getAccountID();
 
 
-        boolean checkexist = iAccountRepository.existsByaccountID(accountid);
+        boolean checkexist = iAccountRepository.existsById(accountid);
         if(!checkexist){
             throw new EntityNotFoundException("Account not found with ID: " + accountid);
         }
@@ -58,6 +58,7 @@ public class TransactionService {
         transaction.setDate(transactionRequest.getDate());
         transaction.setStatus(transactionRequest.getStatus());
         transaction.setImage(transactionRequest.getImage());
+        transaction.setPrice(transactionRequest.getPrice());
         Transaction savetransaction =  transactionRepository.save(transaction);
 
 
@@ -68,10 +69,29 @@ public class TransactionService {
         response.setStatus(savetransaction.getStatus());
         response.setDate(savetransaction.getDate());
         response.setImage(savetransaction.getImage());
+        response.setPrice(savetransaction.getPrice());
         return response;
     }
+    public List<TransactionReponse> getAllTransactions() {
+        List<Transaction> transactions = transactionRepository.findAll();
+        return transactions.stream()
+                .map(transaction -> modelMapper.map(transaction, TransactionReponse.class))
+                .collect(Collectors.toList());
+    }
+    public List<TransactionReponse> getTransactionsByAccountId(String accountId) {
+        List<Transaction> transactions = transactionRepository.findByAccountID(accountId);
+        return transactions.stream()
+                .map(transaction -> modelMapper.map(transaction, TransactionReponse.class))
+                .collect(Collectors.toList());
+    }
+    public TransactionReponse updateTransactionStatus(String transactionId, String newStatus) {
+        Transaction transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new EntityNotFoundException("Transaction not found with ID: " + transactionId));
 
+        transaction.setStatus(newStatus);
+        Transaction updatedTransaction = transactionRepository.save(transaction);
 
-
+        return modelMapper.map(updatedTransaction, TransactionReponse.class);
+    }
 
 }

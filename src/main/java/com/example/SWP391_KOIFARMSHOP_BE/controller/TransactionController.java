@@ -25,10 +25,22 @@ public class TransactionController {
         TransactionReponse transactionResponse = transactionService.create(transactionRequest);
         return new ResponseEntity<>(transactionResponse, HttpStatus.CREATED);
     }
-//    @GetMapping("/all")
-//    public ResponseEntity<List<TransactionReponse>> getAllFeedback() {
-//        List<TransactionReponse> feedbackResponses = transactionService.getAllFeedback();
-//        return ResponseEntity.ok(feedbackResponses); // Trả về status 200 cùng với danh sách feedback
-//    }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<TransactionReponse>> getAllTransactions() {
+        List<TransactionReponse> transactions = transactionService.getAllTransactions();
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+    @GetMapping("/account/{accountId}")
+    public ResponseEntity<List<TransactionReponse>> getTransactionsByAccountId(@PathVariable String accountId) {
+        List<TransactionReponse> transactions = transactionService.getTransactionsByAccountId(accountId);
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
+    // API cập nhật trạng thái giao dịch
+    @PutMapping("/updateStatus/{transactionId}")
+    public ResponseEntity<TransactionReponse> updateTransactionStatus(@PathVariable String transactionId, @RequestParam String status) {
+        TransactionReponse updatedTransaction = transactionService.updateTransactionStatus(transactionId, status);
+        return new ResponseEntity<>(updatedTransaction, HttpStatus.OK);
+    }
 }
