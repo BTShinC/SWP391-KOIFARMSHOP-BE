@@ -31,5 +31,7 @@ public class ProductComboRequest {
     private double desiredPrice;
     @NotBlank(message = "Type cannot be blank")
     private String type;
+    @NotBlank(message = "Type cannot be blank")
+    private String status;
 
 }

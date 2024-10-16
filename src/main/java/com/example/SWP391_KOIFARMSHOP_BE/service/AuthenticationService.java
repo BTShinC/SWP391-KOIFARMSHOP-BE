@@ -3,6 +3,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.service;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.DuplicateEntity;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
 import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.model.EmailDetail;
 import com.example.SWP391_KOIFARMSHOP_BE.model.LoginRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
@@ -64,6 +65,8 @@ public class AuthenticationService implements UserDetailsService {
         String nextId = generateNextAccountId();
         account.setAccountID(nextId);  // Đặt ID cho tài khoản mới
 
+
+
         // Kiểm tra nếu tài khoản có accountID là "A001" thì set role Admin
         Role assignedRole;
         if (nextId.equals("A001")) {
@@ -81,6 +84,12 @@ public class AuthenticationService implements UserDetailsService {
         try {
             // Lưu tài khoản vào cơ sở dữ liệu sau khi mọi thứ hoàn tất
             Account newAccount = iAccountRepository.save(account);
+
+            EmailDetail emailDetail = new EmailDetail();
+            emailDetail.setReceiver(newAccount);
+            emailDetail.setSubject("Welcome My project!");
+            emailDetail.setLink("http://103.90.227.69/");
+            emailService.sendEmail(emailDetail);
 
             // Trả về phản hồi
             return modelMapper.map(newAccount, AccountResponse.class);

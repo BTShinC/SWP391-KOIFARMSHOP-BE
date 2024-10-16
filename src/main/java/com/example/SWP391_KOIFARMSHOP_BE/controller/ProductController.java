@@ -13,8 +13,8 @@ import java.util.List;
 
 @RestController
 
-@CrossOrigin
-@RequestMapping("/api/products")
+@CrossOrigin("*")
+@RequestMapping("/api/product")
 
 public class ProductController {
 
@@ -23,14 +23,14 @@ public class ProductController {
     private ProductService productService;
 
     // API để tạo sản phẩm mới
-    @PostMapping
+    @PostMapping("postall")
     public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest productRequest) {
         ProductResponse newProduct = productService.createProduct(productRequest);
         return ResponseEntity.ok(newProduct);
     }
 
     // API để lấy tất cả sản phẩm
-    @GetMapping
+    @GetMapping("getall")
     public ResponseEntity<List<ProductResponse>> getAllProducts() {
         List<ProductResponse> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
