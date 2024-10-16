@@ -57,4 +57,8 @@ public class ProductRequest {
     @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
 
+    @NotBlank(message = "Consignment type cannot be blank")
+    private String age;
+
+
 }
