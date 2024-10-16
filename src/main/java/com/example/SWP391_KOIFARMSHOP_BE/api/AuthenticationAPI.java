@@ -27,6 +27,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("*")
 public class AuthenticationAPI {
 
     @Autowired
@@ -43,10 +44,6 @@ public class AuthenticationAPI {
 
     public ResponseEntity register(@Valid @RequestBody RegisterRequest registerRequest) {
         AccountResponse newAccount = authenticationService.register(registerRequest);
-        emailService.sendSimpleMessage(registerRequest.getEmail(),
-                "Registration successful",
-                "Congratulations you have successfully registered with your username: " + registerRequest.getUserName() );
-
         return ResponseEntity.ok(newAccount);
 
     }
@@ -83,10 +80,10 @@ public class AuthenticationAPI {
             String token = UUID.randomUUID().toString();
             accountService.saveResetToken(request.getEmail(), token);
 
-            String resetLink = "http://103.90.227.69/recoveryPassword?token=" + token;//gắn link FE vào
-            emailService.sendSimpleMessage(request.getEmail(),
-                    "Reset your password",
-                    "Click the link to reset your password: " + resetLink);
+//            String resetLink = "http://103.90.227.69/recoveryPassword?token=" + token;//gắn link FE vào
+//            emailService.sendSimpleMessage(request.getEmail(),
+//                    "Reset your password",
+//                    "Click the link to reset your password: " + resetLink);
 
             return "Password reset link has been sent to your email.";
         }

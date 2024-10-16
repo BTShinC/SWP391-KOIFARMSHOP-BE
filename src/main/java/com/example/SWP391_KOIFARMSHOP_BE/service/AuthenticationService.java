@@ -3,6 +3,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.service;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.DuplicateEntity;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
 import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.model.EmailDetail;
 import com.example.SWP391_KOIFARMSHOP_BE.model.LoginRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
@@ -53,7 +54,9 @@ public class AuthenticationService implements UserDetailsService {
         if (iAccountRepository.existsByEmail(registerRequest.getEmail())) {
             throw new DuplicateEntity("Email already exists");
         }
-
+        if(iAccountRepository.existsByuserName(registerRequest.getUserName())){
+            throw new DuplicateEntity("Name was exists");
+        }
         // Tạo tài khoản mới và mã hóa mật khẩu
         Account account = modelMapper.map(registerRequest, Account.class);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
@@ -61,6 +64,8 @@ public class AuthenticationService implements UserDetailsService {
         // Sinh ID mới cho tài khoản
         String nextId = generateNextAccountId();
         account.setAccountID(nextId);  // Đặt ID cho tài khoản mới
+
+
 
         // Kiểm tra nếu tài khoản có accountID là "A001" thì set role Admin
         Role assignedRole;
@@ -76,27 +81,21 @@ public class AuthenticationService implements UserDetailsService {
         // Gán vai trò cho tài khoản
         account.setRole(assignedRole);
 
-//        // Tạo token xác thực
-//        String verificationToken = UUID.randomUUID().toString(); // Hoặc một phương pháp tạo token khác
-//        LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(5);
-//
-//        // Lưu thông tin xác thực
-//        emailVerificationRepository.save(new EmailVerification(account.getEmail(), verificationToken, expirationTime));
-//
-//        // Gửi email xác thực
-//        EmailService.sendSimpleMessage(registerRequest.getEmail(),
-//                "Email Verification",
-//                "Please verify your email by clicking the link: " +
-//                        "http://yourapp.com/verify?token=" + verificationToken);
-//
-//        return new AccountResponse("Verification email sent. Please verify your email to complete registration.");
+        try {
+            // Lưu tài khoản vào cơ sở dữ liệu sau khi mọi thứ hoàn tất
+            Account newAccount = iAccountRepository.save(account);
 
+            EmailDetail emailDetail = new EmailDetail();
+            emailDetail.setReceiver(newAccount);
+            emailDetail.setSubject("Welcome My project!");
+            emailDetail.setLink("http://103.90.227.69/");
+            emailService.sendEmail(emailDetail);
 
-        // Lưu tài khoản vào cơ sở dữ liệu sau khi mọi thứ hoàn tất
-        Account newAccount = iAccountRepository.save(account);
-
-        // Trả về phản hồi
-        return modelMapper.map(newAccount, AccountResponse.class);
+            // Trả về phản hồi
+            return modelMapper.map(newAccount, AccountResponse.class);
+        }catch(Exception e){
+            throw new RuntimeException("Failed to register account: " + e.getMessage());
+        }
     }
 
     private String generateNextAccountId() {

@@ -19,4 +19,5 @@ public class ProductComboResponse {
     private String consignmentType;
     private double desiredPrice;
     private String type;
+    private String status;
 }

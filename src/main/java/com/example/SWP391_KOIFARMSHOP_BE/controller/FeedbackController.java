@@ -19,39 +19,21 @@ public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;
 
-    // API để lấy tất cả feedbacks
-    @GetMapping
-    public ResponseEntity<List<FeedbackResponse>> fetchAllFeedback() {
-        List<FeedbackResponse> feedbacks = feedbackService.getAllFeedback();
-        return ResponseEntity.ok(feedbacks);
-    }
-
-    // API để tạo feedback mới
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<FeedbackResponse> saveFeedback(@Valid @RequestBody FeedbackRequest feedbackRequest) {
-        FeedbackResponse createdFeedback = feedbackService.createFeedback(feedbackRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdFeedback);
+    public ResponseEntity<FeedbackResponse> createFeedback(@RequestBody FeedbackRequest feedbackRequest) {
+        FeedbackResponse feedbackResponse = feedbackService.createFeedback(feedbackRequest);
+        return ResponseEntity.ok(feedbackResponse);
     }
 
-    // API để cập nhật feedback
-    @PutMapping("/{id}")
-    public ResponseEntity<FeedbackResponse> updateFeedback(@PathVariable String id, @Valid @RequestBody FeedbackRequest feedbackRequest) {
-        FeedbackResponse updatedFeedback = feedbackService.updateFeedback(id, feedbackRequest);
-        return ResponseEntity.ok(updatedFeedback);
+    @GetMapping("/all")
+    public ResponseEntity<List<FeedbackResponse>> getAllFeedback() {
+        List<FeedbackResponse> feedbackResponses = feedbackService.getAllFeedback();
+        return ResponseEntity.ok(feedbackResponses); // Trả về status 200 cùng với danh sách feedback
     }
 
-    // API để xóa feedback
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteFeedback(@PathVariable String id) {
-        feedbackService.deleteFeedback(id);
-        return ResponseEntity.ok("Delete feedback success!");
-    }
-
-    // API để lấy feedback theo ID
-    @GetMapping("/{id}")
-    public ResponseEntity<FeedbackResponse> getFeedbackByID(@PathVariable String id) {
-        FeedbackResponse feedback = feedbackService.getFeedbackByID(id);
-        return ResponseEntity.ok(feedback);
+    @GetMapping("/order/{orderID}")
+    public ResponseEntity<FeedbackResponse> getFeedbackByOrderID(@PathVariable String orderID) {
+        FeedbackResponse feedbackResponse = feedbackService.getFeedbackByOrderID(orderID);
+        return ResponseEntity.ok(feedbackResponse);
     }
 }

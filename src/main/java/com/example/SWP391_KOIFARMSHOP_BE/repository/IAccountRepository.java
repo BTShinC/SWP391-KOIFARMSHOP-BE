@@ -13,5 +13,6 @@ public interface IAccountRepository extends JpaRepository<Account, String> {
     Account findTopByOrderByAccountIDDesc();
     Account findAccountByaccountID(String accountID);
     Account findRoleByaccountID(String role);
-
+    boolean existsByuserName(String userName);
+    boolean existsByaccountID(String accountID);
 }
