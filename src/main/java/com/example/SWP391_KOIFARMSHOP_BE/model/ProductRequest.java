@@ -1,5 +1,6 @@
 package com.example.SWP391_KOIFARMSHOP_BE.model;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -15,6 +16,8 @@ public class ProductRequest {
 
     @Positive(message = "Size must be a positive number")
     private float size;
+    @Min(value = 0, message = "Age cannot be negative")
+    private int age;
 
     @NotBlank(message = "Sex cannot be blank")
     private String sex;

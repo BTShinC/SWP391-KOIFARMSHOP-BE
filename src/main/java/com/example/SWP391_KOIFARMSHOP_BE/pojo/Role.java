@@ -20,13 +20,14 @@ public class Role {
     @Size(max = 50, message = "Username cannot exceed 50 characters")
     private String roleName;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name ="role_id")
-    private Set<Account> account;
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name ="role_id")
+//    private Set<Account> account;
+//
+//
+//    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL) // Chỉ định mappedBy để tránh vấn đề vòng lặp
+//    private Set<Account> accounts;
 
-
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL) // Chỉ định mappedBy để tránh vấn đề vòng lặp
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Account> accounts;
-
-
 }

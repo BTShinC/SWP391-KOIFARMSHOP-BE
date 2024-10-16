@@ -1,5 +1,6 @@
 package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
+import com.example.SWP391_KOIFARMSHOP_BE.model.AccountRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
@@ -22,25 +23,20 @@ import java.util.Optional;
 public class AccountController {
     @Autowired
     private AccountService accountService;
-    // API để lấy tất cả accounts (tương tự getAllProducts)
-//    @GetMapping
-//    public ResponseEntity<List<AccountResponse>> getAllAccounts() {
-//        List<AccountResponse> accounts = accountService.getAllAccount();
-//        return ResponseEntity.ok(accounts);
-//    }
 
-    // API để lấy account theo ID (tương tự getProductById)
-
+    // API để lấy account theo ID
     @GetMapping("/{id}")
     public ResponseEntity<AccountResponse> getAccountById(@PathVariable String id) {
         AccountResponse account = accountService.getAccountByID(id);
         return ResponseEntity.ok(account);
     }
 
-    // API để cập nhật account (tương tự updateProduct)
+    // API để cập nhật account
     @PutMapping("/{id}")
-    public ResponseEntity<AccountResponse> updateAccount(@PathVariable String id, @Valid @RequestBody RegisterRequest registerRequest) {
-        AccountResponse updatedAccount = accountService.updateAccount(id, registerRequest);
+    public ResponseEntity<AccountResponse> updateAccount(
+            @PathVariable String id,
+            @Valid @RequestBody AccountRequest accountRequest) {
+        AccountResponse updatedAccount = accountService.updateAccount(id, accountRequest);
         return ResponseEntity.ok(updatedAccount);
     }
 

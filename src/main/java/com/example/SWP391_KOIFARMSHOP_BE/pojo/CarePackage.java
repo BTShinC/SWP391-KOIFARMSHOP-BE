@@ -16,9 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class CarePackage {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-
-    private long carePackageID;
+    private String carePackageID;
     @NotBlank(message = "Package name cannot be blank")
     @Size(max = 100, message = "Package name must be less than 100 characters")
     private String packageName;

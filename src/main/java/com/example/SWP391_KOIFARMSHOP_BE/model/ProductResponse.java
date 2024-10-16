@@ -1,5 +1,6 @@
 package com.example.SWP391_KOIFARMSHOP_BE.model;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 import lombok.Data;
@@ -10,6 +11,7 @@ public class ProductResponse {
     private String productName;
     private String breed;
     private float size;
+    private int age;
     private String sex;
     private String healthStatus;
     private String personalityTrait;
