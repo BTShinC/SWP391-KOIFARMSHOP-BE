@@ -16,8 +16,7 @@ public class ProductRequest {
 
     @Positive(message = "Size must be a positive number")
     private float size;
-    @Min(value = 0, message = "Age cannot be negative")
-    private int age;
+
 
     @NotBlank(message = "Sex cannot be blank")
     private String sex;

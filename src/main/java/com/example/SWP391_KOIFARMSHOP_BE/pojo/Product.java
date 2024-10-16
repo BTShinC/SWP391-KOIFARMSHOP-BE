@@ -23,8 +23,6 @@ public class Product {
     private String productName;
     @NotBlank(message = "Breed cannot be blank")
     private String breed;
-    @Min(value = 0, message = "Age cannot be negative")
-    private int age;
 
     @Positive(message = "Size must be a positive number")
     private float size;
@@ -70,7 +68,7 @@ public class Product {
     private String consignmentType;
 
     @Column(nullable = true)
-    private String age;
+    private String age ;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="ordersdetail_id")

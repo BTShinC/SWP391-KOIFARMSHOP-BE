@@ -11,7 +11,7 @@ public class ProductResponse {
     private String productName;
     private String breed;
     private float size;
-    private int age;
+
     private String sex;
     private String healthStatus;
     private String personalityTrait;
