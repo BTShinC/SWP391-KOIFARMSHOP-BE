@@ -94,4 +94,14 @@ public class TransactionService {
         return modelMapper.map(updatedTransaction, TransactionReponse.class);
     }
 
+    public List<TransactionReponse> searchTransactionsByStatus(String status) {
+        List<Transaction> transactions = transactionRepository.findAll();
+        return transactions.stream()
+                .filter(transaction -> transaction.getStatus().toLowerCase().contains(status.toLowerCase()))
+                .map(transaction -> modelMapper.map(transaction, TransactionReponse.class))
+                .collect(Collectors.toList());
+    }
+
+
+
 }

@@ -12,7 +12,7 @@ public class AccountResponse {
     private String email;
     private String phoneNumber;
     private String roleName;
-    private String Token;
+   // private String Token;
 
 
 }

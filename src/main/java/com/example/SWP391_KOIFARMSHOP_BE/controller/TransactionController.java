@@ -43,4 +43,11 @@ public class TransactionController {
         TransactionReponse updatedTransaction = transactionService.updateTransactionStatus(transactionId, status);
         return new ResponseEntity<>(updatedTransaction, HttpStatus.OK);
     }
+
+    @GetMapping("/searchstatus")
+    public ResponseEntity<List<TransactionReponse>> searchTransactionsByStatus(@RequestParam String status) {
+        List<TransactionReponse> transactions = transactionService.searchTransactionsByStatus(status);
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
 }

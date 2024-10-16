@@ -25,5 +25,7 @@ public class ProductResponse {
     private String status;
     private double desiredPrice;
     private String consignmentType;
+    private String age;
+
 
 }
