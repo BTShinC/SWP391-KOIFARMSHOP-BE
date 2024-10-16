@@ -37,16 +37,15 @@ public class ShopCartService {
     @Autowired
     private ModelMapper modelMapper;
 
-    // Tạo ID mới cho ShopCart với định dạng SC001, SC002, ...
     private String generateNextShopCartId() {
         ShopCart lastShopCart = shopCartRepository.findTopByOrderByShopCartIDDesc();
         if (lastShopCart != null) {
             String lastId = lastShopCart.getShopCartID();
-            int idNumber = Integer.parseInt(lastId.substring(2));  // Bỏ 'SC' và chuyển phần còn lại thành số
-            String nextId = String.format("SC%03d", idNumber + 1);  // Tạo ID mới theo dạng SCxxx
+            int idNumber = Integer.parseInt(lastId.substring(2));
+            String nextId = String.format("SC%03d", idNumber + 1);
             return nextId;
         } else {
-            return "SC001";  // ID đầu tiên
+            return "SC001";
         }
     }
 
@@ -62,13 +61,19 @@ public class ShopCartService {
         // Tìm trong bảng Product trước
         Optional<Product> optionalProduct = productRepository.findById(request.getProductId());
         Product product = null;
+        ShopCartResponse response = new ShopCartResponse();
+
         if (optionalProduct.isPresent()) {
             product = optionalProduct.get();
             shopCart.setBreed(product.getBreed());
             shopCart.setPrice(product.getPrice());
             shopCart.setQuantity(product.getQuantity());
-            shopCart.setType(product.getType());
+            shopCart.setType("Product");
+            shopCart.setName(product.getProductName());
+            shopCart.setImage(product.getImage());
             shopCart.setProduct(product);
+            response.setProductId(product.getProductID());
+
         } else {
             // Nếu không có trong Product, kiểm tra ProductCombo
             ProductCombo productCombo = productComboRepository.findById(request.getProductId())
@@ -76,17 +81,28 @@ public class ShopCartService {
             shopCart.setBreed(productCombo.getBreed());
             shopCart.setPrice(productCombo.getPrice());
             shopCart.setQuantity(productCombo.getQuantity());
-            shopCart.setType(productCombo.getType());
+            shopCart.setType("ProductCombo");
+            shopCart.setName(productCombo.getComboName());
+            shopCart.setImage(productCombo.getImage());
             shopCart.setProductCombo(productCombo);
+            response.setProductComboId(productCombo.getProductComboID());
         }
 
         // Lưu vào database
         ShopCart savedCart = shopCartRepository.save(shopCart);
 
-        // Trả về ShopCartResponse
-        return modelMapper.map(savedCart, ShopCartResponse.class);
-    }
+        // Gán giá trị vào response
+        response.setShopCartID(savedCart.getShopCartID());
+        response.setBreed(savedCart.getBreed());
+        response.setPrice(savedCart.getPrice());
+        response.setQuantity(savedCart.getQuantity());
+        response.setType(savedCart.getType());
+        response.setAccountId(savedCart.getAccount().getAccountID());
+        response.setName(savedCart.getName());
+        response.setImage(savedCart.getImage());
 
+        return response;
+    }
     // Lấy tất cả sản phẩm trong giỏ hàng của một tài khoản
     public List<ShopCartResponse> getCartItems(String accountId) {
         Account account = accountRepository.findById(accountId)
