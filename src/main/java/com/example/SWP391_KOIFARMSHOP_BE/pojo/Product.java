@@ -1,11 +1,8 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 
 import lombok.Data;
@@ -23,6 +20,8 @@ public class Product {
     private String productName;
     @NotBlank(message = "Breed cannot be blank")
     private String breed;
+    @Min(value = 0, message = "Age cannot be negative")
+    private int age;
 
     @Positive(message = "Size must be a positive number")
     private float size;

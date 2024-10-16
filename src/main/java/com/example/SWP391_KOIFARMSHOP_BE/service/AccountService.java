@@ -1,12 +1,16 @@
 package com.example.SWP391_KOIFARMSHOP_BE.service;
 
 import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
+import com.example.SWP391_KOIFARMSHOP_BE.model.AccountRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Product;
+import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IAccountRepository;
+import com.example.SWP391_KOIFARMSHOP_BE.repository.IRoleRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,10 +21,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class AccountService{
     @Autowired
     private IAccountRepository iAccountRepository;
-
+    @Autowired
+    private IRoleRepository iRoleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -34,15 +40,32 @@ public class AccountService{
                 .collect(Collectors.toList());
     }
     // Chỉnh sửa account
-    public AccountResponse updateAccount(String accountID, RegisterRequest accountRequest) {
+    public AccountResponse updateAccount(String accountID, AccountRequest accountUpdateRequest) {
         Account account = iAccountRepository.findById(accountID)
                 .orElseThrow(() -> new EntityNotFoundException("Account with ID " + accountID + " not found"));
-        modelMapper.map(accountRequest, account);
-        account.setRole(null);
-        account.setOrders(null);
-        Account updateAccount = iAccountRepository.save(account);
-        return  modelMapper.map(updateAccount, AccountResponse.class);
+
+        // Cập nhật các trường thông tin
+        account.setFullName(accountUpdateRequest.getFullName());
+        account.setAddress(accountUpdateRequest.getAddress());
+        account.setEmail(accountUpdateRequest.getEmail());
+        account.setPhoneNumber(accountUpdateRequest.getPhoneNumber());
+        account.setAccountBalance(accountUpdateRequest.getAccountBalance());
+        account.setImage(accountUpdateRequest.getImage());
+
+        // Xử lý role
+        Role role = iRoleRepository.findById(accountUpdateRequest.getRoleID())
+                .orElseThrow(() -> new EntityNotFoundException("Role not found with ID: " + accountUpdateRequest.getRoleID()));
+        account.setRole(role);
+
+        // Lưu tài khoản đã cập nhật
+        Account updatedAccount = iAccountRepository.save(account);
+
+        // Trả về AccountResponse với roleName
+        AccountResponse response = modelMapper.map(updatedAccount, AccountResponse.class);
+        response.setRoleName(role.getRoleName());
+        return response;
     }
+
 
     // Xóa tài khoản
     public Account deleteAccount(String accountID) {
