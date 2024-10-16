@@ -38,7 +38,7 @@ public class ProductCombo {
     private double desiredPrice;
     @NotBlank(message = "Type cannot be blank")
     private String type;
-    @NotBlank(message = "Consignment type cannot be blank")
+    @Column(nullable = true)
     private String age;
 
 

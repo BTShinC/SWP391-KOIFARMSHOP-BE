@@ -1,5 +1,6 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -10,6 +11,8 @@ import lombok.AllArgsConstructor;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Optional;
 
 @Entity
 @Table(name = "Product")
@@ -67,7 +70,7 @@ public class Product {
     @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
 
-    @NotBlank(message = "Consignment type cannot be blank")
+    @Column(nullable = true)
     private String age;
 
     @ManyToOne(cascade = CascadeType.ALL)
