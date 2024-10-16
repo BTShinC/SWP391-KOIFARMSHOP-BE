@@ -12,4 +12,7 @@ public class ShopCartResponse {
     private String type;  // "Product" hoặc "ProductCombo"
     private String accountId;
     private String productId;
+    private String productComboId;
+    private String name;
+    private String image;
 }
