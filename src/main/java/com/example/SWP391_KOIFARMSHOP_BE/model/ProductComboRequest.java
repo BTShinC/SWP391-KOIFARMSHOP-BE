@@ -33,8 +33,8 @@ public class ProductComboRequest {
     private String type;
     @NotBlank(message = "Type cannot be blank")
     private String status;
-    @NotBlank(message = "Consignment type cannot be blank")
-    private String age;
+
+
 
 
 }
