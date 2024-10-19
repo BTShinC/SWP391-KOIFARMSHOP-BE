@@ -43,8 +43,6 @@ public class ProductCombo {
     @NotBlank(message = "Type cannot be blank")
     private String type;
 
-
-
     @NotBlank(message = "Status cannot be blank")
     private String status;
 

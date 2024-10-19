@@ -7,8 +7,8 @@ import java.util.Date;
 @Data
 public class TransactionRequest {
     private String accountID;
-    private double price;
+    private float price;
     private Date date ;
-    private String Status;
-    private String image;
+
+
 }

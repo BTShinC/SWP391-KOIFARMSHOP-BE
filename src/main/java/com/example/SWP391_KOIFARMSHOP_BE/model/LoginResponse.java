@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class LoginResponse {
 
-    private String token; // JWT token
+   // private String token; // JWT token
     private AccountResponse account; // Thông tin tài khoản
 
 }
