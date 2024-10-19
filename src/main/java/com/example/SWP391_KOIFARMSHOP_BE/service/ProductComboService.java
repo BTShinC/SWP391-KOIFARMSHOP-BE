@@ -32,6 +32,7 @@ public class ProductComboService {
         if (existingProduct.isPresent()) {
             throw new IllegalArgumentException("Product with name '" + productComboRequest.getComboName() + "' already exists.");
         }
+
         String nextId = generateNextProductComboId();
         ProductCombo product = modelMapper.map(productComboRequest, ProductCombo.class);
         product.setProductComboID(nextId);

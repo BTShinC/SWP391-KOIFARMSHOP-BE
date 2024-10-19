@@ -19,9 +19,10 @@ public class Transaction {
     private  String transactionID;
 
     private String accountID;
-    private double price;
+    private float price;
     private Date date ;
-    private String status;
-    private String image;
+
+
+
 
 }
