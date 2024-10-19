@@ -50,9 +50,16 @@ public class AuthenticationAPI {
 
     // API đăng nhập
     @PostMapping("login")
-    public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest) {
-        AccountResponse newAccount = authenticationService.login(loginRequest);
-        return ResponseEntity.ok(newAccount);
+
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest){
+        String token = authenticationService.login(loginRequest); // Lấy token từ service
+        AccountResponse accountResponse = authenticationService.getAccountDetails(loginRequest.getUserName()); // Lấy thông tin tài khoản
+
+        // Trả về LoginResponse gồm token và thông tin tài khoản
+        LoginResponse loginResponse = new LoginResponse(token, accountResponse);
+
+        return ResponseEntity.ok(loginResponse);
+
     }
 
     // API lấy danh sách tài khoản
