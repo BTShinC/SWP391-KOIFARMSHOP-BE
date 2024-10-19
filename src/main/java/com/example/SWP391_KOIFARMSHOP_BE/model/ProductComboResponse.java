@@ -22,7 +22,5 @@ public class ProductComboResponse {
     private double desiredPrice;
     private String type;
     private String status;
-
     private String carePackageID;
-
 }

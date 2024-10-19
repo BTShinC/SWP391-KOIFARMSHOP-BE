@@ -37,8 +37,6 @@ public class ProductComboRequest {
     private String type;
     @NotBlank(message = "Status cannot be blank")
     private String status;
-  
     private String carePackageID;
-
 
 }
