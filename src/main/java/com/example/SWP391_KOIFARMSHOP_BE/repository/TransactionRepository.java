@@ -11,6 +11,6 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
      Transaction findTopByOrderByTransactionIDDesc();
      List<Transaction> findByAccountID(String accountID);
-     @Query("SELECT t FROM Transaction t WHERE LOWER(t.status) LIKE LOWER(CONCAT('%', :status, '%'))")
-     List<Transaction> searchByStatus(@Param("status") String status);
+
+     Transaction findByTransactionID (String transactionID);
 }
