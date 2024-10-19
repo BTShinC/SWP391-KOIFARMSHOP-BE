@@ -11,13 +11,15 @@ public class ProductResponse {
     private String productName;
     private String breed;
     private float size;
-    private int age;
+
     private String sex;
     private String healthStatus;
     private String personalityTrait;
     private String origin;
     private String description;
     private String image;
+    private String image1;
+    private String image2;
     private double price;
     private String certificate;
     private String type;
@@ -26,6 +28,6 @@ public class ProductResponse {
     private double desiredPrice;
     private String consignmentType;
     private String age;
-
+    private String carePackageID;
 
 }

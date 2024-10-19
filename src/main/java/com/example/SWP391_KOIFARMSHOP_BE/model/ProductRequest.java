@@ -16,8 +16,7 @@ public class ProductRequest {
 
     @Positive(message = "Size must be a positive number")
     private float size;
-    @Min(value = 0, message = "Age cannot be negative")
-    private int age;
+
 
     @NotBlank(message = "Sex cannot be blank")
     private String sex;
@@ -38,6 +37,12 @@ public class ProductRequest {
 
     @NotBlank(message = "Image URL cannot be blank")
     private String image;
+    @NotBlank(message="Image1 Url canot br blank")
+
+    private String image1;
+    @NotBlank(message="Image2 Url canot br blank")
+
+    private String image2;
 
     @Positive(message = "Price must be a positive number")
     private double price;
@@ -63,5 +68,6 @@ public class ProductRequest {
     @NotBlank(message = "Consignment type cannot be blank")
     private String age;
 
+    private String carePackageID;
 
 }

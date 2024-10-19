@@ -2,9 +2,11 @@ package com.example.SWP391_KOIFARMSHOP_BE.service;
 
 import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
 import com.example.SWP391_KOIFARMSHOP_BE.model.*;
+import com.example.SWP391_KOIFARMSHOP_BE.pojo.CarePackage;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Product;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.ProductCombo;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
+import com.example.SWP391_KOIFARMSHOP_BE.repository.ICarePackageRepository;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IProductComboRepository;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IProductRepository;
 import org.modelmapper.ModelMapper;
@@ -19,29 +21,46 @@ import java.util.stream.Collectors;
 @Service
 public class ProductComboService {
     @Autowired
-    IProductComboRepository iProductComboRepository;
+    private IProductComboRepository iProductComboRepository;
+    @Autowired
+    private ICarePackageRepository iCarePackageRepository;
 
 
     @Autowired
     private ModelMapper modelMapper;
 
     // Tạo sản phẩm mới
-    public ProductComboResponse createProduct(ProductComboRequest productComboRequest) {
-        Optional<ProductCombo> existingProduct = iProductComboRepository.findByComboName(productComboRequest.getComboName());
-
-        if (existingProduct.isPresent()) {
-            throw new IllegalArgumentException("Product with name '" + productComboRequest.getComboName() + "' already exists.");
+    public ProductComboResponse createProductCombo(ProductComboRequest productComboRequest) {
+        // Kiểm tra nếu combo đã tồn tại
+        Optional<ProductCombo> existingCombo = iProductComboRepository.findByComboName(productComboRequest.getComboName());
+        if (existingCombo.isPresent()) {
+            throw new IllegalArgumentException("Product Combo with name '" + productComboRequest.getComboName() + "' already exists.");
         }
 
+
         String nextId = generateNextProductComboId();
-        ProductCombo product = modelMapper.map(productComboRequest, ProductCombo.class);
-        product.setProductComboID(nextId);
-        product.setConsignment(null);
-        product.setCarePackage(null);
-        product.setOrdersdetail(null);
-        ProductCombo savedProduct = iProductComboRepository.save(product);
-        return modelMapper.map(savedProduct, ProductComboResponse.class);
+
+        // Ánh xạ từ request sang entity
+        ProductCombo productCombo = modelMapper.map(productComboRequest, ProductCombo.class);
+        productCombo.setProductComboID(nextId);
+
+        // Kiểm tra và gán CarePackage nếu có carePackageID trong request
+        if (productComboRequest.getCarePackageID() != null) {
+            CarePackage carePackage = iCarePackageRepository.findById(productComboRequest.getCarePackageID())
+                    .orElseThrow(() -> new EntityNotFoundException("CarePackage with ID " + productComboRequest.getCarePackageID() + " not found"));
+            productCombo.setCarePackage(carePackage);
+        } else {
+            productCombo.setCarePackage(null);
+        }
+
+        productCombo.setConsignment(null);
+        productCombo.setOrdersdetail(null);
+
+        // Lưu ProductCombo
+        ProductCombo savedProductCombo = iProductComboRepository.save(productCombo);
+        return modelMapper.map(savedProductCombo, ProductComboResponse.class);
     }
+
     private String generateNextProductComboId() {
         ProductCombo lastProduct = iProductComboRepository.findTopByOrderByProductComboIDDesc();
         if (lastProduct != null) {
@@ -78,18 +97,41 @@ public class ProductComboService {
     }
 
     // Cập nhật sản phẩm
-    public ProductComboResponse updateProduct(String productId, ProductComboRequest productComboRequest) {
-        ProductCombo product = iProductComboRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product combo with ID " + productId + " not found"));
+    public ProductComboResponse updateProductCombo(String productComboId, ProductComboRequest productComboRequest) {
+        // Lấy ProductCombo hiện có từ database
+        ProductCombo productCombo = iProductComboRepository.findById(productComboId)
+                .orElseThrow(() -> new EntityNotFoundException("Product Combo with ID " + productComboId + " not found"));
 
-        // Cập nhật thông tin sản phẩm
-        modelMapper.map(productComboRequest, product);
-        product.setConsignment(null);
-        product.setCarePackage(null);
-        product.setOrdersdetail(null);
-        ProductCombo updatedProduct = iProductComboRepository.save(product);
-        return modelMapper.map(updatedProduct, ProductComboResponse.class);
+        // Kiểm tra và cập nhật CarePackage nếu có carePackageID trong request
+        if (productComboRequest.getCarePackageID() != null) {
+            CarePackage carePackage = iCarePackageRepository.findById(productComboRequest.getCarePackageID())
+                    .orElseThrow(() -> new EntityNotFoundException("CarePackage with ID " + productComboRequest.getCarePackageID() + " not found"));
+            productCombo.setCarePackage(carePackage);
+        } else {
+            productCombo.setCarePackage(null);
+        }
+
+        // Cập nhật các trường khác
+        productCombo.setComboName(productComboRequest.getComboName());
+        productCombo.setBreed(productComboRequest.getBreed());
+        productCombo.setSize(productComboRequest.getSize());
+        productCombo.setHealthStatus(productComboRequest.getHealthStatus());
+        productCombo.setDescription(productComboRequest.getDescription());
+        productCombo.setImage(productComboRequest.getImage());
+        productCombo.setImage1(productComboRequest.getImage1());
+        productCombo.setImage2(productComboRequest.getImage2());
+        productCombo.setPrice(productComboRequest.getPrice());
+        productCombo.setQuantity(productComboRequest.getQuantity());
+        productCombo.setConsignmentType(productComboRequest.getConsignmentType());
+        productCombo.setDesiredPrice(productComboRequest.getDesiredPrice());
+        productCombo.setType(productComboRequest.getType());
+        productCombo.setStatus(productComboRequest.getStatus());
+
+        // Lưu ProductCombo đã cập nhật
+        ProductCombo updatedProductCombo = iProductComboRepository.save(productCombo);
+        return modelMapper.map(updatedProductCombo, ProductComboResponse.class);
     }
+
 
     // Xóa sản phẩm
     public void deleteProduct(String productId) {
