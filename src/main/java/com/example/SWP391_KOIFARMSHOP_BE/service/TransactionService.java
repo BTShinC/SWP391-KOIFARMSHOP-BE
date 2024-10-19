@@ -83,23 +83,9 @@ public class TransactionService {
                 .map(transaction -> modelMapper.map(transaction, TransactionReponse.class))
                 .collect(Collectors.toList());
     }
-    public TransactionReponse updateTransactionStatus(String transactionId, String newStatus) {
-        Transaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new EntityNotFoundException("Transaction not found with ID: " + transactionId));
 
-        transaction.setStatus(newStatus);
-        Transaction updatedTransaction = transactionRepository.save(transaction);
 
-        return modelMapper.map(updatedTransaction, TransactionReponse.class);
-    }
 
-    public List<TransactionReponse> searchTransactionsByStatus(String status) {
-        List<Transaction> transactions = transactionRepository.findAll();
-        return transactions.stream()
-                .filter(transaction -> transaction.getStatus().toLowerCase().contains(status.toLowerCase()))
-                .map(transaction -> modelMapper.map(transaction, TransactionReponse.class))
-                .collect(Collectors.toList());
-    }
     public String creatURL (TransactionRequest transactionRequest) throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         LocalDateTime createDate = LocalDateTime.now();

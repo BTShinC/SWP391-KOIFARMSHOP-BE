@@ -9,6 +9,5 @@ public class TransactionRequest {
     private String accountID;
     private float price;
     private Date date ;
-    private String Status;
-    private String image;
+
 }

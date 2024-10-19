@@ -53,18 +53,7 @@ public class TransactionController {
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
-    // API cập nhật trạng thái giao dịch
-    @PutMapping("/updateStatus/{transactionId}")
-    public ResponseEntity<TransactionReponse> updateTransactionStatus(@PathVariable String transactionId, @RequestParam String status) {
-        TransactionReponse updatedTransaction = transactionService.updateTransactionStatus(transactionId, status);
-        return new ResponseEntity<>(updatedTransaction, HttpStatus.OK);
-    }
 
-    @GetMapping("/searchstatus")
-    public ResponseEntity<List<TransactionReponse>> searchTransactionsByStatus(@RequestParam String status) {
-        List<TransactionReponse> transactions = transactionService.searchTransactionsByStatus(status);
-        return new ResponseEntity<>(transactions, HttpStatus.OK);
-    }
 
     @PostMapping("/vnpay/response")
     public ResponseEntity handleVNPAYResponse(@RequestParam Map<String, String> params) {
