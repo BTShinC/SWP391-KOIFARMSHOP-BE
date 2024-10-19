@@ -1,48 +1,51 @@
-    package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
-    import jakarta.persistence.*;
-    import lombok.AllArgsConstructor;
-    import lombok.Data;
-    import lombok.NoArgsConstructor;
+package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
-    @Entity
-    @Table(name = "ShopCart")
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public class ShopCart {
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-        @Id
-        @Column(name = "shop_cart_id")
-        private String shopCartID;
+@Entity
+@Table(name = "ShopCart")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ShopCart {
 
-        @Column(name = "breed")
-        private String breed;
+    @Id
+    @Column(name = "shop_cart_id")
+    private String shopCartID;
 
-        @Column(name = "price")
-        private double price;
+    @Column(name = "breed")
+    private String breed;
 
-        @Column(name = "quantity")
-        private int quantity;
+    @Column(name = "price")
+    private double price;
 
-        @Column(name = "type")
-        private String type;
-        @Column(name = "name")
-        private String name;
-        @Column(name = "image")
-        private String image;
+    @Column(name = "quantity")
+    private int quantity;
 
-        @ManyToOne
-        @JoinColumn(name = "account_id")
-        private Account account;
+    @Column(name = "type")
+    private String type;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "image")
+    private String image;
 
-        // Liên kết với Product (nếu thêm sản phẩm)
-        @ManyToOne
-        @JoinColumn(name = "product_id", referencedColumnName = "productID")
-        private Product product;
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
 
-        // Liên kết với ProductCombo (nếu thêm combo)
-        @ManyToOne
-        @JoinColumn(name = "product_combo_id", referencedColumnName = "productComboID")
-        private ProductCombo productCombo;
-    }
+    // Liên kết với Product (nếu thêm sản phẩm)
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "productID")
+    private Product product;
+
+    // Liên kết với ProductCombo (nếu thêm combo)
+    @ManyToOne
+    @JoinColumn(name = "product_combo_id", referencedColumnName = "productComboID")
+    private ProductCombo productCombo;
+}
+
+
