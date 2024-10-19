@@ -21,7 +21,7 @@ public class ProductComboController {
     // API để tạo sản phẩm mới
     @PostMapping
     public ResponseEntity<ProductComboResponse> createProductCombo(@Valid @RequestBody ProductComboRequest productComboRequest) {
-        ProductComboResponse newProduct = productComboService.createProduct(productComboRequest);
+        ProductComboResponse newProduct = productComboService.createProductCombo(productComboRequest);
         return ResponseEntity.ok(newProduct);
     }
 
@@ -49,7 +49,7 @@ public class ProductComboController {
     // API để cập nhật sản phẩm
     @PutMapping("/{id}")
     public ResponseEntity<ProductComboResponse> updateProductCombo(@PathVariable String id, @Valid @RequestBody ProductComboRequest productComboRequest) {
-        ProductComboResponse updatedProduct = productComboService.updateProduct(id, productComboRequest);
+        ProductComboResponse updatedProduct = productComboService.updateProductCombo(id, productComboRequest);
         return ResponseEntity.ok(updatedProduct);
     }
 

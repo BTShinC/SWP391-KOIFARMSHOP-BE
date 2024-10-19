@@ -28,9 +28,15 @@ public class CarePackageService {
         String nextId = generateNextCarePackageID();
         CarePackage carePackage = modelMapper.map(carePackageRequest, CarePackage.class);
         carePackage.setCarePackageID(nextId);
+
+        // Chuyển đổi danh sách thành JSON
+        carePackage.setImagesFromList(carePackageRequest.getImages());
+        carePackage.setServicesFromList(carePackageRequest.getServices());
+
         CarePackage savedCarePackage = carePackageRepository.save(carePackage);
         return modelMapper.map(savedCarePackage, CarePackageResponse.class);
     }
+
     private String generateNextCarePackageID() {
         CarePackage lastCarePackage = carePackageRepository.findTopByOrderByCarePackageIDDesc();
         if (lastCarePackage != null) {
@@ -64,6 +70,11 @@ public class CarePackageService {
                 .orElseThrow(() -> new EntityNotFoundException("Care package with ID " + carePackageId + " not found"));
 
         modelMapper.map(carePackageRequest, existingCarePackage);
+
+        // Cập nhật danh sách thành JSON
+        existingCarePackage.setImagesFromList(carePackageRequest.getImages());
+        existingCarePackage.setServicesFromList(carePackageRequest.getServices());
+
         CarePackage updatedCarePackage = carePackageRepository.save(existingCarePackage);
         return modelMapper.map(updatedCarePackage, CarePackageResponse.class);
     }

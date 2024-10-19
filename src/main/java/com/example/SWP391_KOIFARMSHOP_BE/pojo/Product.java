@@ -45,6 +45,12 @@ public class Product {
     @NotBlank(message="Image Url canot br blank")
 
     private String image;
+    @NotBlank(message="Image1 Url canot br blank")
+
+    private String image1;
+    @NotBlank(message="Image2 Url canot br blank")
+
+    private String image2;
 
     @Positive(message = "Price must be a positive number")
     private double price;
