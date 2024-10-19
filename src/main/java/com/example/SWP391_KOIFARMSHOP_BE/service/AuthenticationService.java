@@ -13,6 +13,7 @@ import com.example.SWP391_KOIFARMSHOP_BE.repository.IRoleRepository;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -116,28 +117,19 @@ public class AuthenticationService implements UserDetailsService {
 
 
     // Hàm xử lý đăng nhập
-    public String login(LoginRequest loginRequest) {
+    public AccountResponse login(LoginRequest loginRequest) {
         try {
-            // Xác thực thông tin đăng nhập
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUserName(),
-                            loginRequest.getPassword()
-                    )
-            );
-
-            // Nếu xác thực thành công, lấy thông tin tài khoản
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    loginRequest.getUserName(),
+                    loginRequest.getPassword()
+            ));
             Account account = (Account) authentication.getPrincipal();
-
-            // Tạo JWT Token
-            String token = tokenService.generateToken(account);
-
-            // Trả về JWT Token cho người dùng
-            return token;
-
+            AccountResponse accountResponse = modelMapper.map(account, AccountResponse.class);
+            accountResponse.setToken(tokenService.generateToken(account));
+            return accountResponse;
         } catch (Exception e) {
-            System.err.println("Error : " + e.getMessage());
-            throw new EntityNotFoundException("Username or password is invalid");
+            e.printStackTrace();
+            throw new RuntimeException("Failed to login account: " + e.getMessage());
         }
     }
 
