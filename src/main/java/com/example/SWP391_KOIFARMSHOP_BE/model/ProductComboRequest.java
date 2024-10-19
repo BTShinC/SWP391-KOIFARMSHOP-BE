@@ -23,6 +23,10 @@ public class ProductComboRequest {
     private String description;
     @NotBlank(message = "Image URL cannot be blank")
     private String image;
+    @NotBlank(message = "Image1 URL cannot be blank")
+    private String image1;
+    @NotBlank(message = "Image2 URL cannot be blank")
+    private String image2;
     @Positive(message = "Price must be a positive number")
     private double price;
     @NotBlank(message = "Consignment type cannot be blank")
@@ -31,10 +35,8 @@ public class ProductComboRequest {
     private double desiredPrice;
     @NotBlank(message = "Type cannot be blank")
     private String type;
-    @NotBlank(message = "Type cannot be blank")
+    @NotBlank(message = "Status cannot be blank")
     private String status;
-    @NotBlank(message = "Consignment type cannot be blank")
-    private String age;
-
+    private String carePackageID;
 
 }

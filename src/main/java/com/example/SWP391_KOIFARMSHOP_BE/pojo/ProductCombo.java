@@ -30,6 +30,10 @@ public class ProductCombo {
     private String description;
     @NotBlank(message = "Image URL cannot be blank")
     private String image;
+    @NotBlank(message = "Image1 URL cannot be blank")
+    private String image1;
+    @NotBlank(message = "Image2 URL cannot be blank")
+    private String image2;
     @Positive(message = "Price must be a positive number")
     private double price;
     @NotBlank(message = "Consignment type cannot be blank")
@@ -38,12 +42,10 @@ public class ProductCombo {
     private double desiredPrice;
     @NotBlank(message = "Type cannot be blank")
     private String type;
-    @Column(nullable = true)
-    private String age;
 
 
 
-    @NotBlank(message = "Type cannot be blank")
+    @NotBlank(message = "Status cannot be blank")
     private String status;
 
     @ManyToOne(cascade = CascadeType.ALL)

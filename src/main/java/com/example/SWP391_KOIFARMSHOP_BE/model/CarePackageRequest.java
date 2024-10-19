@@ -6,8 +6,11 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CarePackageRequest {
+
     @NotBlank(message = "Package name cannot be blank")
     @Size(max = 100, message = "Package name must be less than 100 characters")
     private String packageName;
@@ -23,7 +26,16 @@ public class CarePackageRequest {
     @PositiveOrZero(message = "Duration must be zero or positive")
     private int duration;
 
-    @NotNull(message = "Food intake per day cannot be null")
-    @PositiveOrZero(message = "Food intake per day must be zero or positive")
-    private int foodIntakePerDay;
+    @NotNull(message = "Food Package cannot be null")
+    private String foodPackage;
+
+    @NotNull(message = "Tag cannot be null")
+    private String tag;
+
+    @NotNull(message = "Type cannot be null")
+    private String type;
+
+    private List<String> images;
+
+    private List<String> services;
 }
