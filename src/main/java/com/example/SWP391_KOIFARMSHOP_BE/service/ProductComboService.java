@@ -37,7 +37,7 @@ public class ProductComboService {
             throw new IllegalArgumentException("Product Combo with name '" + productComboRequest.getComboName() + "' already exists.");
         }
 
-
+        // Tạo ID mới cho ProductCombo
         String nextId = generateNextProductComboId();
 
         // Ánh xạ từ request sang entity
