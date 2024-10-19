@@ -13,7 +13,6 @@ import com.example.SWP391_KOIFARMSHOP_BE.repository.IRoleRepository;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -117,19 +116,28 @@ public class AuthenticationService implements UserDetailsService {
 
 
     // Hàm xử lý đăng nhập
-    public AccountResponse login(LoginRequest loginRequest) {
+    public String login(LoginRequest loginRequest) {
         try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    loginRequest.getUserName(),
-                    loginRequest.getPassword()
-            ));
+            // Xác thực thông tin đăng nhập
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getUserName(),
+                            loginRequest.getPassword()
+                    )
+            );
+
+            // Nếu xác thực thành công, lấy thông tin tài khoản
             Account account = (Account) authentication.getPrincipal();
-            AccountResponse accountResponse = modelMapper.map(account, AccountResponse.class);
-            accountResponse.setToken(tokenService.generateToken(account));
-            return accountResponse;
+
+            // Tạo JWT Token
+            String token = tokenService.generateToken(account);
+
+            // Trả về JWT Token cho người dùng
+            return token;
+
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to login account: " + e.getMessage());
+            System.err.println("Error : " + e.getMessage());
+            throw new EntityNotFoundException("Username or password is invalid");
         }
     }
 

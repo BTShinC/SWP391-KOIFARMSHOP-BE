@@ -10,9 +10,8 @@ public class TransactionReponse {
     private  String TransactionID;
 
     private String accountID;
-    private float price;
+    private double price;
     private Date date ;
-
-
-
+    private String Status;
+    private String image;
 }
