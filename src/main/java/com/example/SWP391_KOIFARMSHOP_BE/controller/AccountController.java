@@ -32,6 +32,7 @@ public class AccountController {
     // API để lấy account theo ID (tương tự getProductById)
 
     @GetMapping("/{id}")
+    //@PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<AccountResponse> getAccountById(@PathVariable String id) {
         AccountResponse account = accountService.getAccountByID(id);
         return ResponseEntity.ok(account);
@@ -43,7 +44,6 @@ public class AccountController {
         AccountResponse updatedAccount = accountService.updateAccount(id, registerRequest);
         return ResponseEntity.ok(updatedAccount);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAccount(@PathVariable String id){
