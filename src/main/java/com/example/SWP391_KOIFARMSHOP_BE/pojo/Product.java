@@ -1,5 +1,6 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -7,6 +8,8 @@ import lombok.AllArgsConstructor;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Optional;
 
 @Entity
 @Table(name = "Product")
@@ -20,8 +23,6 @@ public class Product {
     private String productName;
     @NotBlank(message = "Breed cannot be blank")
     private String breed;
-    @Min(value = 0, message = "Age cannot be negative")
-    private int age;
 
     @Positive(message = "Size must be a positive number")
     private float size;
@@ -65,6 +66,9 @@ public class Product {
 
     @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
+
+    @Column(nullable = true)
+    private String age ;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="ordersdetail_id")
