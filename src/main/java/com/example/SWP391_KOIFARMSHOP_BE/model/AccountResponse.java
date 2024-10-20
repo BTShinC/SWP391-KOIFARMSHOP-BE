@@ -13,7 +13,6 @@ public class AccountResponse {
     private String phoneNumber;
     private String roleName;
    // private String Token;
-    private String image;
 
 
 }
