@@ -17,6 +17,7 @@ public class TokenService {
     @Autowired
     IAccountRepository iAccountRepository;
 
+
     // Secret key để ký và xác minh JWT token
     private final String SECRET_KEY = "phanngocghoangsang1234phanngochoangsang456phanngochoangsang7890";
 
@@ -61,14 +62,4 @@ public class TokenService {
         return iAccountRepository.findAccountByaccountID(idString);
     }
 
-    public String getRoleByToken(String token) {
-
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(getSigninKey()) // Thiết lập secret key để xác minh
-                .build()
-                .parseClaimsJws(token) // Xác minh và phân tích JWT token
-                .getBody();
-
-        return claims.get("role", String.class);
-    }
 }

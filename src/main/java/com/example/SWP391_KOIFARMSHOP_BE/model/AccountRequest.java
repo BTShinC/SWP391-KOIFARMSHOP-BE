@@ -29,5 +29,5 @@ public class AccountRequest {
     private String image;
 
     @NotBlank(message = "RoleID cannot be blank")
-    private String roleName;
+    private String roleID;
 }
