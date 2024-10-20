@@ -19,21 +19,27 @@ public class ProductComboController {
 
 
     // API để tạo sản phẩm mới
-    @PostMapping
+    @PostMapping("postCall")
     public ResponseEntity<ProductComboResponse> createProductCombo(@Valid @RequestBody ProductComboRequest productComboRequest) {
         ProductComboResponse newProduct = productComboService.createProductCombo(productComboRequest);
         return ResponseEntity.ok(newProduct);
     }
 
     // API để lấy tất cả sản phẩm
-    @GetMapping
+    @GetMapping("getCallAdmin")
+    public ResponseEntity<List<ProductComboResponse>> getAllProductComboAdmin() {
+        List<ProductComboResponse> products = productComboService.getAllProductsAdmin();
+        return ResponseEntity.ok(products);
+    }
+    // API để lấy tất cả sản phẩm
+    @GetMapping("getCall")
     public ResponseEntity<List<ProductComboResponse>> getAllProductCombo() {
         List<ProductComboResponse> products = productComboService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 
     // API để lấy sản phẩm theo ID
-    @GetMapping("/{id}")
+    @GetMapping("productComboId/{id}")
     public ResponseEntity<ProductComboResponse> getProductComboById(@PathVariable String id) {
         ProductComboResponse product = productComboService.getProductById(id);
         return ResponseEntity.ok(product);
@@ -47,14 +53,14 @@ public class ProductComboController {
     }
 
     // API để cập nhật sản phẩm
-    @PutMapping("/{id}")
+    @PutMapping("updateProductCombo/{id}")
     public ResponseEntity<ProductComboResponse> updateProductCombo(@PathVariable String id, @Valid @RequestBody ProductComboRequest productComboRequest) {
         ProductComboResponse updatedProduct = productComboService.updateProductCombo(id, productComboRequest);
         return ResponseEntity.ok(updatedProduct);
     }
 
     // API để xóa sản phẩm
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<String> deleteProductCombo(@PathVariable String id) {
         productComboService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully");

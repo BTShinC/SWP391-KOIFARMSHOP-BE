@@ -75,7 +75,7 @@ public class Filter extends OncePerRequestFilter {
                 System.out.println(request.getRequestURI());
                 System.out.println(roles);
 
-                if(request.getRequestURI().contains("/api/shop-cart/account") && !roles.contains("Admin")) {
+                if(request.getRequestURI().contains("/api/productcombo/getCallAdmin") && !roles.contains("Admin")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
                 }
@@ -83,10 +83,15 @@ public class Filter extends OncePerRequestFilter {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
                 }
-                if(request.getRequestURI().contains("/api/feedback/all") && !roles.contains("Admin")) {
+//                if(request.getRequestURI().contains("/api/feedback/all") && !roles.contains("Admin")) {
+//                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+//                    return;
+//                }
+                if(request.getRequestURI().contains("/api/product/getallAdmin") && !roles.contains("Admin")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
                 }
+
 
 
             } catch (ExpiredJwtException e) {

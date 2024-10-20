@@ -30,11 +30,17 @@ public class ProductController {
     }
 
     // API để lấy tất cả sản phẩm
+    @GetMapping("getallAdmin")
+    public ResponseEntity<List<ProductResponse>> getAllProductsAdmin() {
+        List<ProductResponse> products = productService.getAllProductsAdmin();
+        return ResponseEntity.ok(products);
+    }
     @GetMapping("getall")
     public ResponseEntity<List<ProductResponse>> getAllProducts() {
         List<ProductResponse> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
+
 
     // API để lấy sản phẩm theo ID
     @GetMapping("/{id}")

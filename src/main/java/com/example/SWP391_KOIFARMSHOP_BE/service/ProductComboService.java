@@ -75,6 +75,12 @@ public class ProductComboService {
 
     // Lấy tất cả sản phẩm
     public List<ProductComboResponse> getAllProducts() {
+        List<ProductCombo> products = iProductComboRepository.findByStatus("Còn hàng");
+        return products.stream()
+                .map(productCombo -> modelMapper.map(productCombo, ProductComboResponse.class))
+                .collect(Collectors.toList());
+    }
+    public List<ProductComboResponse> getAllProductsAdmin() {
         List<ProductCombo> products = iProductComboRepository.findAll();
         return products.stream()
                 .map(productCombo -> modelMapper.map(productCombo, ProductComboResponse.class))

@@ -77,6 +77,13 @@ public class ProductService {
 
     // Lấy tất cả sản phẩm
     public List<ProductResponse> getAllProducts() {
+        List<Product> products = iProductRepository.findByStatus("Còn hàng");
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductResponse.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductResponse> getAllProductsAdmin() {
         List<Product> products = iProductRepository.findAll();
         return products.stream()
                 .map(product -> modelMapper.map(product, ProductResponse.class))

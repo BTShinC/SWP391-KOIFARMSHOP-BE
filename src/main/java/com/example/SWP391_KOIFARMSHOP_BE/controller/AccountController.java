@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 @RequestMapping("/api/account")
 //@PreAuthorize("hasAnyRole('Customer', 'Admin')")
 public class AccountController {
@@ -32,7 +32,7 @@ public class AccountController {
     }
 
     // API để cập nhật account
-    @PutMapping("/{id}")
+    @PutMapping("/updateid/{id}")
     public ResponseEntity<AccountResponse> updateAccount(
             @PathVariable String id,
             @Valid @RequestBody AccountRequest accountRequest) {
@@ -41,7 +41,7 @@ public class AccountController {
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteAccount(@PathVariable String id){
         accountService.deleteAccount(id);
         return ResponseEntity.ok("Delete account success!");

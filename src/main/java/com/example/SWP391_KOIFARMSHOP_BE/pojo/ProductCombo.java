@@ -30,9 +30,9 @@ public class ProductCombo {
     private String description;
     @NotBlank(message = "Image URL cannot be blank")
     private String image;
-    @NotBlank(message = "Image1 URL cannot be blank")
+
     private String image1;
-    @NotBlank(message = "Image2 URL cannot be blank")
+
     private String image2;
     @Positive(message = "Price must be a positive number")
     private double price;
