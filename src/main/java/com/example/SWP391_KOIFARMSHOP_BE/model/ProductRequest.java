@@ -1,5 +1,6 @@
 package com.example.SWP391_KOIFARMSHOP_BE.model;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -15,6 +16,7 @@ public class ProductRequest {
 
     @Positive(message = "Size must be a positive number")
     private float size;
+
 
     @NotBlank(message = "Sex cannot be blank")
     private String sex;
@@ -35,6 +37,12 @@ public class ProductRequest {
 
     @NotBlank(message = "Image URL cannot be blank")
     private String image;
+    @NotBlank(message="Image1 Url canot br blank")
+
+    private String image1;
+    @NotBlank(message="Image2 Url canot br blank")
+
+    private String image2;
 
     @Positive(message = "Price must be a positive number")
     private double price;
@@ -60,5 +68,6 @@ public class ProductRequest {
     @NotBlank(message = "Consignment type cannot be blank")
     private String age;
 
+    private String carePackageID;
 
 }

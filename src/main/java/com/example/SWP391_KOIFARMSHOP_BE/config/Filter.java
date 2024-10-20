@@ -50,6 +50,7 @@ public class Filter extends OncePerRequestFilter {
         //nếu mà ko thì checktoken => false
         return  AUTH_PERMISSION.stream().anyMatch(pattern -> patchMatch.match(pattern, uri));
     }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // kiểm tra trước khi cho phép truy cập vào controller
@@ -62,13 +63,32 @@ public class Filter extends OncePerRequestFilter {
             String token = getToken(request);
             if (token == null) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Empty token");
-                return;
+//              return;
             }
             Account account;
             // => có token
             //check xem token có đúng hay không => lấy thông tin account từ token
             try {
                 account = tokenService.getAccountByToken(token);
+                String roles = tokenService.getRoleByToken(token);
+
+                System.out.println(request.getRequestURI());
+                System.out.println(roles);
+
+                if(request.getRequestURI().contains("/api/shop-cart/account") && !roles.contains("Admin")) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+                    return;
+                }
+                if(request.getRequestURI().contains("/api/account") && !roles.contains("Admin")) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+                    return;
+                }
+                if(request.getRequestURI().contains("/api/feedback/all") && !roles.contains("Admin")) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+                    return;
+                }
+
+
             } catch (ExpiredJwtException e) {
                 // response token hêt hạn
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token has expired");
@@ -78,14 +98,15 @@ public class Filter extends OncePerRequestFilter {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
                 return;
             }
+
             //=> token chuẩn
             // cho phép truy cập
-            // lưu lại thông tin cua account
+            // lưu lại thông tin cuar account
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(account, token, account.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            filterChain.doFilter(request, response);
 
+            filterChain.doFilter(request, response);
         }
     }
         public String getToken (HttpServletRequest request){

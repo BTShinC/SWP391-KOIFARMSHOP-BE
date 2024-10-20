@@ -10,5 +10,4 @@ public class TransactionRequest {
     private float price;
     private Date date ;
 
-
 }

@@ -2,11 +2,8 @@ package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 
 import lombok.Data;
@@ -48,6 +45,12 @@ public class Product {
     @NotBlank(message="Image Url canot br blank")
 
     private String image;
+    @NotBlank(message="Image1 Url canot br blank")
+
+    private String image1;
+    @NotBlank(message="Image2 Url canot br blank")
+
+    private String image2;
 
     @Positive(message = "Price must be a positive number")
     private double price;
@@ -71,7 +74,7 @@ public class Product {
     private String consignmentType;
 
     @Column(nullable = true)
-    private String age;
+    private String age ;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="ordersdetail_id")

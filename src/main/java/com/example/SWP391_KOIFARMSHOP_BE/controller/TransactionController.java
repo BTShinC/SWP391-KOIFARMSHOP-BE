@@ -24,10 +24,13 @@ public class TransactionController {
 
     @Autowired
     private TransactionService transactionService;
+
     @Autowired
     TransactionRepository transactionRepository;
+
     @Autowired
     IAccountRepository iAccountRepository;
+
 
     // API để tạo mới một transaction
     @PostMapping("/create")
@@ -97,4 +100,5 @@ public class TransactionController {
         System.out.println("Transaction failed with status: " + transactionStatus);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Giao dịch không thành công.");
     }
+
 }

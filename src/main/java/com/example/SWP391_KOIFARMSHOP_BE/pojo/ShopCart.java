@@ -1,3 +1,4 @@
+
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
 import jakarta.persistence.*;
@@ -46,3 +47,5 @@ public class ShopCart {
     @JoinColumn(name = "product_combo_id", referencedColumnName = "productComboID")
     private ProductCombo productCombo;
 }
+
+

@@ -11,5 +11,6 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
      Transaction findTopByOrderByTransactionIDDesc();
      List<Transaction> findByAccountID(String accountID);
+
      Transaction findByTransactionID (String transactionID);
 }

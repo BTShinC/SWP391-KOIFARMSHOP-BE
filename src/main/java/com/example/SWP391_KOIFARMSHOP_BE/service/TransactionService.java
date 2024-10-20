@@ -85,6 +85,7 @@ public class TransactionService {
     }
 
 
+
     public String creatURL (TransactionRequest transactionRequest) throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         LocalDateTime createDate = LocalDateTime.now();
@@ -101,7 +102,7 @@ public class TransactionService {
         String tmnCode = "7XL12PHS";
         String secretKey = "LBFKRMUSBR85Y6JRKJPKF15M71XSEW8T";
         String vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        String returnUrl = "http://localhost:8080/vnpay/response?transactionID=" + transaction.getTransactionID();
+        String returnUrl = "http://103.90.227.69/vnpay/response?transactionID=" + transaction.getTransactionID();
         String currCode = "VND";
         Map<String, String> vnpParams = new TreeMap<>();
         vnpParams.put("vnp_Version", "2.1.0");
@@ -109,21 +110,21 @@ public class TransactionService {
         vnpParams.put("vnp_TmnCode", tmnCode);
         vnpParams.put("vnp_Locale", "vn");
         vnpParams.put("vnp_CurrCode", currCode);
-        vnpParams.put("vnp_TxnRef", transaction.getTransactionID().toString());
+        vnpParams.put("vnp_TxnRef", transaction.getTransactionID());
         vnpParams.put("vnp_OrderInfo", "Thanh toan cho ma GD: " + transaction.getTransactionID());
         vnpParams.put("vnp_OrderType", "other");
         vnpParams.put("vnp_Amount", amount);
         vnpParams.put("vnp_ReturnUrl", returnUrl);
         vnpParams.put("vnp_CreateDate", formattedCreateDate);
-        vnpParams.put("vnp_IpAddr", "128.199.178.23");
+        vnpParams.put("vnp_IpAddr", "103.90.227.69");
 
         StringBuilder signDataBuilder = new StringBuilder();
         for (Map.Entry<String, String> entry : vnpParams.entrySet()) {
 
-        signDataBuilder.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.toString()));
-        signDataBuilder.append("=");
-        signDataBuilder.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
-        signDataBuilder.append("&");
+            signDataBuilder.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8));
+            signDataBuilder.append("=");
+            signDataBuilder.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8));
+            signDataBuilder.append("&");
         }
         signDataBuilder.deleteCharAt( signDataBuilder.length() - 1); // Remove last '&'
         String signData = signDataBuilder.toString();
@@ -134,14 +135,14 @@ public class TransactionService {
         urlBuilder.append("?");
         for (Map.Entry<String, String> entry : vnpParams.entrySet()) {
 
-            urlBuilder.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.toString()));
+            urlBuilder.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8));
             urlBuilder.append("=");
-            urlBuilder.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
+            urlBuilder.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8));
 
             urlBuilder.append("&");
         }
-            urlBuilder.deleteCharAt( urlBuilder.length() - 1); // Remove last '&'
-            return urlBuilder.toString();
+        urlBuilder.deleteCharAt( urlBuilder.length() - 1); // Remove last '&'
+        return urlBuilder.toString();
     }
     private String generateHMAC (String secretKey, String signData) throws NoSuchAlgorithmException, InvalidKeyException {
         Mac hmacSha512 = Mac.getInstance(  "HmacSHA512");
@@ -154,7 +155,8 @@ public class TransactionService {
             result.append(String.format("%02x",b));
         }
         return result.toString();
-        }
+    }
+
 
 
 }

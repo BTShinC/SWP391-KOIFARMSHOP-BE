@@ -13,6 +13,4 @@ public class TransactionReponse {
     private float price;
     private Date date ;
 
-
-
 }
