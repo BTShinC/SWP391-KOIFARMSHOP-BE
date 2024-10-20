@@ -3,9 +3,11 @@ package com.example.SWP391_KOIFARMSHOP_BE.service;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ConsignmentRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ConsignmentResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Consignment;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Product;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.ProductCombo;
+import com.example.SWP391_KOIFARMSHOP_BE.repository.IAccountRepository;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IConsignmentRepository;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IProductComboRepository;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IProductRepository;
@@ -29,9 +31,12 @@ public class ConsignmentService {
 
     @Autowired
     private IProductComboRepository productComboRepository;
+    @Autowired
+    private IAccountRepository accountRepository;
 
     @Autowired
     private ModelMapper modelMapper;
+
 
     // Tạo ID mới cho Consignment
     private String generateNextConsignmentID() {
@@ -47,6 +52,9 @@ public class ConsignmentService {
 
     // Tạo consignment mới
     public ConsignmentResponse createConsignment(ConsignmentRequest consignmentRequest) {
+        Account account = accountRepository.findById(consignmentRequest.getAccountID())
+                .orElseThrow(() -> new EntityNotFoundException("Account with ID " +consignmentRequest.getAccountID() + " not found"));
+
         Consignment consignment = new Consignment();
         consignment.setConsignmentID(generateNextConsignmentID());
         consignment.setConsignmentDate(consignmentRequest.getConsignmentDate());
@@ -55,6 +63,7 @@ public class ConsignmentService {
         consignment.setDateReceived(consignmentRequest.getDateReceived());
         consignment.setDateExpiration(consignmentRequest.getDateExpiration());
         consignment.setStatus(consignmentRequest.getStatus());
+        consignment.setAccountID(consignmentRequest.getAccountID());
 
         // Kiểm tra nếu Product hoặc ProductCombo tồn tại và có type là "Consignment"
         if (consignmentRequest.getProductID() != null && !consignmentRequest.getProductID().isEmpty()) {
@@ -117,6 +126,17 @@ public class ConsignmentService {
 
         Consignment updatedConsignment = consignmentRepository.save(consignment);
         return modelMapper.map(updatedConsignment, ConsignmentResponse.class);
+    }
+    // Lấy sản phẩm theo accoutID
+    public List<ConsignmentResponse> getConsignmentsByAccountID(String accountID) {
+        Account account = accountRepository.findById(accountID)
+                .orElseThrow(() -> new EntityNotFoundException("Account with ID " + accountID + " not found"));
+
+        List<Consignment> consignments = consignmentRepository.findByAccountID(accountID);
+
+        return consignments.stream()
+                .map(consignment -> modelMapper.map(consignment, ConsignmentResponse.class))
+                .collect(Collectors.toList());
     }
 
     // Xóa consignment

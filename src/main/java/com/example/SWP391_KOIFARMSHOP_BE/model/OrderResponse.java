@@ -3,6 +3,9 @@ package com.example.SWP391_KOIFARMSHOP_BE.model;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
 @Data
 public class OrderResponse {
     private String orderID;
@@ -12,5 +15,5 @@ public class OrderResponse {
     private String description;
     private String accountId;
     private long feedbackId;
-//    private Set<OrdersDetailResponse> ordersDetail;
+    private List<OrdersDetailResponse> ordersDetails;
 }

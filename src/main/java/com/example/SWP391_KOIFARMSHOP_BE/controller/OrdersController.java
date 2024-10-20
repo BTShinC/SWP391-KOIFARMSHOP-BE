@@ -20,25 +20,25 @@ public class OrdersController {
     @Autowired
     private OrdersService ordersService;
 
-    // Create Order
-    @PostMapping
-    public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest orderRequest) {
-        OrderResponse newOrder = ordersService.createOrder(orderRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newOrder);
-    }
 
-    // Get All Orders
+    // Lấy ra tất cả order
     @GetMapping
     public ResponseEntity<List<OrderResponse>> getAllOrders() {
         List<OrderResponse> orders = ordersService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
 
-    // Get Order by ID
+    // Lấy sản phảma theo orderid
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponse> getOrderById(@PathVariable String id) {
         OrderResponse order = ordersService.getOrderById(id);
         return ResponseEntity.ok(order);
+    }
+    //Lấy order theo accounid
+    @GetMapping("/account/{accountId}")
+    public ResponseEntity<List<OrderResponse>> getOrdersByAccountId(@PathVariable String accountId) {
+        List<OrderResponse> orders = ordersService.getOrdersByAccountId(accountId);
+        return ResponseEntity.ok(orders);
     }
 
     // Update Order
@@ -55,7 +55,7 @@ public class OrdersController {
         ordersService.deleteOrder(id);
     }
 
-    // API để tạo Order với Product và ProductCombo
+    // Tạo order
     @PostMapping("/makeOrder")
     public ResponseEntity<?> makeOrder(
             @RequestParam("accountId") String accountId,

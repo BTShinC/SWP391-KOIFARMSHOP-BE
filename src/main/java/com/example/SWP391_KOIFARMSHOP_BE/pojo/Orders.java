@@ -1,5 +1,6 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -40,8 +41,10 @@ public class Orders {
     private Payment payment;
 
 
-    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<OrdersDetail> ordersDetail;
+
 
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
