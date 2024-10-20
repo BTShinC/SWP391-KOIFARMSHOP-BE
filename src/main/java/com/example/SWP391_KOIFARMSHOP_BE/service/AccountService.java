@@ -53,8 +53,8 @@ public class AccountService{
         account.setImage(accountUpdateRequest.getImage());
 
         // Xử lý role
-        Role role = iRoleRepository.findById(accountUpdateRequest.getRoleID())
-                .orElseThrow(() -> new EntityNotFoundException("Role not found with ID: " + accountUpdateRequest.getRoleID()));
+        Role role = iRoleRepository.findByRoleName(accountUpdateRequest.getRoleName())
+                .orElseThrow(() -> new EntityNotFoundException("Role not found with ID: " + accountUpdateRequest.getRoleName()));
         account.setRole(role);
 
         // Lưu tài khoản đã cập nhật
