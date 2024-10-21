@@ -89,7 +89,7 @@ public class AuthenticationService implements UserDetailsService {
             emailDetail.setReceiver(newAccount);
             emailDetail.setSubject("Welcome My project!");
             emailDetail.setLink("http://103.90.227.69/");
-            emailService.sendEmail(emailDetail);
+            emailService.sendEmail(emailDetail, "WelcomeTemplate");
 
             // Trả về phản hồi
             return modelMapper.map(newAccount, AccountResponse.class);

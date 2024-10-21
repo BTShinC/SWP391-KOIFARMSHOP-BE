@@ -1,5 +1,6 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,16 +18,17 @@ public class OrdersDetail {
     private String ordersDetailID;
 
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_combo_id")
+    private ProductCombo productCombo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orders_id")
+    @JsonBackReference
     private Orders orders;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "productID")
-    private Product product; // Lưu productID
-
-    @ManyToOne
-    @JoinColumn(name = "product_combo_id", referencedColumnName = "productComboID")
-    private ProductCombo productCombo; // Lưu productComboID
 }
 

@@ -77,13 +77,21 @@ public class AuthenticationAPI {
 
         Account account = accountService.findByEmail(request.getEmail());
         if (account != null) {
+            // Tạo token reset mật khẩu
             String token = UUID.randomUUID().toString();
             accountService.saveResetToken(request.getEmail(), token);
 
-//            String resetLink = "http://103.90.227.69/recoveryPassword?token=" + token;//gắn link FE vào
-//            emailService.sendSimpleMessage(request.getEmail(),
-//                    "Reset your password",
-//                    "Click the link to reset your password: " + resetLink);
+            // Tạo link reset mật khẩu
+            String resetLink = "http://103.90.227.69/recoveryPassword?token=" + token;
+
+            // Tạo thông tin email
+            EmailDetail emailDetail = new EmailDetail();
+            emailDetail.setReceiver(account);
+            emailDetail.setSubject("Reset Your Password");
+            emailDetail.setLink(resetLink);
+
+            // Gửi email sử dụng template Thymeleaf
+            emailService.sendEmail(emailDetail, "FogotEmail");
 
             return "Password reset link has been sent to your email.";
         }

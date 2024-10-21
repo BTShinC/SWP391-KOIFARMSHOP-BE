@@ -4,7 +4,6 @@ import com.example.SWP391_KOIFARMSHOP_BE.model.EmailDetail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -20,28 +19,32 @@ public class EmailService {
     @Autowired
     JavaMailSender javaMailSender;
 
-
-    public void sendEmail(EmailDetail emailDetail){
+    // Gửi email với Thymeleaf template
+    public void sendEmail(EmailDetail emailDetail, String templateName) {
         try {
+            // Set biến vào template context (name, link...)
             Context context = new Context();
-            context.setVariable("name", emailDetail.getReceiver().getEmail());
-            context.setVariable("button", "Go to my homepage");
+            context.setVariable("name", emailDetail.getReceiver().getUsername());
             context.setVariable("link", emailDetail.getLink());
+            context.setVariable("button", "Reset Password");
 
-            String template = templateEngine.process("WelcomeTemplate",context);
+            // Xử lý template và render HTML nội dung
+            String htmlContent = templateEngine.process(templateName, context);
 
-
+            // Tạo và cấu hình email
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
-            mimeMessageHelper.setFrom("sangpnhse172506@fpt.edu.vn");
+            mimeMessageHelper.setFrom("chungdmse171186@fpt.edu.vn");
             mimeMessageHelper.setTo(emailDetail.getReceiver().getEmail());
-            mimeMessageHelper.setText(template, true);
             mimeMessageHelper.setSubject(emailDetail.getSubject());
+            mimeMessageHelper.setText(htmlContent, true);  // true để gửi email dạng HTML
+
+            // Gửi email
             javaMailSender.send(mimeMessage);
 
-        } catch (MessagingException e){
-            System.out.println("ERROR SENT EMAIL");
+        } catch (MessagingException e) {
+            System.out.println("Error sending email: " + e.getMessage());
         }
     }
 }

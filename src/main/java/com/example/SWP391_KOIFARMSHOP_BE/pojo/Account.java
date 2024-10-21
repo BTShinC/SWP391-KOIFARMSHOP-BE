@@ -94,7 +94,7 @@ public  class Account implements UserDetails {
 private Role role;
 
   @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account-id")
+    @JoinColumn(name = "account_id")
     private Set<Orders> orders ;
 
 }

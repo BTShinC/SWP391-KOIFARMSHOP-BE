@@ -51,20 +51,44 @@ public class ShopCartService {
 
     // Thêm sản phẩm hoặc combo vào giỏ hàng
     public ShopCartResponse addToCart(ShopCartRequest request) {
+        // Kiểm tra xem Account có tồn tại không
         Account account = accountRepository.findById(request.getAccountId())
                 .orElseThrow(() -> new EntityNotFoundException("Account with ID " + request.getAccountId() + " not found"));
 
+        // Kiểm tra xem sản phẩm hoặc combo đã tồn tại trong giỏ hàng chưa
+        List<ShopCart> existingCartItems = shopCartRepository.findByAccount_AccountID(request.getAccountId());
+
+        // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa
+        Optional<ShopCart> existingProductCart = existingCartItems.stream()
+                .filter(cartItem -> cartItem.getProduct() != null
+                        && cartItem.getProduct().getProductID().equals(request.getProductId()))
+                .findFirst();
+
+        if (existingProductCart.isPresent()) {
+            throw new IllegalArgumentException("Product with ID " + request.getProductId() + " is already in the cart.");
+        }
+
+        // Kiểm tra combo sản phẩm đã tồn tại trong giỏ hàng chưa
+        Optional<ShopCart> existingProductComboCart = existingCartItems.stream()
+                .filter(cartItem -> cartItem.getProductCombo() != null
+                        && cartItem.getProductCombo().getProductComboID().equals(request.getProductId()))
+                .findFirst();
+
+        if (existingProductComboCart.isPresent()) {
+            throw new IllegalArgumentException("Product combo with ID " + request.getProductId() + " is already in the cart.");
+        }
+
+        // Tạo ShopCart mới
         ShopCart shopCart = new ShopCart();
         shopCart.setShopCartID(generateNextShopCartId());
         shopCart.setAccount(account);  // Gán account
 
         // Tìm trong bảng Product trước
         Optional<Product> optionalProduct = productRepository.findById(request.getProductId());
-        Product product = null;
         ShopCartResponse response = new ShopCartResponse();
 
         if (optionalProduct.isPresent()) {
-            product = optionalProduct.get();
+            Product product = optionalProduct.get();
             shopCart.setBreed(product.getBreed());
             shopCart.setPrice(product.getPrice());
             shopCart.setQuantity(product.getQuantity());
@@ -105,10 +129,19 @@ public class ShopCartService {
     }
     // Lấy tất cả sản phẩm trong giỏ hàng của một tài khoản
     public List<ShopCartResponse> getCartItems(String accountId) {
+        // Tìm tài khoản
         Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new EntityNotFoundException("Account with ID " +accountId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Account with ID " + accountId + " not found"));
 
-        return shopCartRepository.findByAccount_AccountID(accountId).stream()
+        // Lấy tất cả các mục giỏ hàng cho tài khoản
+        List<ShopCart> cartItems = shopCartRepository.findByAccount_AccountID(accountId);
+
+        // Lọc chỉ những sản phẩm và productCombo có trạng thái là "Còn hàng"
+        return cartItems.stream()
+                .filter(cartItem ->
+                        (cartItem.getProduct() != null && "Còn hàng".equals(cartItem.getProduct().getStatus())) ||
+                                (cartItem.getProductCombo() != null && "Còn hàng".equals(cartItem.getProductCombo().getStatus()))
+                )
                 .map(cartItem -> modelMapper.map(cartItem, ShopCartResponse.class))
                 .collect(Collectors.toList());
     }

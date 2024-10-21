@@ -34,7 +34,11 @@ public class ConsignmentController {
         ConsignmentResponse consignment = consignmentService.getConsignmentById(id);
         return ResponseEntity.ok(consignment);
     }
-
+    @GetMapping("/account/{accountID}")
+    public ResponseEntity<List<ConsignmentResponse>> getConsignmentsByAccountID(@PathVariable String accountID) {
+        List<ConsignmentResponse> consignments = consignmentService.getConsignmentsByAccountID(accountID);
+        return ResponseEntity.ok(consignments);
+    }
     @PutMapping("/{id}")
     public ResponseEntity<ConsignmentResponse> updateConsignment(@PathVariable String id, @RequestBody ConsignmentRequest consignmentRequest) {
         ConsignmentResponse updatedConsignment = consignmentService.updateConsignment(id, consignmentRequest);
