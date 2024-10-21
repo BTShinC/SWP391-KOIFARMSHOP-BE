@@ -10,4 +10,5 @@ public interface IOrdersRepository extends JpaRepository<Orders, String> {
     Orders findTopByOrderByOrderIDDesc();
     Orders findByorderID(String orderID);
     List<Orders> findAllByAccount_AccountID(String accountId);
+    List<Orders> findBystatus(String status);
 }

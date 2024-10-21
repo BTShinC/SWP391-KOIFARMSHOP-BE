@@ -11,4 +11,5 @@ import java.util.List;
 public interface IConsignmentRepository extends JpaRepository<Consignment, String> {
     Consignment findTopByOrderByConsignmentIDDesc();
     List<Consignment> findByAccountID(String accountId);
+    Consignment findByconsignmentID(String consignmentID);
 }

@@ -32,19 +32,19 @@ public class AccountService{
     @Autowired
     private ModelMapper modelMapper;
 
-    // Lấy tất cả Account
+
     public List<AccountResponse> getAllAccount() {
         List<Account> accounts = iAccountRepository.findAll();
         return accounts.stream()
                 .map(account -> modelMapper.map(account, AccountResponse.class))
                 .collect(Collectors.toList());
     }
-    // Chỉnh sửa account
+
     public AccountResponse updateAccount(String accountID, AccountRequest accountUpdateRequest) {
         Account account = iAccountRepository.findById(accountID)
                 .orElseThrow(() -> new EntityNotFoundException("Account with ID " + accountID + " not found"));
 
-        // Cập nhật các trường thông tin
+
         account.setFullName(accountUpdateRequest.getFullName());
         account.setAddress(accountUpdateRequest.getAddress());
         account.setEmail(accountUpdateRequest.getEmail());
@@ -52,15 +52,14 @@ public class AccountService{
         account.setAccountBalance(accountUpdateRequest.getAccountBalance());
         account.setImage(accountUpdateRequest.getImage());
 
-        // Xử lý role
         Role role = iRoleRepository.findByRoleName(accountUpdateRequest.getRoleName())
                 .orElseThrow(() -> new EntityNotFoundException("Role not found with ID: " + accountUpdateRequest.getRoleName()));
         account.setRole(role);
 
-        // Lưu tài khoản đã cập nhật
+
         Account updatedAccount = iAccountRepository.save(account);
 
-        // Trả về AccountResponse với roleName
+
         AccountResponse response = modelMapper.map(updatedAccount, AccountResponse.class);
         response.setRoleName(role.getRoleName());
         return response;
@@ -121,7 +120,7 @@ public class AccountService{
         Account account = iAccountRepository.findById(accountID)
                 .orElseThrow(() -> new EntityNotFoundException("Account with ID " + accountID + " not found"));
 
-        // Cộng thêm số tiền mới vào số dư hiện tại
+
         double updatedBalance = account.getAccountBalance() + amount;
         account.setAccountBalance(updatedBalance);
 
@@ -130,16 +129,29 @@ public class AccountService{
         return modelMapper.map(updatedAccount, AccountResponse.class);
     }
 
+    public String updateAccountBalancRefund(String accountID, double amount) {
+        Account account = iAccountRepository.findById(accountID)
+                .orElseThrow(() -> new EntityNotFoundException("Account with ID " + accountID + " not found"));
+
+
+        double updatedBalance = account.getAccountBalance() + amount;
+        account.setAccountBalance(updatedBalance);
+
+        iAccountRepository.save(account);
+
+        return "Account balance updated successfully. New balance: " + updatedBalance;
+    }
+
     public AccountResponse deductAccountBalance(String accountID, double amount) {
         Account account = iAccountRepository.findById(accountID)
                 .orElseThrow(() -> new EntityNotFoundException("Account with ID " + accountID + " not found"));
 
-        // Kiểm tra số dư có đủ để trừ không
+
         if (account.getAccountBalance() < amount) {
             throw new IllegalArgumentException("Insufficient account balance to perform this transaction.");
         }
 
-        // Trừ số tiền từ số dư hiện tại
+
         double updatedBalance = account.getAccountBalance() - amount;
         account.setAccountBalance(updatedBalance);
 
