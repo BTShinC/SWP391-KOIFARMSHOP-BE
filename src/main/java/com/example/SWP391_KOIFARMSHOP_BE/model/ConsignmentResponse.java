@@ -14,6 +14,7 @@ public class ConsignmentResponse {
     private Date dateReceived;
     private Date dateExpiration;
     private String status;
+    private double toltal;
     private String accountID;
     private String productID;
     private String productComboID;

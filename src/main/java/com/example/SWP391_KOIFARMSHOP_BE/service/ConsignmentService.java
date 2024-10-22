@@ -64,6 +64,7 @@ public class ConsignmentService {
         consignment.setDateExpiration(consignmentRequest.getDateExpiration());
         consignment.setStatus(consignmentRequest.getStatus());
         consignment.setAccountID(consignmentRequest.getAccountID());
+        consignment.setToltal(consignmentRequest.getToltal());
 
         // Kiểm tra nếu Product hoặc ProductCombo tồn tại và có type là "Consignment"
         if (consignmentRequest.getProductID() != null && !consignmentRequest.getProductID().isEmpty()) {
@@ -71,7 +72,7 @@ public class ConsignmentService {
                     .orElseThrow(() -> new EntityNotFoundException("Product with ID " + consignmentRequest.getProductID() + " not found"));
 
             // Kiểm tra type của Product phải là "Consignment"
-            if (!"Consignment".equalsIgnoreCase(product.getType())) {
+            if (!"Ký gửi".equalsIgnoreCase(product.getType())) {
                 throw new IllegalArgumentException("Product is not for consignment. Type must be 'Consignment'.");
             }
 
@@ -82,7 +83,7 @@ public class ConsignmentService {
                     .orElseThrow(() -> new EntityNotFoundException("ProductCombo with ID " + consignmentRequest.getProductComboID() + " not found"));
 
             // Kiểm tra type của ProductCombo phải là "Consignment"
-            if (!"Consignment".equalsIgnoreCase(productCombo.getType())) {
+            if (!"Ký gửi".equalsIgnoreCase(productCombo.getType())) {
                 throw new IllegalArgumentException("ProductCombo is not for consignment. Type must be 'Consignment'.");
             }
 

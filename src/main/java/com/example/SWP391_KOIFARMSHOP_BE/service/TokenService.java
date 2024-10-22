@@ -30,6 +30,8 @@ public class TokenService {
         return Jwts.builder()
                 .setSubject(String.valueOf(account.getAccountID())) // Lưu account ID vào token
                 .claim("role", account.getRole().getRoleName()) // Thêm vai trò vào token
+                .claim("fullName", account.getFullName()) // Thêm tên đầy đủ vào token
+                .claim("accountBalance", account.getAccountBalance()) // Thêm số dư tài khoản vào token
                 .setIssuedAt(new Date(System.currentTimeMillis())) // Thời gian phát hành
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // Hết hạn sau 1 ngày
                 .signWith(getSigninKey()) // Ký token bằng secret key

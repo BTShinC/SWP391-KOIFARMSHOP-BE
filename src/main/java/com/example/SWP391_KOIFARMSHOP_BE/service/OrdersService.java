@@ -77,7 +77,7 @@ public class OrdersService {
             total += product.getPrice();  // Tính tổng giá
 
             // Sau khi lưu OrdersDetail, cập nhật trạng thái của Product
-            product.setStatus("Đã được đặt");
+            product.setStatus("Đã bán");
             iProductRepository.save(product);  // Lưu lại Product
         }
 
