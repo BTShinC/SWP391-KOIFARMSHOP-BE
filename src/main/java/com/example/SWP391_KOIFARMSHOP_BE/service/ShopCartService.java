@@ -89,6 +89,12 @@ public class ShopCartService {
 
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
+
+            // Kiểm tra trạng thái của Product
+            if (!"Còn hàng".equals(product.getStatus())) {
+                throw new IllegalArgumentException("Product with ID " + request.getProductId() + " is not available for sale.");
+            }
+
             shopCart.setBreed(product.getBreed());
             shopCart.setPrice(product.getPrice());
             shopCart.setQuantity(product.getQuantity());
@@ -102,6 +108,12 @@ public class ShopCartService {
             // Nếu không có trong Product, kiểm tra ProductCombo
             ProductCombo productCombo = productComboRepository.findById(request.getProductId())
                     .orElseThrow(() -> new EntityNotFoundException("Product or Combo with ID " + request.getProductId() + " not found"));
+
+            // Kiểm tra trạng thái của ProductCombo
+            if (!"Còn hàng".equals(productCombo.getStatus())) {
+                throw new IllegalArgumentException("Product combo with ID " + request.getProductId() + " is not available for sale.");
+            }
+
             shopCart.setBreed(productCombo.getBreed());
             shopCart.setPrice(productCombo.getPrice());
             shopCart.setQuantity(productCombo.getQuantity());
@@ -127,6 +139,7 @@ public class ShopCartService {
 
         return response;
     }
+
     // Lấy tất cả sản phẩm trong giỏ hàng của một tài khoản
     public List<ShopCartResponse> getCartItems(String accountId) {
         // Tìm tài khoản
