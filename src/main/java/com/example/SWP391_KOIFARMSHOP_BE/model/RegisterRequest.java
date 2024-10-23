@@ -37,10 +37,4 @@ public class RegisterRequest {
     @Size(max = 255, message = "Image URL cannot exceed 255 characters")
     private String image;
 
-
-
-
-
-
-
 }

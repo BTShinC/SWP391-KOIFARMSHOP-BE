@@ -1,45 +1,53 @@
 package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
-import com.example.SWP391_KOIFARMSHOP_BE.pojo.Consignment;
-import com.example.SWP391_KOIFARMSHOP_BE.service.IConsignmentService;
+import com.example.SWP391_KOIFARMSHOP_BE.model.ConsignmentRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.ConsignmentResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.service.ConsignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 @RestController
-@CrossOrigin
-@RequestMapping("/api/consignment")
+@RequestMapping("/api/consignments")
+@CrossOrigin("*")
 public class ConsignmentController {
+
     @Autowired
-    private IConsignmentService iConsignmentService;
-    @GetMapping("/")
-    public ResponseEntity<List<Consignment>> fetchALlConsignment(){
-        return ResponseEntity.ok(iConsignmentService.getAllConsignment());
-    }
-    @PostMapping("/")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Consignment saveConsignment(@RequestBody Consignment consignment){
-        return iConsignmentService.insertConsignment(consignment);
+    private ConsignmentService consignmentService;
+
+    @PostMapping
+    public ResponseEntity<ConsignmentResponse> createConsignment(@RequestBody ConsignmentRequest consignmentRequest) {
+        ConsignmentResponse newConsignment = consignmentService.createConsignment(consignmentRequest);
+        return ResponseEntity.ok(newConsignment);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Consignment> updateConsignment(@PathVariable long id, @RequestBody Consignment consignment){
-        Consignment updateConsignment = iConsignmentService.updateConsignment(id, consignment);
-        return ResponseEntity.ok(updateConsignment);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteConsignment(@PathVariable long id){
-        iConsignmentService.deleteConsignment(id);
-        return ResponseEntity.ok("Delete Consignment success!");
+    @GetMapping
+    public ResponseEntity<List<ConsignmentResponse>> getAllConsignments() {
+        List<ConsignmentResponse> consignments = consignmentService.getAllConsignments();
+        return ResponseEntity.ok(consignments);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Consignment>> getConsignmentByID(@PathVariable long id){
-        Optional<Consignment> consignment = iConsignmentService.getConsignmentByID(id);
-        return  ResponseEntity.ok(consignment);
+    public ResponseEntity<ConsignmentResponse> getConsignmentById(@PathVariable String id) {
+        ConsignmentResponse consignment = consignmentService.getConsignmentById(id);
+        return ResponseEntity.ok(consignment);
+    }
+    @GetMapping("/account/{accountID}")
+    public ResponseEntity<List<ConsignmentResponse>> getConsignmentsByAccountID(@PathVariable String accountID) {
+        List<ConsignmentResponse> consignments = consignmentService.getConsignmentsByAccountID(accountID);
+        return ResponseEntity.ok(consignments);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<ConsignmentResponse> updateConsignment(@PathVariable String id, @RequestBody ConsignmentRequest consignmentRequest) {
+        ConsignmentResponse updatedConsignment = consignmentService.updateConsignment(id, consignmentRequest);
+        return ResponseEntity.ok(updatedConsignment);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteConsignment(@PathVariable String id) {
+        consignmentService.deleteConsignment(id);
+        return ResponseEntity.noContent().build();
     }
 }

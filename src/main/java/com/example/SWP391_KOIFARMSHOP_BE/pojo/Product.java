@@ -1,13 +1,15 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+
 import lombok.AllArgsConstructor;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Optional;
 
 @Entity
 @Table(name = "Product")
@@ -16,8 +18,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Product {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private long productID;
+    private String productID;
+    @NotBlank(message = "Product name cannot be blank")
+    private String productName;
     @NotBlank(message = "Breed cannot be blank")
     private String breed;
 
@@ -37,10 +40,17 @@ public class Product {
     private String origin;
 
     @NotBlank(message = "Description cannot be blank")
-    private String description; // sửa lỗi chính tả từ desciption
 
-    @NotBlank(message = "Image URL cannot be blank")
+    private String description;
+    @NotBlank(message="Image Url canot br blank")
+
     private String image;
+    @NotBlank(message="Image1 Url canot br blank")
+
+    private String image1;
+    @NotBlank(message="Image2 Url canot br blank")
+
+    private String image2;
 
     @Positive(message = "Price must be a positive number")
     private double price;
@@ -60,8 +70,10 @@ public class Product {
     @Positive(message = "Desired price must be a positive number")
     private double desiredPrice;
 
-    @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
+
+    @Column(nullable = true)
+    private String age ;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="ordersdetail_id")

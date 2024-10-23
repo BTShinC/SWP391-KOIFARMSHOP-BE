@@ -1,5 +1,6 @@
 package com.example.SWP391_KOIFARMSHOP_BE.pojo;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -19,21 +20,22 @@ import java.util.Set;
 @NoArgsConstructor
 public class Orders {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-
-    private long orderID;
+    @Column( name = "order_id")
+    private String orderID;
     @NotBlank(message = "Status cannot be blank")
     @Size(max = 50, message = "Status must be less than 50 characters")
     private String status;
     @PositiveOrZero(message = "Total must be zero or a positive number")
     private double total;
+    @Column(name = "discounted_total") // Tổng tiền sau khi giảm giá
+    private double discountedTotal;
     @NotNull(message = "Date cannot be null")
     private Date date;
     @Size(max = 255, message = "Description must be less than 255 characters")
     private String description;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account-id")
+    @JoinColumn(name = "account_id")
     private Account account ;
 
 
@@ -41,13 +43,16 @@ public class Orders {
     private Payment payment;
 
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<OrdersDetail> ordersDetail;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "feedback_id")
-    private Feedback feedback;
 
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Feedback feedback;
+    @ManyToOne
+    @JoinColumn(name = "promotion_id", referencedColumnName = "promotionID", nullable = true)
+    private Promotion promotion;
 
 }

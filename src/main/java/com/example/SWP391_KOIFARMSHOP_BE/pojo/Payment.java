@@ -13,9 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private long paymentID;
+    private String paymentID;
     @PositiveOrZero(message = "Sale price must be zero or a positive number")
     private double salePrice;
     @PositiveOrZero(message = "Ship price must be zero or a positive number")

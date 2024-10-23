@@ -1,46 +1,55 @@
 package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
-import com.example.SWP391_KOIFARMSHOP_BE.pojo.CarePackage;
-import com.example.SWP391_KOIFARMSHOP_BE.service.ICarePackageService;
+import com.example.SWP391_KOIFARMSHOP_BE.model.CarePackageRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.CarePackageResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.service.CarePackageService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@CrossOrigin
-@RequestMapping("/api/carePackage")
+@RequestMapping("/api/carePackages")
 public class CarePackageController {
+
     @Autowired
-    private ICarePackageService iCarePackageService;
-    @GetMapping("/")
-    public ResponseEntity<List<CarePackage>> fetchALlCarePackage(){
-        return ResponseEntity.ok(iCarePackageService.getAllCarePackage());
-    }
-    @PostMapping("/")
-    @ResponseStatus (HttpStatus.CREATED)
-    public CarePackage saveCarePackage(@RequestBody CarePackage carePackage){
-        return iCarePackageService.insertCarePackage(carePackage);
+    private CarePackageService carePackageService;
+
+    // Tạo gói chăm sóc mới
+    @PostMapping
+    public ResponseEntity<CarePackageResponse> createCarePackage(@Valid @RequestBody CarePackageRequest carePackageRequest) {
+        CarePackageResponse newCarePackage = carePackageService.createCarePackage(carePackageRequest);
+        return ResponseEntity.ok(newCarePackage);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CarePackage> updateCarePackage(@PathVariable long id, @RequestBody CarePackage carePackage){
-        CarePackage updateCarePackage = iCarePackageService.updateCarePackage(id, carePackage);
-        return ResponseEntity.ok(updateCarePackage);
+    // Lấy tất cả các gói chăm sóc
+    @GetMapping
+    public ResponseEntity<List<CarePackageResponse>> getAllCarePackages() {
+        List<CarePackageResponse> carePackages = carePackageService.getAllCarePackages();
+        return ResponseEntity.ok(carePackages);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCarePackage(@PathVariable long id){
-        iCarePackageService.deleteCarePackage(id);
-        return ResponseEntity.ok("Delete Care Package success!");
-    }
-
+    // Lấy gói chăm sóc theo ID
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<CarePackage>> getCarePackageByID(@PathVariable long id){
-        Optional<CarePackage> carePackage = iCarePackageService.getCarePackageByID(id);
-        return  ResponseEntity.ok(carePackage);
+    public ResponseEntity<CarePackageResponse> getCarePackageById(@PathVariable String id) {
+        CarePackageResponse carePackage = carePackageService.getCarePackageById(id);
+        return ResponseEntity.ok(carePackage);
     }
+
+    // Cập nhật gói chăm sóc
+    @PutMapping("/{id}")
+    public ResponseEntity<CarePackageResponse> updateCarePackage(@PathVariable String id, @Valid @RequestBody CarePackageRequest carePackageRequest) {
+        CarePackageResponse updatedCarePackage = carePackageService.updateCarePackage(id, carePackageRequest);
+        return ResponseEntity.ok(updatedCarePackage);
+    }
+
+    // Xóa gói chăm sóc
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCarePackage(@PathVariable String id) {
+        carePackageService.deleteCarePackage(id);
+        return ResponseEntity.ok("Care package deleted successfully");
+    }
+
 }

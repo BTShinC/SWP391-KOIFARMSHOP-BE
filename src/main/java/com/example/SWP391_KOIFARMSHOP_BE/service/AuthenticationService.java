@@ -3,16 +3,16 @@ package com.example.SWP391_KOIFARMSHOP_BE.service;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.DuplicateEntity;
 import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
 import com.example.SWP391_KOIFARMSHOP_BE.model.AccountResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.model.EmailDetail;
 import com.example.SWP391_KOIFARMSHOP_BE.model.LoginRequest;
-import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
 import com.example.SWP391_KOIFARMSHOP_BE.model.RegisterRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IAccountRepository;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IRoleRepository;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +22,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,10 +31,6 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     IAccountRepository iAccountRepository;
 
-
-    @Autowired
-    IRoleRepository iRoleRepository;
-
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -43,46 +38,85 @@ public class AuthenticationService implements UserDetailsService {
     ModelMapper modelMapper;
 
     @Autowired
+    IRoleRepository iRoleRepository;
+
+    @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
     TokenService tokenService;
 
-    @Value("${default.role.name:USER}")
-    private String defaultRoleName;
+    @Autowired
+    EmailService emailService;
 
-    public AccountResponse register(RegisterRequest registerRequest) {
-
+    public AccountResponse register(@Valid RegisterRequest registerRequest) {
+        // Kiểm tra email đã tồn tại hay chưa
         if (iAccountRepository.existsByEmail(registerRequest.getEmail())) {
             throw new DuplicateEntity("Email already exists");
         }
+        if(iAccountRepository.existsByuserName(registerRequest.getUserName())){
+            throw new DuplicateEntity("Name was exists");
+        }
+        // Tạo tài khoản mới và mã hóa mật khẩu
         Account account = modelMapper.map(registerRequest, Account.class);
-
-
         account.setPassword(passwordEncoder.encode(account.getPassword()));
-        // Lưu tài khoản vào cơ sở dữ liệu lần đầu tiên để có accountID
-        Account newAccount = iAccountRepository.save(account);
-        // Kiểm tra nếu đây là tài khoản đầu tiên (accountID == 1) thì set role Admin
-        if (newAccount.getAccountID() == 1) {
-            Role adminRole = iRoleRepository.findByRoleName("admin")
+
+        // Sinh ID mới cho tài khoản
+        String nextId = generateNextAccountId();
+        account.setAccountID(nextId);  // Đặt ID cho tài khoản mới
+
+
+
+        // Kiểm tra nếu tài khoản có accountID là "A001" thì set role Admin
+        Role assignedRole;
+        if (nextId.equals("A001")) {
+            assignedRole = iRoleRepository.findByRoleName("Admin")
                     .orElseThrow(() -> new RuntimeException("Admin role not found"));
-            newAccount.setRole(adminRole);
         } else {
             // Gán role mặc định là Customer cho các tài khoản khác
-            Role customerRole = iRoleRepository.findByRoleName("customer")
+            assignedRole = iRoleRepository.findByRoleName("Customer")
                     .orElseThrow(() -> new RuntimeException("Customer role not found"));
-            newAccount.setRole(customerRole);
         }
 
-        // Cập nhật tài khoản với vai trò mới
-        newAccount = iAccountRepository.save(newAccount);
-        return modelMapper.map(newAccount, AccountResponse.class);
+        // Gán vai trò cho tài khoản
+        account.setRole(assignedRole);
 
+        try {
+            // Lưu tài khoản vào cơ sở dữ liệu sau khi mọi thứ hoàn tất
+            Account newAccount = iAccountRepository.save(account);
 
+            EmailDetail emailDetail = new EmailDetail();
+            emailDetail.setReceiver(newAccount);
+            emailDetail.setSubject("Welcome My project!");
+            emailDetail.setLink("http://103.90.227.69/");
+            emailService.sendEmail(emailDetail, "WelcomeTemplate");
+
+            // Trả về phản hồi
+            return modelMapper.map(newAccount, AccountResponse.class);
+        }catch(Exception e){
+            throw new RuntimeException("Failed to register account: " + e.getMessage());
+        }
     }
 
+    private String generateNextAccountId() {
+        // Lấy tài khoản có accountID lớn nhất hiện tại
+        Account lastAccount = iAccountRepository.findTopByOrderByAccountIDDesc();
+
+        // Nếu có tài khoản trước đó, sinh ID mới
+        if (lastAccount != null) {
+            String lastId = lastAccount.getAccountID(); // Ví dụ: "A001"
+            int idNumber = Integer.parseInt(lastId.substring(1)); // Lấy phần số từ "A001"
+            String nextId = String.format("A%03d", idNumber + 1); // Sinh ID mới theo định dạng "A002"
+            return nextId;
+        } else {
+            return "A001"; // Nếu chưa có tài khoản nào, bắt đầu từ "A001"
+        }
+    }
+
+
+
     // Hàm xử lý đăng nhập
-    public AccountResponse login(LoginRequest loginRequest) {
+    public String login(LoginRequest loginRequest) {
         try {
             // Xác thực thông tin đăng nhập
             Authentication authentication = authenticationManager.authenticate(
@@ -94,10 +128,12 @@ public class AuthenticationService implements UserDetailsService {
 
             // Nếu xác thực thành công, lấy thông tin tài khoản
             Account account = (Account) authentication.getPrincipal();
-            AccountResponse accountResponse =  modelMapper.map(account, AccountResponse.class);
-            accountResponse.setToken(tokenService.generateToken(account));
-            // lần sau quay lại chỉ cần cái token
-            return accountResponse;
+
+            // Tạo JWT Token
+            String token = tokenService.generateToken(account);
+
+            // Trả về JWT Token cho người dùng
+            return token;
 
         } catch (Exception e) {
             System.err.println("Error : " + e.getMessage());
@@ -110,7 +146,7 @@ public class AuthenticationService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         Account account = iAccountRepository.findAccountByUserName(userName);
         if (account == null) {
-            throw new UsernameNotFoundException("User not found with username: " + userName);
+            throw new UsernameNotFoundException("Account with username " + userName + " not found");
         }
         return account;
     }
@@ -128,11 +164,10 @@ public class AuthenticationService implements UserDetailsService {
     public AccountResponse getAccountDetails(String username) {
         Account account = iAccountRepository.findAccountByUserName(username);
         if (account == null) {
-            throw new EntityNotFoundException("Account not found");
+            throw new EntityNotFoundException("Account with username " + username + " not found");
         }
         return modelMapper.map(account, AccountResponse.class);
     }
 
-    // Hàm để lấy thời gian hết hạn của token
 
 }

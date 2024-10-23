@@ -1,21 +1,22 @@
 package com.example.SWP391_KOIFARMSHOP_BE.model;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class ProductRequest {
+    @NotBlank(message = "Product name cannot be blank")
+    private String productName;
 
     @NotBlank(message = "Breed cannot be blank")
     private String breed;
 
     @Positive(message = "Size must be a positive number")
     private float size;
+
 
     @NotBlank(message = "Sex cannot be blank")
     private String sex;
@@ -30,10 +31,18 @@ public class ProductRequest {
     private String origin;
 
     @NotBlank(message = "Description cannot be blank")
-    private String description; // sửa lỗi chính tả từ desciption
+
+    private String description;
+
 
     @NotBlank(message = "Image URL cannot be blank")
     private String image;
+    @NotBlank(message="Image1 Url canot br blank")
+
+    private String image1;
+    @NotBlank(message="Image2 Url canot br blank")
+
+    private String image2;
 
     @Positive(message = "Price must be a positive number")
     private double price;
@@ -53,7 +62,11 @@ public class ProductRequest {
     @Positive(message = "Desired price must be a positive number")
     private double desiredPrice;
 
-    @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
+
+    @NotBlank(message = "Consignment type cannot be blank")
+    private String age;
+
+    private String carePackageID;
 
 }

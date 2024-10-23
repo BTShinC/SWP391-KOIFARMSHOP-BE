@@ -1,45 +1,39 @@
 package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
-import com.example.SWP391_KOIFARMSHOP_BE.pojo.Feedback;
-import com.example.SWP391_KOIFARMSHOP_BE.service.IFeedbackService;
+import com.example.SWP391_KOIFARMSHOP_BE.model.FeedbackRequest;
+import com.example.SWP391_KOIFARMSHOP_BE.model.FeedbackResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.service.FeedbackService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/api/feedback")
 public class FeedbackController {
+
     @Autowired
-    private IFeedbackService iFeedbackService;
-    @GetMapping("/")
-    public ResponseEntity<List<Feedback>> fetchALlFeedback(){
-        return ResponseEntity.ok(iFeedbackService.getAllFeedback());
-    }
-    @PostMapping("/")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Feedback saveFeedback(@RequestBody Feedback feedback){
-        return iFeedbackService.insertFeedback(feedback);
+    private FeedbackService feedbackService;
+
+    @PostMapping
+    public ResponseEntity<FeedbackResponse> createFeedback(@RequestBody FeedbackRequest feedbackRequest) {
+        FeedbackResponse feedbackResponse = feedbackService.createFeedback(feedbackRequest);
+        return ResponseEntity.ok(feedbackResponse);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Feedback> updateFeedback(@PathVariable long id, @RequestBody Feedback feedback){
-        Feedback updateFeedback = iFeedbackService.updateFeedback(id, feedback);
-        return ResponseEntity.ok(updateFeedback);
+    @GetMapping("/all")
+    public ResponseEntity<List<FeedbackResponse>> getAllFeedback() {
+        List<FeedbackResponse> feedbackResponses = feedbackService.getAllFeedback();
+        return ResponseEntity.ok(feedbackResponses); // Trả về status 200 cùng với danh sách feedback
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteFeedback(@PathVariable long id){
-        iFeedbackService.deleteFeedback(id);
-        return ResponseEntity.ok("Delete Feedback success!");
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<Feedback>> getFeedbackByID(@PathVariable long id){
-        Optional<Feedback> feedback = iFeedbackService.getFeedbackByID(id);
-        return  ResponseEntity.ok(feedback);
+    @GetMapping("/order/{orderID}")
+    public ResponseEntity<FeedbackResponse> getFeedbackByOrderID(@PathVariable String orderID) {
+        FeedbackResponse feedbackResponse = feedbackService.getFeedbackByOrderID(orderID);
+        return ResponseEntity.ok(feedbackResponse);
     }
 }

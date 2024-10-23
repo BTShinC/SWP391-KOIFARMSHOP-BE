@@ -6,42 +6,36 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 @Data
+
 public class ProductComboRequest {
 
-    @NotBlank(message = "Breed cannot be blank")
-    private String name;
-
+    @NotBlank(message = "Name cannot be blank")
+    private String comboName;
     @Positive(message = "Size must be a positive number")
     private float size;
-
     @NotBlank(message = "Breed cannot be blank")
     private String breed;
-
     @NotBlank(message = "Health status cannot be blank")
     private String healthStatus;
-
     @PositiveOrZero(message = "Quantity must be zero or a positive number")
     private int quantity;
-
     @NotBlank(message = "Description cannot be blank")
     private String description;
-
     @NotBlank(message = "Image URL cannot be blank")
     private String image;
-
+    @NotBlank(message = "Image1 URL cannot be blank")
+    private String image1;
+    @NotBlank(message = "Image2 URL cannot be blank")
+    private String image2;
     @Positive(message = "Price must be a positive number")
     private double price;
-
-    @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
-
     @Positive(message = "Desired price must be a positive number")
     private double desiredPrice;
-
     @NotBlank(message = "Type cannot be blank")
     private String type;
-
-    @NotBlank(message = "Type cannot be blank")
-    private String Status;
+    @NotBlank(message = "Status cannot be blank")
+    private String status;
+    private String carePackageID;
 
 }

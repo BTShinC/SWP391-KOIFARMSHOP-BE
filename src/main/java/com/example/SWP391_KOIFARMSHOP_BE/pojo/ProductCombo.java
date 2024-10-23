@@ -15,12 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductCombo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private long productComboID;
-
-    private String name;
-
+    private String productComboID;
+    @NotBlank(message = "Name cannot be blank")
+    private String comboName;
     @Positive(message = "Size must be a positive number")
     private float size;
     @NotBlank(message = "Breed cannot be blank")
@@ -33,17 +30,22 @@ public class ProductCombo {
     private String description;
     @NotBlank(message = "Image URL cannot be blank")
     private String image;
+    @NotBlank(message = "Image1 URL cannot be blank")
+    private String image1;
+    @NotBlank(message = "Image2 URL cannot be blank")
+    private String image2;
     @Positive(message = "Price must be a positive number")
     private double price;
-    @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
     @Positive(message = "Desired price must be a positive number")
     private double desiredPrice;
     @NotBlank(message = "Type cannot be blank")
     private String type;
 
-    @NotBlank(message = "Type cannot be blank")
-    private String Status;
+
+
+    @NotBlank(message = "Status cannot be blank")
+    private String status;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="ordersdetail_id")
@@ -53,10 +55,8 @@ public class ProductCombo {
     @JoinColumn(name ="carepackage_id")
     private CarePackage carePackage;
 
-
-    @OneToOne(mappedBy = "productCombo")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "productCombo")
     private Consignment consignment;
-
 
 }
 

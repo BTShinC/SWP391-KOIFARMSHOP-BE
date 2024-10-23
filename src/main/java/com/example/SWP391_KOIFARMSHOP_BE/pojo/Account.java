@@ -14,12 +14,9 @@ import java.util.Set;
 @Entity
 @Table(name = "Account")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public  class Account implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long accountID;
+    private String accountID;
     @NotBlank(message = "Username cannot be blank")
     @Size(max = 50, message = "Username cannot exceed 50 characters")
 
@@ -51,6 +48,9 @@ public  class Account implements UserDetails {
     @Size(max = 255, message = "Image URL cannot exceed 255 characters")
 
     private String image;
+
+    // resetToken để lưu token đặt lại mật khẩu
+    private String resetToken;
     @JsonIgnore
     boolean isDeleted = false;
 
@@ -86,18 +86,16 @@ public  class Account implements UserDetails {
         return true;
     }
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name ="role_id",referencedColumnName = "RoleID")
-    private Role role ;
+//  @ManyToOne(cascade = CascadeType.ALL)
+//  @JoinColumn(name ="role_id",referencedColumnName = "RoleID")
+//    private Role role ;
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "role_id", referencedColumnName = "roleID")
+private Role role;
 
   @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account-id")
+    @JoinColumn(name = "account_id")
     private Set<Orders> orders ;
-
-
-//    @ManyToOne
-//    @JoinColumn(name = "role_id", referencedColumnName = "roleID")
-//    private Role role;
 
 }
 
