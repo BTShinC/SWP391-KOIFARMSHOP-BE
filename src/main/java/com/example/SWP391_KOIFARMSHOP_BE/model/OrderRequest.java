@@ -24,7 +24,7 @@ public class OrderRequest {
     private String description;
 
     @NotNull(message = "Account ID cannot be null")
-    private String accountId;
+    private String accountID;
 
-    private String feedbackId;
+    private String feedbackID;
 }
