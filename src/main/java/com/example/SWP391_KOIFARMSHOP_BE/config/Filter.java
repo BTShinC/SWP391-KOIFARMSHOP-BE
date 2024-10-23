@@ -80,10 +80,10 @@ public class Filter extends OncePerRequestFilter {
                 System.out.println(request.getRequestURI());
                 System.out.println(roles);
 
-                if(request.getRequestURI().contains("/api/shop-cart/account") && !roles.contains("Admin")) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
-                    return;
-                }
+//                if(request.getRequestURI().contains("/api/shop-cart/account") && !roles.contains("Admin")) {
+//                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+//                    return;
+//                }
                 if(request.getRequestURI().contains("/api/account") && !roles.contains("Admin")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
