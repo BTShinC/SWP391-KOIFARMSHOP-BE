@@ -32,7 +32,7 @@ public class Filter extends OncePerRequestFilter {
     HandlerExceptionResolver resolver;
 
     // đinhj nghĩa cho thằng filter nhưng thằng yêu cầu tới cái đường dẫn này cho phép truy cập
-    private final List<String> AUTH_PERMISSION = List.of(
+   private final List<String> AUTH_PERMISSION = List.of(
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
@@ -84,10 +84,10 @@ public class Filter extends OncePerRequestFilter {
 //                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
 //                    return;
 //                }
-                if(request.getRequestURI().contains("/api/account") && !roles.contains("Admin")) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
-                    return;
-                }
+//                if(request.getRequestURI().contains("/api/account") && !roles.contains("Admin")) {
+//                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+//                    return;
+//                }
                 if(request.getRequestURI().contains("/api/feedback/all") && !roles.contains("Admin")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
