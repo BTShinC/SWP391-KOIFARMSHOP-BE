@@ -25,8 +25,8 @@ public class OrdersDetailController {
 
     // Lấy tất cả OrdersDetails theo OrderID
     @GetMapping("/order/{orderID}")
-    public ResponseEntity<List<OrdersDetailResponse>> getOrdersDetailsByOrderId(@PathVariable String orderId) {
-        List<OrdersDetailResponse> responses = ordersDetailService.getOrdersDetailsByOrderId(orderId);
+    public ResponseEntity<List<OrdersDetailResponse>> getOrdersDetailsByOrderId(@PathVariable String orderID) {
+        List<OrdersDetailResponse> responses = ordersDetailService.getOrdersDetailsByOrderId(orderID);
         return ResponseEntity.ok(responses);
     }
     // Lấy tất cả OrdersDetails theo loại "Trang trại" với count và tổng doanh thu
