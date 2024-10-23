@@ -39,7 +39,10 @@ public class Filter extends OncePerRequestFilter {
             "/api/login",
             "/api/Register",
             "/api/role/post",
-            "/api/product/getall"
+            "/api/forgot",
+            "/api/reset"
+
+
     );
 
     // có cho phép truy cập hay ko
@@ -76,10 +79,10 @@ public class Filter extends OncePerRequestFilter {
                 System.out.println(request.getRequestURI());
                 System.out.println(roles);
 
-//                if(request.getRequestURI().contains("/api/shop-cart/account") && !roles.contains("Admin")) {
-//                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
-//                    return;
-//                }
+                if(request.getRequestURI().contains("/api/shop-cart/account") && !roles.contains("Admin")) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+                    return;
+                }
                 if(request.getRequestURI().contains("/api/account") && !roles.contains("Admin")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
@@ -112,7 +115,10 @@ public class Filter extends OncePerRequestFilter {
     }
         public String getToken (HttpServletRequest request){
             String authHeader = request.getHeader("Authorization");
-            if (authHeader == null) return null;
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                // Trả về null hoặc có thể ném một ngoại lệ nếu cần thiết
+                return null;
+            }
             return authHeader.substring(7);
         }
     }
