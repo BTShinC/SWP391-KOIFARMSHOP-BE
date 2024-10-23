@@ -11,4 +11,5 @@ public interface IOrdersDetailRepository extends JpaRepository<OrdersDetail, Str
 
     // Tìm danh sách OrdersDetail theo Orders
     List<OrdersDetail> findByOrders(Orders orders);
+    List<OrdersDetail> findByType(String type);
 }

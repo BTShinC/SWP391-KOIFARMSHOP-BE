@@ -27,6 +27,8 @@ public class Orders {
     private String status;
     @PositiveOrZero(message = "Total must be zero or a positive number")
     private double total;
+    @Column(name = "discounted_total") // Tổng tiền sau khi giảm giá
+    private double discountedTotal;
     @NotNull(message = "Date cannot be null")
     private Date date;
     @Size(max = 255, message = "Description must be less than 255 characters")
@@ -49,6 +51,8 @@ public class Orders {
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Feedback feedback;
-
+    @ManyToOne
+    @JoinColumn(name = "promotion_id", referencedColumnName = "promotionID", nullable = true)
+    private Promotion promotion;
 
 }
