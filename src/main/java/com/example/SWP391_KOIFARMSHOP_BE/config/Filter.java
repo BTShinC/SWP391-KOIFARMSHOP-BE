@@ -40,8 +40,9 @@ public class Filter extends OncePerRequestFilter {
             "/api/Register",
             "/api/role/post",
             "/api/forgot",
-            "/api/reset"
-
+            "/api/reset",
+            "/api/product/getall",
+            "/api/productcombo/getall"
 
     );
 
