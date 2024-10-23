@@ -24,7 +24,7 @@ public class OrdersDetailController {
     }
 
     // Lấy tất cả OrdersDetails theo OrderID
-    @GetMapping("/order/{orderId}")
+    @GetMapping("/order/{orderID}")
     public ResponseEntity<List<OrdersDetailResponse>> getOrdersDetailsByOrderId(@PathVariable String orderId) {
         List<OrdersDetailResponse> responses = ordersDetailService.getOrdersDetailsByOrderId(orderId);
         return ResponseEntity.ok(responses);

@@ -36,7 +36,7 @@ public class OrdersController {
         return ResponseEntity.ok(order);
     }
     //Lấy order theo accounid
-    @GetMapping("/account/{accountId}")
+    @GetMapping("/account/{accountID}")
     public ResponseEntity<List<OrderResponse>> getOrdersByAccountId(@PathVariable String accountId) {
         List<OrderResponse> orders = ordersService.getOrdersByAccountId(accountId);
         return ResponseEntity.ok(orders);
@@ -59,9 +59,9 @@ public class OrdersController {
     // Tạo order
     @PostMapping("/makeOrder")
     public ResponseEntity<?> makeOrder(
-            @RequestParam("accountId") String accountId,
-            @RequestParam(value = "productIds", required = false) List<String> productIds,
-            @RequestParam(value = "productComboIds", required = false) List<String> productComboIds,
+            @RequestParam("accountID") String accountId,
+            @RequestParam(value = "productIDs", required = false) List<String> productIds,
+            @RequestParam(value = "productComboIDs", required = false) List<String> productComboIds,
             @RequestParam(value = "promotionID", required = false) String promotionID) {
 
         // Nếu productIds hoặc productComboIds không có giá trị, gán chúng thành danh sách rỗng

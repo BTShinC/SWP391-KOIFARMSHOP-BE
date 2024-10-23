@@ -42,8 +42,8 @@ public class Filter extends OncePerRequestFilter {
             "/api/forgot",
             "/api/reset",
             "/api/product/getall",
-            "/api/productcombo/getall"
-
+            "/api/productcombo/getall",
+            "/api/carePackages"
     );
 
     // có cho phép truy cập hay ko
