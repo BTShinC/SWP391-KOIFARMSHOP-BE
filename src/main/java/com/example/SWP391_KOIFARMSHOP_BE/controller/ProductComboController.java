@@ -19,14 +19,14 @@ public class ProductComboController {
 
 
     // API để tạo sản phẩm mới
-    @PostMapping
+    @PostMapping("postall")
     public ResponseEntity<ProductComboResponse> createProductCombo(@Valid @RequestBody ProductComboRequest productComboRequest) {
         ProductComboResponse newProduct = productComboService.createProductCombo(productComboRequest);
         return ResponseEntity.ok(newProduct);
     }
 
     // API để lấy tất cả sản phẩm
-    @GetMapping
+    @GetMapping("getall")
     public ResponseEntity<List<ProductComboResponse>> getAllProductCombo() {
         List<ProductComboResponse> products = productComboService.getAllProducts();
         return ResponseEntity.ok(products);
