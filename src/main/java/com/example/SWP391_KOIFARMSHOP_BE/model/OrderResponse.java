@@ -11,6 +11,7 @@ public class OrderResponse {
     private String orderID;
     private String status;
     private double total;
+    private double discountedTotal;
     private Date date;
     private String description;
     private String accountID;

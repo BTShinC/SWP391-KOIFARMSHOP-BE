@@ -36,7 +36,6 @@ public class ProductCombo {
     private String image2;
     @Positive(message = "Price must be a positive number")
     private double price;
-    @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
     @Positive(message = "Desired price must be a positive number")
     private double desiredPrice;

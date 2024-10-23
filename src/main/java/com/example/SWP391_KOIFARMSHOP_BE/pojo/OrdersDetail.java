@@ -16,7 +16,13 @@ import java.util.Set;
 public class OrdersDetail {
     @Id
     private String ordersDetailID;
+    @Column(name = "price")
+    private double price;
 
+    @Column(name = "discounted_price")
+    private double discountedPrice;
+    @Column(name = "type")
+    private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

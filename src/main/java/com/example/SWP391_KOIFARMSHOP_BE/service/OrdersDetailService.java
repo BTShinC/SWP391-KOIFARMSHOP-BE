@@ -2,6 +2,7 @@ package com.example.SWP391_KOIFARMSHOP_BE.service;
 
 import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
 import com.example.SWP391_KOIFARMSHOP_BE.model.OrdersDetailResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.model.OrdersDetailSummaryResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Orders;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.OrdersDetail;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IOrdersDetailRepository;
@@ -45,4 +46,56 @@ public class OrdersDetailService {
                 .map(ordersDetail -> modelMapper.map(ordersDetail, OrdersDetailResponse.class))
                 .collect(Collectors.toList());
     }
+    // Lấy tất cả OrdersDetail theo loại "Trang trại"
+    public OrdersDetailSummaryResponse getOrdersDetailsByTypeFarm() {
+        List<OrdersDetail> ordersDetails = ordersDetailRepository.findByType("Trang trại");
+
+        // Tính tổng doanh thu (tổng các discountedPrice)
+        double totalRevenue = ordersDetails.stream()
+                .mapToDouble(OrdersDetail::getDiscountedPrice)
+                .sum();
+
+        // Đếm số lượng OrdersDetail
+        int count = ordersDetails.size();
+
+        // Chuyển đổi OrdersDetail thành OrdersDetailResponse
+        List<OrdersDetailResponse> detailResponses = ordersDetails.stream()
+                .map(ordersDetail -> modelMapper.map(ordersDetail, OrdersDetailResponse.class))
+                .collect(Collectors.toList());
+
+        // Tạo OrdersDetailSummaryResponse
+        OrdersDetailSummaryResponse summaryResponse = new OrdersDetailSummaryResponse();
+        summaryResponse.setCount(count);
+        summaryResponse.setTotalRevenue(totalRevenue);
+        summaryResponse.setDetails(detailResponses);
+
+        return summaryResponse;
+    }
+
+    // Lấy tất cả OrdersDetail theo loại "Ký gửi"
+    public OrdersDetailSummaryResponse getOrdersDetailsByTypeConsignment() {
+        List<OrdersDetail> ordersDetails = ordersDetailRepository.findByType("Ký gửi");
+
+        // Tính tổng doanh thu (10% của mỗi productPrice)
+        double totalRevenue = ordersDetails.stream()
+                .mapToDouble(ordersDetail -> ordersDetail.getPrice() * 0.2 - (ordersDetail.getPrice()- ordersDetail.getDiscountedPrice()))
+                .sum();
+
+        // Đếm số lượng OrdersDetail
+        int count = ordersDetails.size();
+
+        // Chuyển đổi OrdersDetail thành OrdersDetailResponse
+        List<OrdersDetailResponse> detailResponses = ordersDetails.stream()
+                .map(ordersDetail -> modelMapper.map(ordersDetail, OrdersDetailResponse.class))
+                .collect(Collectors.toList());
+
+        // Tạo OrdersDetailSummaryResponse
+        OrdersDetailSummaryResponse summaryResponse = new OrdersDetailSummaryResponse();
+        summaryResponse.setCount(count);
+        summaryResponse.setTotalRevenue(totalRevenue);
+        summaryResponse.setDetails(detailResponses);
+
+        return summaryResponse;
+    }
+
 }

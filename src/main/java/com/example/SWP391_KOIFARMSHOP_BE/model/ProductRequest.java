@@ -62,7 +62,6 @@ public class ProductRequest {
     @Positive(message = "Desired price must be a positive number")
     private double desiredPrice;
 
-    @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
 
     @NotBlank(message = "Consignment type cannot be blank")

@@ -14,7 +14,10 @@ public class ConsignmentResponse {
     private Date dateReceived;
     private Date dateExpiration;
     private String status;
-    private double toltal;
+    private double total;
+    private String farmName;
+    private String reason;
+    private String consignmentType;
     private String accountID;
     private String productID;
     private String productComboID;
