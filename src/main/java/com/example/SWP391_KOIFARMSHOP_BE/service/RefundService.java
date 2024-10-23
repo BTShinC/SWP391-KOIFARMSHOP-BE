@@ -32,15 +32,15 @@ public class RefundService {
             throw new EntityNotFoundException("Consignment not found for ID: " + consignmentID);
         }
 
-        if (consignment.getStatus().equalsIgnoreCase("Đã bán")) {
+        if (consignment.getStatus().equalsIgnoreCase("Hoàn tất")) {
             Product product = consignment.getProduct();
             ProductCombo productCombo = consignment.getProductCombo();
 
             double refundAmount;
             if (product != null) {
-                refundAmount = product.getPrice() * 0.95;
+                refundAmount = product.getPrice() * 0.8;
             } else if (productCombo != null) {
-                refundAmount = productCombo.getPrice() * 0.95;
+                refundAmount = productCombo.getPrice() * 0.8;
             } else {
                 throw new IllegalArgumentException("No valid product or product combo found for consignment ID: " + consignmentID);
             }

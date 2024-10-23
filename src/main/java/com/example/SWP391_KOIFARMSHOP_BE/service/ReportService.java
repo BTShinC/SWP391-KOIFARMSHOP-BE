@@ -17,7 +17,7 @@ public class ReportService {
     IOrdersRepository iOrdersRepository;
 
     public List<OrderReport> ordershop(){
-        List<Orders> orders = iOrdersRepository.findBystatus("Đã bán");
+        List<Orders> orders = iOrdersRepository.findBystatus(" Hoàn tất");
         return orders.stream()
                 .map(order -> {
                     OrderReport report = new OrderReport();

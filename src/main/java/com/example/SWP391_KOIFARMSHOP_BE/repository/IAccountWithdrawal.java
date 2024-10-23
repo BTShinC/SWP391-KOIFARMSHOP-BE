@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IAccountWithdrawal extends JpaRepository<AccountWithdrawal, String> {
-
-
+    AccountWithdrawal findTopByOrderByAccountWithdrawalIdDesc();
+    boolean existsByAccountId(String accountID);
 }

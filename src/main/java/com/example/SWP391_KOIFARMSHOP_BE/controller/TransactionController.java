@@ -54,51 +54,51 @@ public class TransactionController {
     }
 
 
+@PostMapping("/vnpay/response")
+public ResponseEntity handleVNPAYResponse(@RequestBody Map<String, String> requestBody) {
+    // In ra tất cả các tham số nhận được từ body request
+    System.out.println("Received body: " + requestBody);
 
-    @PostMapping("/vnpay/response")
-    public ResponseEntity handleVNPAYResponse(@RequestParam Map<String, String> params) {
-        // In ra tất cả các tham số nhận được từ VNPAY
-        System.out.println("Received params: " + params);
+    // Lấy các giá trị từ request body
+    String transactionID = requestBody.get("vnp_TxnRef"); // Lấy mã giao dịch từ vnp_TxnRef
+    String transactionStatus = requestBody.get("vnp_ResponseCode"); // Lấy mã trạng thái giao dịch
+    String amount = requestBody.get("vnp_Amount"); // Lấy số tiền từ vnp_Amount
 
-        String transactionID = params.get("vnp_TxnRef"); // Lấy mã giao dịch từ vnp_TxnRef
-        String transactionStatus = params.get("vnp_ResponseCode"); // Lấy mã trạng thái giao dịch
-        String amount = params.get("vnp_Amount"); // Lấy số tiền từ vnp_Amount
+    // In ra các thông tin đã lấy
+    System.out.println("Transaction ID: " + transactionID);
+    System.out.println("Transaction Status: " + transactionStatus);
+    System.out.println("Amount: " + amount);
 
-        // In ra các thông tin đã lấy
-        System.out.println("Transaction ID: " + transactionID);
-        System.out.println("Transaction Status: " + transactionStatus);
-        System.out.println("Amount: " + amount);
+    // Kiểm tra trạng thái giao dịch
+    if ("00".equals(transactionStatus)) { // Giả sử "00" là mã trạng thái thành công
+        // Tìm giao dịch và tài khoản khách hàng
+        Transaction transaction = transactionRepository.findByTransactionID(transactionID);
+        if (transaction != null) {
+            String accountID = transaction.getAccountID();
+            System.out.println("Found transaction. Account ID: " + accountID);
 
-        // Kiểm tra trạng thái giao dịch
-        if ("00".equals(transactionStatus)) { // Giả sử "00" là mã trạng thái thành công
-            // Tìm giao dịch và tài khoản khách hàng
-            Transaction transaction = transactionRepository.findByTransactionID(transactionID);
-            if (transaction != null) {
-                String accountID = transaction.getAccountID();
-                System.out.println("Found transaction. Account ID: " + accountID);
+            Account account = iAccountRepository.findById(accountID)
+                    .orElseThrow(() -> new EntityNotFoundException("Account not found with ID: " + accountID));
 
-                Account account = iAccountRepository.findById(accountID)
-                        .orElseThrow(() -> new EntityNotFoundException("Account not found with ID: " + accountID));
+            // Cộng tiền vào ví
+            float moneyToAdd = Float.parseFloat(amount) / 100; // Chia cho 100 vì VNPAY gửi số tiền tính bằng đồng
+            System.out.println("Current Account Balance: " + account.getAccountBalance());
+            account.setAccountBalance(account.getAccountBalance() + moneyToAdd);
+            System.out.println("Updated Account Balance: " + account.getAccountBalance());
 
-                // Cộng tiền vào ví
-                float moneyToAdd = Float.parseFloat(amount) / 100; // Chia cho 100 vì VNPAY gửi số tiền tính bằng đồng
-                System.out.println("Current Account Balance: " + account.getAccountBalance());
-                account.setAccountBalance(account.getAccountBalance() + moneyToAdd);
-                System.out.println("Updated Account Balance: " + account.getAccountBalance());
+            // Lưu lại tài khoản
+            iAccountRepository.save(account);
 
-                // Lưu lại tài khoản
-                iAccountRepository.save(account);
-
-                // Trả về phản hồi thành công
-                return ResponseEntity.ok("Tiền đã được nạp vào ví thành công.");
-            } else {
-                System.out.println("Transaction not found for ID: " + transactionID);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Giao dịch không tìm thấy.");
-            }
+            // Trả về phản hồi thành công
+            return ResponseEntity.ok("Tiền đã được nạp vào ví thành công.");
+        } else {
+            System.out.println("Transaction not found for ID: " + transactionID);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Giao dịch không tìm thấy.");
         }
-
-        System.out.println("Transaction failed with status: " + transactionStatus);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Giao dịch không thành công.");
     }
+
+    System.out.println("Transaction failed with status: " + transactionStatus);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Giao dịch không thành công.");
+}
 
 }
