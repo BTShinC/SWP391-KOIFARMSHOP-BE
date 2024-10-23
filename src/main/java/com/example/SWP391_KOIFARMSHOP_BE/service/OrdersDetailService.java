@@ -48,8 +48,9 @@ public class OrdersDetailService {
     }
     // Lấy tất cả OrdersDetail theo loại "Trang trại"
     public OrdersDetailSummaryResponse getOrdersDetailsByTypeFarm() {
-        List<OrdersDetail> ordersDetails = ordersDetailRepository.findByType("Trang trại");
-
+        List<OrdersDetail> ordersDetails = ordersDetailRepository.findByType("Trang trại").stream()
+                .filter(ordersDetail -> "Hoàn tất".equals(ordersDetail.getOrders().getStatus()))  // Kiểm tra trạng thái Order
+                .collect(Collectors.toList());
         // Tính tổng doanh thu (tổng các discountedPrice)
         double totalRevenue = ordersDetails.stream()
                 .mapToDouble(OrdersDetail::getDiscountedPrice)
@@ -74,9 +75,11 @@ public class OrdersDetailService {
 
     // Lấy tất cả OrdersDetail theo loại "Ký gửi"
     public OrdersDetailSummaryResponse getOrdersDetailsByTypeConsignment() {
-        List<OrdersDetail> ordersDetails = ordersDetailRepository.findByType("Ký gửi");
+        List<OrdersDetail> ordersDetails = ordersDetailRepository.findByType("Ký gửi").stream()
+                .filter(ordersDetail -> "Hoàn tất".equals(ordersDetail.getOrders().getStatus()))  // Kiểm tra trạng thái Order
+                .collect(Collectors.toList());
 
-        // Tính tổng doanh thu (10% của mỗi productPrice)
+        // Tính tổng doanh thu (20% của mỗi productPrice)
         double totalRevenue = ordersDetails.stream()
                 .mapToDouble(ordersDetail -> ordersDetail.getPrice() * 0.2 - (ordersDetail.getPrice()- ordersDetail.getDiscountedPrice()))
                 .sum();
