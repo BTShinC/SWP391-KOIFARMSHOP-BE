@@ -250,8 +250,8 @@ public class OrdersService {
 
         // Cập nhật thông tin đơn hàng từ request
         existingOrder.setStatus(orderRequest.getStatus());
-        existingOrder.setDate(orderRequest.getDate());
-        existingOrder.setDescription(orderRequest.getDescription());
+//        existingOrder.setDate(orderRequest.getDate());
+//        existingOrder.setDescription(orderRequest.getDescription());
 
         // Lưu lại đơn hàng sau khi cập nhật trạng thái
         Orders updatedOrder = iOrdersRepository.save(existingOrder);
