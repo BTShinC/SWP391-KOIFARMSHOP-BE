@@ -63,7 +63,7 @@ public class ConsignmentService {
         consignment.setDateReceived(consignmentRequest.getDateReceived());
         consignment.setDateExpiration(consignmentRequest.getDateExpiration());
         consignment.setStatus(consignmentRequest.getStatus());
-        consignment.setAccountID(consignmentRequest.getAccountID());
+//        consignment.setAccountID(consignmentRequest.getAccountID());
         consignment.setTotal(consignmentRequest.getTotal());
         consignment.setFarmName(consignmentRequest.getFarmName());
         consignment.setReason(consignmentRequest.getReason());
