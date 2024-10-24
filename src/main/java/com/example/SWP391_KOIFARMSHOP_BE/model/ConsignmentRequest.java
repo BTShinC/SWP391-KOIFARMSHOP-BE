@@ -30,6 +30,7 @@ public class ConsignmentRequest {
     private double total;
     private String farmName;
     private String reason;
+    private int duration;
     private String accountID;
     private String productID;
     private String productComboID;
