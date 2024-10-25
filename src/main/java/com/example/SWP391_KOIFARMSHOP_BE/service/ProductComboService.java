@@ -140,4 +140,25 @@ public class ProductComboService {
         iProductComboRepository.delete(product);
 
     }
+
+    // Get product combos by type "Trang trại"
+    public List<ProductComboResponse> getProductCombosByFarmType() {
+        List<ProductCombo> productCombos = iProductComboRepository.findByType("Trang trại");
+
+        return productCombos.stream()
+                .map(productCombo -> modelMapper.map(productCombo, ProductComboResponse.class))
+                .collect(Collectors.toList());
     }
+    // Get product combos by type "Ký gửi" and consignment type "Ký gửi để bán"
+    public List<ProductComboResponse> getProductCombosForConsignmentSale() {
+        List<ProductCombo> productCombos = iProductComboRepository.findByType("Ký gửi")
+                .stream()
+                .filter(productCombo -> "Ký gửi để bán".equals(productCombo.getConsignmentType()))
+                .collect(Collectors.toList());
+
+        return productCombos.stream()
+                .map(productCombo -> modelMapper.map(productCombo, ProductComboResponse.class))
+                .collect(Collectors.toList());
+    }
+
+}

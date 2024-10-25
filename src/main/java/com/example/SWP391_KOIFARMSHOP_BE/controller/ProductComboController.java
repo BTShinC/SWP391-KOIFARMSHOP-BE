@@ -59,4 +59,18 @@ public class ProductComboController {
         productComboService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully");
     }
+
+    // API get type "Trang trại"
+    @GetMapping("/farm")
+    public ResponseEntity<List<ProductComboResponse>> getProductCombosByFarmType() {
+        List<ProductComboResponse> productCombos = productComboService.getProductCombosByFarmType();
+        return ResponseEntity.ok(productCombos);
+    }
+
+    // API get combo "Ký gửi"
+    @GetMapping("/consignment-for-sale")
+    public ResponseEntity<List<ProductComboResponse>> getProductCombosForConsignmentSale() {
+        List<ProductComboResponse> productCombos = productComboService.getProductCombosForConsignmentSale();
+        return ResponseEntity.ok(productCombos);
+    }
 }
