@@ -1,6 +1,7 @@
 package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
 
+import com.example.SWP391_KOIFARMSHOP_BE.model.ProductComboResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.ProductResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.service.ProductService;
@@ -63,5 +64,18 @@ public class ProductController {
     public ResponseEntity<String> deleteProduct(@PathVariable String id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully");
+    }
+
+    // API get type "Trang trại"
+    @GetMapping("/farm")
+    public ResponseEntity<List<ProductResponse>> getProductCombosByFarmType() {
+        List<ProductResponse> product = productService.getProductsByFarmType();
+        return ResponseEntity.ok(product);
+    }
+    //API get cá ký gửi bán
+    @GetMapping("/consignment-for-sale")
+    public ResponseEntity<List<ProductResponse>> getProductsForConsignmentSale() {
+        List<ProductResponse> products = productService.getProductsForConsignmentSale();
+        return ResponseEntity.ok(products);
     }
 }
