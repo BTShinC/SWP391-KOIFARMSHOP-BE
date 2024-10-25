@@ -90,6 +90,7 @@ public class OrdersService {
             orderDetail.setOrders(savedOrder);
             orderDetail.setProduct(product);
             orderDetail.setType(product.getType());
+            orderDetail.setDate(orderDate);
 
             double originalPrice = product.getPrice();  // Giá gốc
             double discountedPrice = originalPrice;
@@ -125,6 +126,7 @@ public class OrdersService {
             orderDetail.setOrders(savedOrder);
             orderDetail.setProductCombo(productCombo);
             orderDetail.setType(productCombo.getType());
+            orderDetail.setDate(orderDate);
 
             double originalComboPrice = productCombo.getPrice();  // Giá gốc combo
             double discountedComboPrice = originalComboPrice;
