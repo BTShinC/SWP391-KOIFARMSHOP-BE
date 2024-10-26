@@ -38,7 +38,7 @@ public class ProductController {
     }
 
     // API để lấy sản phẩm theo ID
-    @GetMapping("/{id}")
+    @GetMapping("get/{id}")
     public ResponseEntity<ProductResponse> getProductById(@PathVariable String id) {
         ProductResponse product = productService.getProductById(id);
         return ResponseEntity.ok(product);
