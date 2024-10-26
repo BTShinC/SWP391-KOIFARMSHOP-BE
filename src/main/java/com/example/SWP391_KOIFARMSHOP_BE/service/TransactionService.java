@@ -64,7 +64,7 @@ public class TransactionService {
         transaction.setAccountID(accountid);
         transaction.setDate(transactionRequest.getDate());
         transaction.setPrice(transactionRequest.getPrice());
-
+        transaction.setDescription(transactionRequest.getDescription());
         // Lưu đối tượng transaction vào cơ sở dữ liệu
         Transaction savedTransaction = transactionRepository.save(transaction);
 
