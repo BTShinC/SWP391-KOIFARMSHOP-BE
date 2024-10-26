@@ -34,6 +34,11 @@ public class Consignment {
     @NotBlank(message = "Status cannot be blank")
     @Size(max = 50, message = "Status must be less than 50 characters")
     private String status;
+    private double total;
+    private String farmName;
+    private String reason;
+    private String consignmentType;
+    private int duration;
     private String accountID;
     // Mối quan hệ với ProductCombo
     @OneToOne(cascade = CascadeType.ALL)

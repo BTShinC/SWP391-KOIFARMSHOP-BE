@@ -10,9 +10,9 @@ public class ShopCartResponse {
     private double price;
     private int quantity;
     private String type;  // "Product" hoặc "ProductCombo"
-    private String accountId;
-    private String productId;
-    private String productComboId;
+    private String accountID;
+    private String productID;
+    private String productComboID;
     private String name;
     private String image;
 }

@@ -64,6 +64,9 @@ public class ConsignmentService {
         consignment.setDateExpiration(consignmentRequest.getDateExpiration());
         consignment.setStatus(consignmentRequest.getStatus());
         consignment.setAccountID(consignmentRequest.getAccountID());
+        consignment.setTotal(consignmentRequest.getTotal());
+        consignment.setFarmName(consignmentRequest.getFarmName());
+        consignment.setReason(consignmentRequest.getReason());
 
         // Kiểm tra nếu Product hoặc ProductCombo tồn tại và có type là "Consignment"
         if (consignmentRequest.getProductID() != null && !consignmentRequest.getProductID().isEmpty()) {
@@ -71,10 +74,10 @@ public class ConsignmentService {
                     .orElseThrow(() -> new EntityNotFoundException("Product with ID " + consignmentRequest.getProductID() + " not found"));
 
             // Kiểm tra type của Product phải là "Consignment"
-            if (!"Consignment".equalsIgnoreCase(product.getType())) {
+            if (!"Ký gửi".equalsIgnoreCase(product.getType())) {
                 throw new IllegalArgumentException("Product is not for consignment. Type must be 'Consignment'.");
             }
-
+            consignment.setConsignmentType(product.getConsignmentType());
             consignment.setProduct(product);
 
         } else if (consignmentRequest.getProductComboID() != null && !consignmentRequest.getProductComboID().isEmpty()) {
@@ -82,10 +85,10 @@ public class ConsignmentService {
                     .orElseThrow(() -> new EntityNotFoundException("ProductCombo with ID " + consignmentRequest.getProductComboID() + " not found"));
 
             // Kiểm tra type của ProductCombo phải là "Consignment"
-            if (!"Consignment".equalsIgnoreCase(productCombo.getType())) {
+            if (!"Ký gửi".equalsIgnoreCase(productCombo.getType())) {
                 throw new IllegalArgumentException("ProductCombo is not for consignment. Type must be 'Consignment'.");
             }
-
+            consignment.setConsignmentType(productCombo.getConsignmentType());
             consignment.setProductCombo(productCombo);
 
         } else {
@@ -123,6 +126,10 @@ public class ConsignmentService {
         consignment.setDateReceived(consignmentRequest.getDateReceived());
         consignment.setDateExpiration(consignmentRequest.getDateExpiration());
         consignment.setStatus(consignmentRequest.getStatus());
+        consignment.setTotal(consignmentRequest.getTotal());
+        consignment.setFarmName(consignmentRequest.getFarmName());
+        consignment.setReason(consignmentRequest.getReason());
+
 
         Consignment updatedConsignment = consignmentRepository.save(consignment);
         return modelMapper.map(updatedConsignment, ConsignmentResponse.class);

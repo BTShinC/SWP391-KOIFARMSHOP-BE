@@ -70,7 +70,6 @@ public class Product {
     @Positive(message = "Desired price must be a positive number")
     private double desiredPrice;
 
-    @NotBlank(message = "Consignment type cannot be blank")
     private String consignmentType;
 
     @Column(nullable = true)

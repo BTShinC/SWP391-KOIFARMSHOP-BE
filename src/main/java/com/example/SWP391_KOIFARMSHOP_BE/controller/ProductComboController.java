@@ -33,7 +33,7 @@ public class ProductComboController {
     }
 
     // API để lấy sản phẩm theo ID
-    @GetMapping("/{id}")
+    @GetMapping("get/{id}")
     public ResponseEntity<ProductComboResponse> getProductComboById(@PathVariable String id) {
         ProductComboResponse product = productComboService.getProductById(id);
         return ResponseEntity.ok(product);

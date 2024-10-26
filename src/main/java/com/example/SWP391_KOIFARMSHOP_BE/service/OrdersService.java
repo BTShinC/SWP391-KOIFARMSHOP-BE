@@ -36,11 +36,14 @@ public class OrdersService {
     private IOrdersDetailRepository iOrdersDetailRepository;
 
     @Autowired
+    private IPromotionRepository iPromotionRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
 
-    @Transactional  // Đảm bảo toàn bộ phương thức nằm trong một giao dịch
-    public OrderResponse createOrderWithMultipleProducts(String accountId, List<String> productIds, List<String> productComboIds) {
+    @Transactional
+    public OrderResponse createOrderWithMultipleProducts(String accountId, List<String> productIds, List<String> productComboIds, String promotionID) {
         // 1. Kiểm tra Account
         Account account = iAccountRepository.findById(accountId)
                 .orElseThrow(() -> new EntityNotFoundException("Account with ID " + accountId + " not found"));
@@ -50,15 +53,31 @@ public class OrdersService {
         String nextId = generateNextOrderId(); // Tạo ID mới
         order.setOrderID(nextId);
         order.setAccount(account);
-        order.setDate(new Date()); // Thời gian hiện tại
-        order.setStatus("Đang xử lý");  // Set trạng thái mặc định cho order
-        order.setTotal(0); // Tổng tiền sẽ được tính sau
+        Date orderDate = new Date();  // Ngày hiện tại
+        order.setDate(orderDate);
+        order.setStatus("Đang xử lý");
+
+        Promotion promotion = null;
+        double discountValue = 0;
+
+        // Nếu có mã khuyến mãi, kiểm tra Promotion
+        if (promotionID != null) {
+            promotion = iPromotionRepository.findById(promotionID)
+                    .orElseThrow(() -> new EntityNotFoundException("Promotion with ID " + promotionID + " not found"));
+
+            // Kiểm tra ngày Order có nằm trong khoảng thời gian của Promotion không
+            if (orderDate.compareTo(promotion.getStartDate()) >= 0 && orderDate.compareTo(promotion.getEndDate()) <= 0) {
+                discountValue = promotion.getDiscountValue();  // Lấy giá trị giảm giá
+                order.setPromotion(promotion);  // Gán Promotion cho Order
+            }
+        }
 
         // 3. Lưu Order trước khi tạo OrderDetail
         Orders savedOrder = iOrdersRepository.save(order);
 
-        // 4. Tạo danh sách OrderDetail cho từng sản phẩm hoặc combo
-        double total = 0;
+        // 4. Khởi tạo các biến để tính tổng tiền
+        double total = 0;  // Tổng tiền chưa giảm giá
+        double discountedTotal = 0;  // Tổng tiền sau khi giảm giá
 
         // Xử lý Product
         for (String productId : productIds) {
@@ -68,17 +87,31 @@ public class OrdersService {
             // Tạo OrderDetail cho sản phẩm
             OrdersDetail orderDetail = new OrdersDetail();
             orderDetail.setOrdersDetailID(generateNextOrderDetailId());
-            orderDetail.setOrders(savedOrder);  // Liên kết với Order
-            orderDetail.setProduct(product);  // Liên kết với Product
+            orderDetail.setOrders(savedOrder);
+            orderDetail.setProduct(product);
+            orderDetail.setType(product.getType());
 
-            // Lưu `OrdersDetail` trước để đảm bảo khóa ngoại đã hợp lệ
+            double originalPrice = product.getPrice();  // Giá gốc
+            double discountedPrice = originalPrice;
+
+            // Áp dụng khuyến mãi cho Product nếu có
+            if (promotion != null) {
+                discountedPrice = originalPrice - (originalPrice * discountValue / 100);
+            }
+
+            // Gán giá gốc và giá giảm vào OrdersDetail
+            orderDetail.setPrice(originalPrice);
+            orderDetail.setDiscountedPrice(discountedPrice);
+
+            total += originalPrice;  // Cộng vào tổng tiền gốc
+            discountedTotal += discountedPrice;  // Cộng vào tổng tiền giảm giá
+
+            // Lưu OrdersDetail
             iOrdersDetailRepository.save(orderDetail);
 
-            total += product.getPrice();  // Tính tổng giá
-
             // Sau khi lưu OrdersDetail, cập nhật trạng thái của Product
-            product.setStatus("Đã được đặt");
-            iProductRepository.save(product);  // Lưu lại Product
+            product.setStatus("Đã bán");
+            iProductRepository.save(product);
         }
 
         // Xử lý ProductCombo
@@ -89,26 +122,42 @@ public class OrdersService {
             // Tạo OrderDetail cho ProductCombo
             OrdersDetail orderDetail = new OrdersDetail();
             orderDetail.setOrdersDetailID(generateNextOrderDetailId());
-            orderDetail.setOrders(savedOrder);  // Liên kết với Order
-            orderDetail.setProductCombo(productCombo);  // Liên kết với ProductCombo
+            orderDetail.setOrders(savedOrder);
+            orderDetail.setProductCombo(productCombo);
+            orderDetail.setType(productCombo.getType());
 
-            // Lưu `OrdersDetail` trước để đảm bảo khóa ngoại đã hợp lệ
+            double originalComboPrice = productCombo.getPrice();  // Giá gốc combo
+            double discountedComboPrice = originalComboPrice;
+
+            // Áp dụng khuyến mãi cho ProductCombo nếu có
+            if (promotion != null) {
+                discountedComboPrice = originalComboPrice - (originalComboPrice * discountValue / 100);
+            }
+
+            // Gán giá gốc và giá giảm vào OrdersDetail
+            orderDetail.setPrice(originalComboPrice);
+            orderDetail.setDiscountedPrice(discountedComboPrice);
+
+            total += originalComboPrice;  // Cộng vào tổng tiền gốc
+            discountedTotal += discountedComboPrice;  // Cộng vào tổng tiền giảm giá
+
+            // Lưu OrdersDetail
             iOrdersDetailRepository.save(orderDetail);
 
-            total += productCombo.getPrice();  // Tính tổng giá
-
-            // Sau khi lưu OrdersDetail, cập nhật trạng thái của ProductCombo
+            // Cập nhật trạng thái của ProductCombo
             productCombo.setStatus("Đã bán");
-            iProductComboRepository.save(productCombo);  // Lưu lại ProductCombo
+            iProductComboRepository.save(productCombo);
         }
 
         // 6. Cập nhật tổng tiền cho Order
-        savedOrder.setTotal(total);
+        savedOrder.setTotal(total);  // Tổng tiền chưa giảm giá
+        savedOrder.setDiscountedTotal(discountedTotal);  // Tổng tiền đã giảm giá
         iOrdersRepository.save(savedOrder);
 
         // Trả về phản hồi đơn hàng
         return modelMapper.map(savedOrder, OrderResponse.class);
     }
+
 
 
 
@@ -201,8 +250,8 @@ public class OrdersService {
 
         // Cập nhật thông tin đơn hàng từ request
         existingOrder.setStatus(orderRequest.getStatus());
-        existingOrder.setDate(orderRequest.getDate());
-        existingOrder.setDescription(orderRequest.getDescription());
+//        existingOrder.setDate(orderRequest.getDate());
+//        existingOrder.setDescription(orderRequest.getDescription());
 
         // Lưu lại đơn hàng sau khi cập nhật trạng thái
         Orders updatedOrder = iOrdersRepository.save(existingOrder);

@@ -1,5 +1,6 @@
 package com.example.SWP391_KOIFARMSHOP_BE.controller;
 
+import com.example.SWP391_KOIFARMSHOP_BE.exception.EntityNotFoundException;
 import com.example.SWP391_KOIFARMSHOP_BE.model.OrderRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.OrderResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.service.OrdersService;
@@ -35,9 +36,9 @@ public class OrdersController {
         return ResponseEntity.ok(order);
     }
     //Lấy order theo accounid
-    @GetMapping("/account/{accountId}")
-    public ResponseEntity<List<OrderResponse>> getOrdersByAccountId(@PathVariable String accountId) {
-        List<OrderResponse> orders = ordersService.getOrdersByAccountId(accountId);
+    @GetMapping("/account/{accountID}")
+    public ResponseEntity<List<OrderResponse>> getOrdersByAccountId(@PathVariable String accountID) {
+        List<OrderResponse> orders = ordersService.getOrdersByAccountId(accountID);
         return ResponseEntity.ok(orders);
     }
 
@@ -58,9 +59,10 @@ public class OrdersController {
     // Tạo order
     @PostMapping("/makeOrder")
     public ResponseEntity<?> makeOrder(
-            @RequestParam("accountId") String accountId,
-            @RequestParam(value = "productIds", required = false) List<String> productIds,
-            @RequestParam(value = "productComboIds", required = false) List<String> productComboIds) {
+            @RequestParam("accountID") String accountId,
+            @RequestParam(value = "productIDs", required = false) List<String> productIds,
+            @RequestParam(value = "productComboIDs", required = false) List<String> productComboIds,
+            @RequestParam(value = "promotionID", required = false) String promotionID) {
 
         // Nếu productIds hoặc productComboIds không có giá trị, gán chúng thành danh sách rỗng
         if (productIds == null) {
@@ -70,15 +72,20 @@ public class OrdersController {
             productComboIds = new ArrayList<>();
         }
 
-        // Kiểm tra nếu cả hai đều rỗng
+        // Kiểm tra nếu cả hai danh sách đều rỗng
         if (productIds.isEmpty() && productComboIds.isEmpty()) {
             return ResponseEntity.badRequest().body("Order must contain at least one product or product combo.");
         }
 
-        // Gọi service để xử lý tạo đơn hàng
-        OrderResponse orderResponse = ordersService.createOrderWithMultipleProducts(accountId, productIds, productComboIds);
-        return ResponseEntity.ok(orderResponse);
+        try {
+            // Gọi service để xử lý tạo đơn hàng
+            OrderResponse orderResponse = ordersService.createOrderWithMultipleProducts(accountId, productIds, productComboIds, promotionID);
+            return ResponseEntity.ok(orderResponse);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating order: " + ex.getMessage());
+        }
     }
-
 
 }

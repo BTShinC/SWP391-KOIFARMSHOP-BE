@@ -23,11 +23,15 @@ public class ConsignmentRequest {
     @NotNull(message = "Date expiration cannot be null")
     @Future(message = "Date expiration must be in the future")
     private Date dateExpiration;
-
+    private int duration;
     @NotBlank(message = "Status cannot be blank")
     @Size(max = 50, message = "Status must be less than 50 characters")
     private String status;
+    private double total;
+    private String farmName;
+    private String reason;
     private String accountID;
     private String productID;
     private String productComboID;
+
 }

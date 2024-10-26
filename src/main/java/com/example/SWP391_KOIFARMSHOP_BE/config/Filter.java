@@ -32,13 +32,20 @@ public class Filter extends OncePerRequestFilter {
     HandlerExceptionResolver resolver;
 
     // đinhj nghĩa cho thằng filter nhưng thằng yêu cầu tới cái đường dẫn này cho phép truy cập
-    private final List<String> AUTH_PERMISSION = List.of(
+   private final List<String> AUTH_PERMISSION = List.of(
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/api/login",
             "/api/Register",
-            "/api/role/post"
+            "/api/role/post",
+            "/api/forgot",
+            "/api/reset",
+            "/api/product/getall",
+            "/api/productcombo/getall",
+            "/api/carePackages",
+            "/api/productcombo/get/{id}",
+            "/api/product/get/{id}"
     );
 
     // có cho phép truy cập hay ko
@@ -79,10 +86,10 @@ public class Filter extends OncePerRequestFilter {
 //                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
 //                    return;
 //                }
-                if(request.getRequestURI().contains("/api/account") && !roles.contains("Admin")) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
-                    return;
-                }
+//                if(request.getRequestURI().contains("/api/account") && !roles.contains("Admin")) {
+//                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+//                    return;
+//                }
                 if(request.getRequestURI().contains("/api/feedback/all") && !roles.contains("Admin")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
@@ -111,7 +118,10 @@ public class Filter extends OncePerRequestFilter {
     }
         public String getToken (HttpServletRequest request){
             String authHeader = request.getHeader("Authorization");
-            if (authHeader == null) return null;
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                // Trả về null hoặc có thể ném một ngoại lệ nếu cần thiết
+                return null;
+            }
             return authHeader.substring(7);
         }
     }

@@ -24,4 +24,9 @@ public class RefundController {
            String accountResponse = refundService.refundProduct(consignmentID);
             return accountResponse; // Trả về mã 200 OK cùng với AccountResponse
     }
+    @PostMapping("refundall/{consignmentID}")
+    public String refundProducts(@PathVariable String consignmentID) {
+        String accountResponse = refundService.refundProducts(consignmentID);
+        return accountResponse; // Trả về mã 200 OK cùng với AccountResponse
+    }
 }

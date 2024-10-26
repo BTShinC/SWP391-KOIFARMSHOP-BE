@@ -6,5 +6,5 @@ import lombok.Data;
 public class OrdersDetailRequest {
     private String productID;
     private String productComboID;
-    private String ordersID;
+    private String orderID;
 }
