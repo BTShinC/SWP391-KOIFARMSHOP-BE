@@ -33,17 +33,10 @@ public class RefundService {
         }
 
         if (consignment.getStatus().equalsIgnoreCase("Hoàn tất")) {
-            Product product = consignment.getProduct();
-            ProductCombo productCombo = consignment.getProductCombo();
+
 
             double refundAmount;
-            if (product != null) {
-                refundAmount = product.getPrice() * 0.8;
-            } else if (productCombo != null) {
-                refundAmount = productCombo.getPrice() * 0.8;
-            } else {
-                throw new IllegalArgumentException("No valid product or product combo found for consignment ID: " + consignmentID);
-            }
+            refundAmount = consignment.getTotal();
 
             String accountResponse = accountService.updateAccountBalancRefund(consignment.getAccountID(), refundAmount);
 
@@ -64,17 +57,10 @@ public class RefundService {
         }
 
         if (consignment.getStatus().equalsIgnoreCase("Chờ xác nhận")) {
-            Product product = consignment.getProduct();
-            ProductCombo productCombo = consignment.getProductCombo();
+
 
             double refundAmount;
-            if (product != null) {
-                refundAmount = product.getPrice() ;
-            } else if (productCombo != null) {
-                refundAmount = productCombo.getPrice() ;
-            } else {
-                throw new IllegalArgumentException("No valid product or product combo found for consignment ID: " + consignmentID);
-            }
+             refundAmount = consignment.getTotal();
 
             String accountResponse = accountService.updateAccountBalancRefund(consignment.getAccountID(), refundAmount);
 
