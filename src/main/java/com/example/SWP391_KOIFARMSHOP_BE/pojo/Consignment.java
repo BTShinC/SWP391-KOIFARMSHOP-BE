@@ -38,6 +38,7 @@ public class Consignment {
     private String farmName;
     private String reason;
     private String consignmentType;
+    private int duration;
     private String accountID;
     // Mối quan hệ với ProductCombo
     @OneToOne(cascade = CascadeType.ALL)

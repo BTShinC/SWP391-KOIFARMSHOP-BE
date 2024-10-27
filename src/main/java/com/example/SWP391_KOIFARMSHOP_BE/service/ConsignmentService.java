@@ -63,6 +63,7 @@ public class ConsignmentService {
         consignment.setDateReceived(consignmentRequest.getDateReceived());
         consignment.setDateExpiration(consignmentRequest.getDateExpiration());
         consignment.setStatus(consignmentRequest.getStatus());
+        consignment.setDuration(consignmentRequest.getDuration());
         consignment.setAccountID(consignmentRequest.getAccountID());
         consignment.setTotal(consignmentRequest.getTotal());
         consignment.setFarmName(consignmentRequest.getFarmName());
@@ -126,6 +127,10 @@ public class ConsignmentService {
         consignment.setDateReceived(consignmentRequest.getDateReceived());
         consignment.setDateExpiration(consignmentRequest.getDateExpiration());
         consignment.setStatus(consignmentRequest.getStatus());
+        consignment.setTotal(consignmentRequest.getTotal());
+        consignment.setFarmName(consignmentRequest.getFarmName());
+        consignment.setReason(consignmentRequest.getReason());
+
 
         Consignment updatedConsignment = consignmentRepository.save(consignment);
         return modelMapper.map(updatedConsignment, ConsignmentResponse.class);

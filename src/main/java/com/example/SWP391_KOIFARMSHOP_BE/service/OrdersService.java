@@ -90,6 +90,7 @@ public class OrdersService {
             orderDetail.setOrders(savedOrder);
             orderDetail.setProduct(product);
             orderDetail.setType(product.getType());
+            orderDetail.setDate(orderDate);
 
             double originalPrice = product.getPrice();  // Giá gốc
             double discountedPrice = originalPrice;
@@ -125,6 +126,7 @@ public class OrdersService {
             orderDetail.setOrders(savedOrder);
             orderDetail.setProductCombo(productCombo);
             orderDetail.setType(productCombo.getType());
+            orderDetail.setDate(orderDate);
 
             double originalComboPrice = productCombo.getPrice();  // Giá gốc combo
             double discountedComboPrice = originalComboPrice;
@@ -250,8 +252,8 @@ public class OrdersService {
 
         // Cập nhật thông tin đơn hàng từ request
         existingOrder.setStatus(orderRequest.getStatus());
-        existingOrder.setDate(orderRequest.getDate());
-        existingOrder.setDescription(orderRequest.getDescription());
+//        existingOrder.setDate(orderRequest.getDate());
+//        existingOrder.setDescription(orderRequest.getDescription());
 
         // Lưu lại đơn hàng sau khi cập nhật trạng thái
         Orders updatedOrder = iOrdersRepository.save(existingOrder);
