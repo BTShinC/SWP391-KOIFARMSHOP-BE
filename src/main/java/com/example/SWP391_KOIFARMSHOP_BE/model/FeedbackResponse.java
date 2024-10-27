@@ -6,4 +6,6 @@ import lombok.Data;
 public class FeedbackResponse {
     private String feedbackID;
     private String desciption;
+    private String image;
+    private String orderID;
 }

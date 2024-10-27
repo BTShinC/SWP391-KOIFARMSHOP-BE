@@ -9,5 +9,6 @@ public class FeedbackRequest {
     private String desciption;
     private String accountID;
     private String orderID;
+    private String image;
 
 }

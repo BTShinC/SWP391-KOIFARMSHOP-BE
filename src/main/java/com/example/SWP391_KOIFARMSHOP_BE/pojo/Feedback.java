@@ -17,6 +17,8 @@ public class Feedback {
     @Size(max = 500, message = "Description must be less than 500 characters")
     private String desciption;
 
+    private String image;
+
     @OneToOne
     @JoinColumn(name = "order_id")
     private Orders order;
