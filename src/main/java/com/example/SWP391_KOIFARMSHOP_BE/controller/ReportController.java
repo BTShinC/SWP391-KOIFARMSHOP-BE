@@ -24,4 +24,29 @@ public class ReportController {
         List<OrderReport> orderReports = reportService.ordershop();
         return new ResponseEntity<>(orderReports, HttpStatus.OK);
     }
+    @GetMapping("/countProduct")
+    public String getCountProduct() {
+        return reportService.getcountproduct();
+    }
+    @GetMapping("/countProductCombo")
+    public String getCountProductCombo() {
+        return reportService.getcountproductCombo();
+    }
+    @GetMapping("/countallproduct")
+    public String getallProduct() {
+        return reportService.getall();
+    }
+    @GetMapping("/accountcustomer")
+    public String getaccountcustomer(){
+        return reportService.getaccountcustomer();
+    }
+    @GetMapping("/accountall")
+    public String getaccount(){
+        return reportService.getallaccount();
+    }
+    @GetMapping("/top5-breeds")
+    public List<String> getTop5BestSellingBreeds() {
+        return reportService.getTop5BestSellingBreeds();
+    }
+
 }
