@@ -25,12 +25,10 @@ public class Question {
     @Size(max = 50, message = "Username cannot exceed 50 characters")
     private String userName;
 
-    @Column(name = "contact", unique = true, nullable = false)
-    @Size(max = 100, message = "Thông tin liên hệ không được quá 100 ký tự")
-    @Pattern(
-            regexp = "^(\\+84|0\\d{9,10}|[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6})$",
-            message = "Thông tin liên hệ phải là email hoặc số điện thoại hợp lệ"
-    )
+    @Column(name = "contact")
+    @NotBlank(message = "Phone number cannot be blank")
+    @Pattern(regexp = "^[0-9]+$", message = "Phone number should only contain numbers")
+    @Size(min = 10, max = 15, message = "Phone number should be between 10 and 15 digits")
     private String contact;
 
 
