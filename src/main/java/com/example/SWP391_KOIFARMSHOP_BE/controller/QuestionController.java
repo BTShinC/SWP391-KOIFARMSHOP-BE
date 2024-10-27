@@ -5,6 +5,7 @@ import com.example.SWP391_KOIFARMSHOP_BE.model.QuestionRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.TransactionReponse;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Question;
 import com.example.SWP391_KOIFARMSHOP_BE.service.QuestionService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,13 +34,18 @@ public class QuestionController {
         List<QuestionReponse> question = questionService.getAllQuestion();
         return new ResponseEntity<>(question, HttpStatus.OK);
     }
-    @PutMapping("/updateStatus/{id}")
-    public ResponseEntity<?> updateQuestionStatus(
-            @RequestParam("ID") String questionID,
-            @RequestParam("status") String newStatus) {
-            QuestionReponse updatedQuestionResponse = questionService.updateStatus(questionID, newStatus);
-            return ResponseEntity.ok(updatedQuestionResponse);
-
+    @PutMapping("/update-status")
+    public ResponseEntity<QuestionReponse> updateQuestionStatus(
+            @RequestParam String questionID,
+            @RequestParam String newStatus) {
+        try {
+            QuestionReponse updatedQuestion = questionService.updateStatus(questionID, newStatus);
+            return ResponseEntity.ok(updatedQuestion);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
 }

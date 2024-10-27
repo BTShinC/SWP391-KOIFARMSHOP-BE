@@ -58,7 +58,7 @@ public class CareDetailService {
         Consignment consignment = consignmentRepository.findById(request.getConsignmentID())
                 .orElseThrow(() -> new EntityNotFoundException("Consignment với ID " + request.getConsignmentID() + " không tìm thấy"));
 
-        if (!"Chăm sóc".equalsIgnoreCase(consignment.getConsignmentType())) {
+        if (!"Ký gửi chăm sóc".equalsIgnoreCase(consignment.getConsignmentType())) {
             throw new IllegalArgumentException("Consignment phải có consignmentType là 'Chăm sóc' để thêm CareDetails.");
         }
 
