@@ -81,7 +81,7 @@ public class ReportService {
         for(Account account : accounts ) {
             count++;
         }
-        return "Tất cả  tài khoản trong hệ thống : " +count;
+        return "" +count;
     }
     public String getaccountcustomer(){
         Optional<Role> roleOptional = iRoleRepository.findByRoleName("Customer");
@@ -89,7 +89,7 @@ public class ReportService {
             Role role = roleOptional.get();
             List<Account> accounts = iAccountRepository.findByRole(role);
             int count = accounts.size(); // Đếm số lượng tài khoản
-            return "Số lượng tài khoản có vai trò khách hàng: " + count;
+            return "" + count;
         } else {
             return "Vai trò khách hàng không tồn tại.";
         }
