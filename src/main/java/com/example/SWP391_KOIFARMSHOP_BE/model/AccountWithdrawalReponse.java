@@ -19,4 +19,5 @@ public class AccountWithdrawalReponse {
     private String account_holder_name;
     private String bank_branch;
     private String bank_name;
+    private String description;
 }

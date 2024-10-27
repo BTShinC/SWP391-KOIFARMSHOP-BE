@@ -38,4 +38,7 @@ public class AccountWithdrawal {
     private String bank_branch;
     @NotBlank(message = "bank_name cannot be blank")
     private String bank_name;
+    @NotBlank(message = "description cannot be blank")
+    private String description;
+
 }

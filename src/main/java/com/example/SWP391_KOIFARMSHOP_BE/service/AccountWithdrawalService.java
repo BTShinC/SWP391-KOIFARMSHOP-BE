@@ -69,6 +69,7 @@ public class AccountWithdrawalService {
        accountWithdrawal.setAccount_holder_name(accountWithdrawalRequest.getAccount_holder_name());
        accountWithdrawal.setBank_branch(accountWithdrawalRequest.getBank_branch());
        accountWithdrawal.setBank_name(accountWithdrawalRequest.getBank_name());
+       accountWithdrawal.setDescription(accountWithdrawalRequest.getDescription());
        System.out.println(accountWithdrawal);
        // Lưu đối tượng transaction vào cơ sở dữ liệu
        AccountWithdrawal savedaccountWithdrawal = iAccountWithdrawal.save(accountWithdrawal);
