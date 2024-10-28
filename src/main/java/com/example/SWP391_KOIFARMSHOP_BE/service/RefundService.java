@@ -32,17 +32,13 @@ public class RefundService {
             throw new EntityNotFoundException("Consignment not found for ID: " + consignmentID);
         }
 
-// <<<<<<< Drawal
-        if (consignment.getStatus().equalsIgnoreCase("Hoàn tất")|| consignment.getStatus().equalsIgnoreCase("Đã hủy")) {
+
+        if (consignment.getStatus().equalsIgnoreCase("Hoàn tất")) {
             Product product = consignment.getProduct();
             ProductCombo productCombo = consignment.getProductCombo();
-// =======
-//         if (consignment.getStatus().equalsIgnoreCase("Hoàn tất")) {
-
-// >>>>>>> Authentication
 
             double refundAmount;
-            refundAmount = consignment.getTotal();
+            refundAmount = consignment.getTotal() *0.8;
 
             String accountResponse = accountService.updateAccountBalancRefund(consignment.getAccountID(), refundAmount);
 
