@@ -15,7 +15,7 @@ public interface IProductRepository extends JpaRepository<Product, String> {
     Optional<Product> findByProductName(String productName);
     public Product findByBreed(String breed);
     Product findTopByOrderByProductIDDesc();
-
+    List<Product> findByType(String type);
 
 
 }

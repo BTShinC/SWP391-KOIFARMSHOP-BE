@@ -1,8 +1,11 @@
 package com.example.SWP391_KOIFARMSHOP_BE.repository;
 
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
+import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface IAccountRepository extends JpaRepository<Account, String> {
@@ -16,5 +19,6 @@ public interface IAccountRepository extends JpaRepository<Account, String> {
     boolean existsByuserName(String userName);
     boolean existsByaccountID(String accounID);
     Account findByUserName(String userName);
+    List<Account> findByRole(Role role);
 
 }

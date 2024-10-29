@@ -32,22 +32,49 @@ public class RefundService {
             throw new EntityNotFoundException("Consignment not found for ID: " + consignmentID);
         }
 
+
         if (consignment.getStatus().equalsIgnoreCase("Hoàn tất")) {
             Product product = consignment.getProduct();
             ProductCombo productCombo = consignment.getProductCombo();
 
-            double refundAmount;
+            double refundAmount = 0;
             if (product != null) {
                 refundAmount = product.getPrice() * 0.8;
             } else if (productCombo != null) {
                 refundAmount = productCombo.getPrice() * 0.8;
-            } else {
-                throw new IllegalArgumentException("No valid product or product combo found for consignment ID: " + consignmentID);
+            }
+
+            if (refundAmount == 0) {
+                throw new IllegalArgumentException("No valid product or combo found for refund.");
             }
 
             String accountResponse = accountService.updateAccountBalancRefund(consignment.getAccountID(), refundAmount);
 
             consignment.setStatus("Đã hoàn tiền");
+            consignmentRepository.save(consignment);
+            return "Refund successful! " + accountResponse;
+
+        } else {
+            throw new IllegalArgumentException("Consignment is not sold, cannot process refund.");
+        }
+    }
+
+    public String refundProducts(String consignmentID) {
+        Consignment consignment = consignmentRepository.findByconsignmentID(consignmentID);
+
+        if (consignment == null) {
+            throw new EntityNotFoundException("Consignment not found for ID: " + consignmentID);
+        }
+
+        if (consignment.getStatus().equalsIgnoreCase("Chờ xác nhận")) {
+
+
+            double refundAmount;
+             refundAmount = consignment.getTotal();
+
+            String accountResponse = accountService.updateAccountBalancRefund(consignment.getAccountID(), refundAmount);
+
+            consignment.setStatus("Đã hủy");
             consignmentRepository.save(consignment);
             return "Refund successful! " + accountResponse;
 

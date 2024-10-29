@@ -64,7 +64,7 @@ public class TransactionService {
         transaction.setAccountID(accountid);
         transaction.setDate(transactionRequest.getDate());
         transaction.setPrice(transactionRequest.getPrice());
-
+        transaction.setDescription(transactionRequest.getDescription());
         // Lưu đối tượng transaction vào cơ sở dữ liệu
         Transaction savedTransaction = transactionRepository.save(transaction);
 
@@ -102,7 +102,7 @@ public class TransactionService {
         String tmnCode = "7XL12PHS";
         String secretKey = "LBFKRMUSBR85Y6JRKJPKF15M71XSEW8T";
         String vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        String returnUrl = "http://localhost:5173/wallet/vnpay/response?transactionID=" + transaction.getTransactionID();
+        String returnUrl = "http://103.90.227.69/wallet/vnpay/response?transactionID=" + transaction.getTransactionID();
         String currCode = "VND";
         Map<String, String> vnpParams = new TreeMap<>();
         vnpParams.put("vnp_Version", "2.1.0");

@@ -145,4 +145,24 @@ public class ProductService {
         iProductRepository.delete(product);
     }
 
+    // Get products by type "Trang trại"
+    public List<ProductResponse> getProductsByFarmType() {
+        List<Product> products = iProductRepository.findByType("Trang trại");
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductResponse.class))
+                .collect(Collectors.toList());
+    }
+
+    // Get products by type "Ký gửi" and consignment type "Ký gửi để bán"
+    public List<ProductResponse> getProductsForConsignmentSale() {
+        List<Product> products = iProductRepository.findByType("Ký gửi")
+                .stream()
+                .filter(product -> "Ký gửi để bán".equals(product.getConsignmentType()))
+                .collect(Collectors.toList());
+
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductResponse.class))
+                .collect(Collectors.toList());
+    }
+
 }

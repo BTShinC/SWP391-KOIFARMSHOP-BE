@@ -6,6 +6,7 @@ import com.example.SWP391_KOIFARMSHOP_BE.pojo.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -13,4 +14,5 @@ public interface IProductComboRepository extends JpaRepository<ProductCombo, Str
     Optional<ProductCombo> findByComboName(String comboName);
     public ProductCombo findByBreed(String breed);
     ProductCombo findTopByOrderByProductComboIDDesc();
+    List<ProductCombo> findByType(String type);
 }

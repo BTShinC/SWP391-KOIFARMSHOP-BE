@@ -43,7 +43,9 @@ public class Filter extends OncePerRequestFilter {
             "/api/reset",
             "/api/product/getall",
             "/api/productcombo/getall",
-            "/api/carePackages"
+            "/api/carePackages",
+            "/api/productcombo/get/{id}",
+            "/api/product/get/{id}"
     );
 
     // có cho phép truy cập hay ko
@@ -80,14 +82,14 @@ public class Filter extends OncePerRequestFilter {
                 System.out.println(request.getRequestURI());
                 System.out.println(roles);
 
-//                if(request.getRequestURI().contains("/api/shop-cart/account") && !roles.contains("Admin")) {
-//                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
-//                    return;
-//                }
-//                if(request.getRequestURI().contains("/api/account") && !roles.contains("Admin")) {
-//                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
-//                    return;
-//                }
+                if(request.getRequestURI().contains("/api/question/update-status") && !roles.contains("Admin")|| roles.contains("Staff")) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+                    return;
+                }
+                if(request.getRequestURI().contains("/api/question/all") && !roles.contains("Admin")) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+                    return;
+                }
                 if(request.getRequestURI().contains("/api/feedback/all") && !roles.contains("Admin")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;

@@ -18,6 +18,7 @@ public class ConsignmentResponse {
     private String farmName;
     private String reason;
     private String consignmentType;
+    private int duration;
     private String accountID;
     private String productID;
     private String productComboID;

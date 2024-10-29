@@ -51,11 +51,15 @@ public class FeedbackService {
             throw new IllegalArgumentException("Account ID does not match with the order's account.");
         }
 
+        System.out.println("Description in FeedbackRequest: " + feedbackRequest.getDesciption());
+
         // Tạo mới feedback
         Feedback feedback = new Feedback();
         feedback.setFeedbackID(generateFeedbackID());
         feedback.setDesciption(feedbackRequest.getDesciption());
-        feedback.setOrder(order.get()); // Liên kết với Order
+
+        feedback.setOrder(order.get());
+        feedback.setImage(feedbackRequest.getImage());
 
         feedbackRepository.save(feedback);
 
@@ -63,7 +67,9 @@ public class FeedbackService {
         FeedbackResponse response = new FeedbackResponse();
         response.setFeedbackID(feedback.getFeedbackID());
         response.setDesciption(feedback.getDesciption());
+        response.setImage(feedback.getImage());
         return response;
+
     }
 
     public List<FeedbackResponse> getAllFeedback() {
@@ -88,7 +94,7 @@ public class FeedbackService {
         FeedbackResponse response = new FeedbackResponse();
         response.setFeedbackID(feedback.getFeedbackID());
         response.setDesciption(feedback.getDesciption());
-
+        response.setImage(feedback.getImage());
         return response;
     }
 
