@@ -84,6 +84,11 @@ public class OrdersService {
             Product product = iProductRepository.findById(productId)
                     .orElseThrow(() -> new EntityNotFoundException("Product with ID " + productId + " not found"));
 
+            // Kiểm tra trạng thái của Product
+            if (!"Còn hàng".equals(product.getStatus())) {
+                throw new IllegalArgumentException("Product with ID " + productId + " is not available for ordering.");
+            }
+
             // Tạo OrderDetail cho sản phẩm
             OrdersDetail orderDetail = new OrdersDetail();
             orderDetail.setOrdersDetailID(generateNextOrderDetailId());
@@ -119,6 +124,11 @@ public class OrdersService {
         for (String productComboId : productComboIds) {
             ProductCombo productCombo = iProductComboRepository.findById(productComboId)
                     .orElseThrow(() -> new EntityNotFoundException("Product combo with ID " + productComboId + " not found"));
+
+            // Kiểm tra trạng thái của ProductCombo
+            if (!"Còn hàng".equals(productCombo.getStatus())) {
+                throw new IllegalArgumentException("ProductCombo with ID " + productComboId + " is not available for ordering.");
+            }
 
             // Tạo OrderDetail cho ProductCombo
             OrdersDetail orderDetail = new OrdersDetail();
@@ -159,6 +169,7 @@ public class OrdersService {
         // Trả về phản hồi đơn hàng
         return modelMapper.map(savedOrder, OrderResponse.class);
     }
+
 
 
 
