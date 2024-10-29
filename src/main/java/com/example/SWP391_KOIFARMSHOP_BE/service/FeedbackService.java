@@ -33,7 +33,7 @@ public class FeedbackService {
         if (lastfeedback != null) {
             String lastId = lastfeedback.getFeedbackID();
             int idNumber = Integer.parseInt(lastId.substring(1));
-            String nextId = String.format("O%03d", idNumber + 1);
+            String nextId = String.format("F%03d", idNumber + 1);
             return nextId;
         } else {
             return "F001";
@@ -51,12 +51,12 @@ public class FeedbackService {
             throw new IllegalArgumentException("Account ID does not match with the order's account.");
         }
 
-        System.out.println("Description in FeedbackRequest: " + feedbackRequest.getDesciption());
+        System.out.println("Description in FeedbackRequest: " + feedbackRequest.getDescription());
 
         // Tạo mới feedback
         Feedback feedback = new Feedback();
         feedback.setFeedbackID(generateFeedbackID());
-        feedback.setDesciption(feedbackRequest.getDesciption());
+        feedback.setDescription(feedbackRequest.getDescription());
 
         feedback.setOrder(order.get());
         feedback.setImage(feedbackRequest.getImage());
@@ -66,7 +66,7 @@ public class FeedbackService {
         // Trả về FeedbackResponse
         FeedbackResponse response = new FeedbackResponse();
         response.setFeedbackID(feedback.getFeedbackID());
-        response.setDesciption(feedback.getDesciption());
+        response.setDescription(feedback.getDescription());
         response.setImage(feedback.getImage());
         return response;
 
@@ -93,7 +93,7 @@ public class FeedbackService {
         // Chuyển đổi Feedback thành FeedbackResponse
         FeedbackResponse response = new FeedbackResponse();
         response.setFeedbackID(feedback.getFeedbackID());
-        response.setDesciption(feedback.getDesciption());
+        response.setDescription(feedback.getDescription());
         response.setImage(feedback.getImage());
         return response;
     }
