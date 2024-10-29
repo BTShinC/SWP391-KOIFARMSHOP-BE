@@ -37,8 +37,16 @@ public class RefundService {
             Product product = consignment.getProduct();
             ProductCombo productCombo = consignment.getProductCombo();
 
-            double refundAmount;
-            refundAmount = consignment.getTotal() *0.8;
+            double refundAmount = 0;
+            if (product != null) {
+                refundAmount = product.getPrice() * 0.8;
+            } else if (productCombo != null) {
+                refundAmount = productCombo.getPrice() * 0.8;
+            }
+
+            if (refundAmount == 0) {
+                throw new IllegalArgumentException("No valid product or combo found for refund.");
+            }
 
             String accountResponse = accountService.updateAccountBalancRefund(consignment.getAccountID(), refundAmount);
 
