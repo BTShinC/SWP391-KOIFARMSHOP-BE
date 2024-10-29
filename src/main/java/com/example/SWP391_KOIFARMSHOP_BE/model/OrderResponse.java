@@ -15,6 +15,6 @@ public class OrderResponse {
     private Date date;
     private String description;
     private String accountID;
-    private long feedbackId;
+    private String feedbackId;
     private List<OrdersDetailResponse> ordersDetails;
 }
