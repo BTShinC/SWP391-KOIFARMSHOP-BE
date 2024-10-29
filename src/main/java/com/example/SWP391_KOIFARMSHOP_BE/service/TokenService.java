@@ -34,7 +34,7 @@ public class TokenService {
                 .claim("fullName", account.getFullName()) // Thêm tên đầy đủ vào token
                 .claim("accountBalance", account.getAccountBalance()) // Thêm số dư tài khoản vào token
                 .setIssuedAt(new Date(System.currentTimeMillis())) // Thời gian phát hành
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // Hết hạn sau 1 ngày
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 ))
                 .signWith(getSigninKey()) // Ký token bằng secret key
                 .compact();
     }
