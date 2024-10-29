@@ -15,7 +15,7 @@ public class Feedback {
     @Id
     private String feedbackID;
     @Size(max = 500, message = "Description must be less than 500 characters")
-    private String desciption;
+    private String description;
 
     private String image;
 

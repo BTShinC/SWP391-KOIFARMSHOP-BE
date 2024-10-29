@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class FeedbackResponse {
     private String feedbackID;
-    private String desciption;
+    private String description;
     private String image;
     private String orderID;
 }
