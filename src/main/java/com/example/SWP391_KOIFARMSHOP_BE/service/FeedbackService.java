@@ -3,8 +3,10 @@ package com.example.SWP391_KOIFARMSHOP_BE.service;
 import com.example.SWP391_KOIFARMSHOP_BE.model.FeedbackRequest;
 import com.example.SWP391_KOIFARMSHOP_BE.model.FeedbackResponse;
 import com.example.SWP391_KOIFARMSHOP_BE.model.OrderResponse;
+import com.example.SWP391_KOIFARMSHOP_BE.pojo.Account;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Feedback;
 import com.example.SWP391_KOIFARMSHOP_BE.pojo.Orders;
+import com.example.SWP391_KOIFARMSHOP_BE.repository.IAccountRepository;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IFeedbackRepository;
 import com.example.SWP391_KOIFARMSHOP_BE.repository.IOrdersRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,6 +29,9 @@ public class FeedbackService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    IAccountRepository iAccountRepository;
 
     private  String generateFeedbackID() {
         Feedback lastfeedback = feedbackRepository.findTopByOrderByFeedbackIDDesc();
@@ -85,7 +90,11 @@ public class FeedbackService {
         if (!order.isPresent()) {
             throw new EntityNotFoundException("Order not found with ID: " + orderID);
         }
-
+        Account account = order.get().getAccount();
+        if (account == null) {
+            throw new EntityNotFoundException("Account not found for order ID: " + orderID);
+        }
+        String accountID = account.getAccountID();
         // Tìm Feedback liên quan đến Order
         Feedback feedback = feedbackRepository.findByOrder(order.get())
                 .orElseThrow(() -> new EntityNotFoundException("Feedback not found for order ID: " + orderID));
@@ -96,6 +105,8 @@ public class FeedbackService {
         response.setDescription(feedback.getDescription());
         response.setImage(feedback.getImage());
         response.setOrderID(orderID);
+        response.setAccountID(accountID);
+
         return response;
     }
 
