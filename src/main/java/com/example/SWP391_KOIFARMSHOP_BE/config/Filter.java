@@ -36,11 +36,11 @@ public class Filter extends OncePerRequestFilter {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
-            "/api/login",
-            "/api/Register",
+            "/api/authen/login",
+            "/api/authen/Register",
             "/api/role/post",
-            "/api/forgot",
-            "/api/reset",
+            "/api/authen/forgot",
+            "/api/authen/reset",
             "/api/product/getall",
             "/api/productcombo/getall",
             "/api/carePackages",
@@ -82,19 +82,43 @@ public class Filter extends OncePerRequestFilter {
                 System.out.println(request.getRequestURI());
                 System.out.println(roles);
 
-                if(request.getRequestURI().contains("/api/question/update-status") && !roles.contains("Admin")|| roles.contains("Staff")) {
+                if(request.getRequestURI().contains("/api/question/update-status") && !roles.contains("Admin")&& !roles.contains("Staff")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
                 }
-                if(request.getRequestURI().contains("/api/question/all") && !roles.contains("Admin")|| roles.contains("Staff")) {
+                if(request.getRequestURI().contains("/api/question/all") && !roles.contains("Admin")&& !roles.contains("Staff")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
                 }
-                if(request.getRequestURI().contains("/api/feedback/all") && !roles.contains("Admin")|| roles.contains("Staff")) {
+                if(request.getRequestURI().contains("/api/feedback/all") && !roles.contains("Admin")&& !roles.contains("Staff")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
                 }
-                if(request.getRequestURI().contains("/api/report/*") && !roles.contains("Admin")) {
+                if(request.getRequestURI().contains("/api/report") && !roles.contains("Admin")) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+                    return;
+                }
+                if(request.getRequestURI().contains("/api/authen/account") && !roles.contains("Admin")&& !roles.contains("Staff")) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+                    return;
+                }
+                if(request.getRequestURI().contains("/api/product/getall") && !roles.contains("Admin")&& !roles.contains("Staff")) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+                    return;
+                }
+                if(request.getRequestURI().contains("/api/productcombo/getall") && !roles.contains("Admin")&& !roles.contains("Staff")) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+                    return;
+                }
+                if(request.getRequestURI().contains("/api/consignments") && !roles.contains("Admin")&& !roles.contains("Staff")) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+                    return;
+                }
+                if(request.getRequestURI().contains("/api/orders") && !roles.contains("Admin")&& !roles.contains("Staff")) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+                    return;
+                }
+                if(request.getRequestURI().contains("/api/transactions/all") && !roles.contains("Admin")&& !roles.contains("Staff")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
                 }
