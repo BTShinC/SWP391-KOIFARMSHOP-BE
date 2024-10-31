@@ -9,6 +9,7 @@ import com.example.SWP391_KOIFARMSHOP_BE.repository.ITotalRevenueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -55,7 +56,8 @@ public class TotalRevenueService {
         }
 
         // Calculate careConsignment revenue for consignment care consignments
-        List<Consignment> consignments = consignmentRepository.findByDateRangeAndStatus(startDate, endDate, "Hoàn tất");
+        List<String> statuses = Arrays.asList("Hoàn tất", "Đã hoàn tiền");
+        List<Consignment> consignments = consignmentRepository.findByDateRangeAndStatuses(startDate, endDate, statuses);
 
         for (Consignment consignment : consignments) {
             careConsignment += consignment.getTotal();
