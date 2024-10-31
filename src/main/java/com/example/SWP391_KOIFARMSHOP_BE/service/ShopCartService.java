@@ -149,15 +149,41 @@ public class ShopCartService {
         // Lấy tất cả các mục giỏ hàng cho tài khoản
         List<ShopCart> cartItems = shopCartRepository.findByAccount_AccountID(accountId);
 
-        // Lọc chỉ những sản phẩm và productCombo có trạng thái là "Còn hàng"
+        // Lọc các sản phẩm và productCombo có trạng thái là "Còn hàng"
         return cartItems.stream()
                 .filter(cartItem ->
                         (cartItem.getProduct() != null && "Còn hàng".equals(cartItem.getProduct().getStatus())) ||
                                 (cartItem.getProductCombo() != null && "Còn hàng".equals(cartItem.getProductCombo().getStatus()))
                 )
-                .map(cartItem -> modelMapper.map(cartItem, ShopCartResponse.class))
+                .map(cartItem -> {
+                    // Cập nhật thuộc tính động từ Product hoặc ProductCombo
+                    ShopCartResponse response = new ShopCartResponse();
+                    response.setShopCartID(cartItem.getShopCartID());
+                    response.setQuantity(cartItem.getQuantity());
+                    response.setType(cartItem.getProduct() != null ? "Product" : "ProductCombo");
+                    response.setAccountID(accountId);
+
+                    if (cartItem.getProduct() != null) {
+                        Product product = cartItem.getProduct();
+                        response.setProductID(product.getProductID());
+                        response.setBreed(product.getBreed());
+                        response.setPrice(product.getPrice());
+                        response.setName(product.getProductName());
+                        response.setImage(product.getImage());
+                    } else if (cartItem.getProductCombo() != null) {
+                        ProductCombo combo = cartItem.getProductCombo();
+                        response.setProductComboID(combo.getProductComboID());
+                        response.setBreed(combo.getBreed());
+                        response.setPrice(combo.getPrice());
+                        response.setName(combo.getComboName());
+                        response.setImage(combo.getImage());
+                    }
+
+                    return response;
+                })
                 .collect(Collectors.toList());
     }
+
 
     // Cập nhật số lượng sản phẩm trong giỏ hàng
     public ShopCartResponse updateCartItem(String cartItemId, int newQuantity) {
