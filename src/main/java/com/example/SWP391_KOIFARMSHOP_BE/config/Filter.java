@@ -114,10 +114,10 @@ public class Filter extends OncePerRequestFilter {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
                 }
-                if(request.getRequestURI().contains("/api/orders") && !roles.contains("Admin")&& !roles.contains("Staff")) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
-                    return;
-                }
+//                if(request.getRequestURI().contains("/api/orders") && !roles.contains("Admin")&& !roles.contains("Staff")) {
+//                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
+//                    return;
+//                }
                 if(request.getRequestURI().contains("/api/transactions/all") && !roles.contains("Admin")&& !roles.contains("Staff")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not permission");
                     return;
