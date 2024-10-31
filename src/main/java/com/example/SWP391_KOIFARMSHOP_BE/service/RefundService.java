@@ -33,7 +33,7 @@ public class RefundService {
         }
 
 
-        if (consignment.getStatus().equalsIgnoreCase("Hoàn tất")) {
+        if (consignment.getStatus().equalsIgnoreCase("Chưa hoàn tiền")) {
             Product product = consignment.getProduct();
             ProductCombo productCombo = consignment.getProductCombo();
 
@@ -50,7 +50,7 @@ public class RefundService {
 
             String accountResponse = accountService.updateAccountBalancRefund(consignment.getAccountID(), refundAmount);
 
-            consignment.setStatus("Đã hoàn tiền");
+            consignment.setStatus("Hoàn tất");
             consignmentRepository.save(consignment);
             return "Refund successful! " + accountResponse;
 
