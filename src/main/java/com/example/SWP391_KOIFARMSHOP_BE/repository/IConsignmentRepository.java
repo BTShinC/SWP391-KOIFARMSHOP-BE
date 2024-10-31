@@ -15,6 +15,7 @@ public interface IConsignmentRepository extends JpaRepository<Consignment, Strin
     List<Consignment> findByAccountID(String accountId);
     Consignment findByconsignmentID(String consignmentID);
     // Lấy tất cả Consignment có ngày trong khoảng startDate và endDate
-    @Query("SELECT c FROM Consignment c WHERE c.consignmentDate BETWEEN :startDate AND :endDate")
-    List<Consignment> findByDateRange(Date startDate, Date endDate);
+    @Query("SELECT c FROM Consignment c WHERE c.consignmentDate BETWEEN :startDate AND :endDate AND c.status = :status")
+    List<Consignment> findByDateRangeAndStatus(Date startDate, Date endDate, String status);
+
 }

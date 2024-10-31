@@ -55,7 +55,8 @@ public class TotalRevenueService {
         }
 
         // Calculate careConsignment revenue for consignment care consignments
-        List<Consignment> consignments = consignmentRepository.findByDateRange(startDate, endDate);
+        List<Consignment> consignments = consignmentRepository.findByDateRangeAndStatus(startDate, endDate, "Hoàn tất");
+
         for (Consignment consignment : consignments) {
             careConsignment += consignment.getTotal();
         }

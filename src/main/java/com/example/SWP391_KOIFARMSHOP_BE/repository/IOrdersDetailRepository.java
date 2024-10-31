@@ -16,6 +16,6 @@ public interface IOrdersDetailRepository extends JpaRepository<OrdersDetail, Str
     List<OrdersDetail> findByType(String type);
 
     // Lấy tất cả OrdersDetail có trạng thái "Đã hoàn thành" và thuộc loại đã cho trong khoảng ngày
-    @Query("SELECT od FROM OrdersDetail od WHERE od.orders.status = 'Đã hoàn thành' AND od.type = :type AND od.date BETWEEN :startDate AND :endDate")
+    @Query("SELECT od FROM OrdersDetail od WHERE od.orders.status = 'Hoàn tất' AND od.type = :type AND od.date BETWEEN :startDate AND :endDate")
     List<OrdersDetail> findCompletedOrdersByTypeAndDate(String type, Date startDate, Date endDate);
 }
