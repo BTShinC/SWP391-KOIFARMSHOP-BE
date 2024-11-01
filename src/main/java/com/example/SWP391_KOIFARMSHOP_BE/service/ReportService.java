@@ -103,16 +103,16 @@ public class ReportService {
         List<String> allBreedsSold = new ArrayList<>();
 
         for (Product product : products) {
-            if ("Đã bán".equals(product.getStatus())) {
+            if ("Hết hàng".equals(product.getStatus())) {
                 allBreedsSold.add(product.getBreed());
             }
         }
 
-        for (ProductCombo productCombo : productCombos) {
-            if ("Đã bán".equals(productCombo.getStatus())) {
-                allBreedsSold.add(productCombo.getBreed());
-            }
-        }
+//        for (ProductCombo productCombo : productCombos) {
+//            if ("Đã bán".equals(productCombo.getStatus())) {
+//                allBreedsSold.add(productCombo.getBreed());
+//            }
+//        }
 
 
         Map<String, Long> breedCount = allBreedsSold.stream()
